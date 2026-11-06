@@ -15,16 +15,22 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(50), unique=True, nullable=True, index=True)
     email = db.Column(db.String(200), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     xp = db.Column(db.Integer, default=0, nullable=False)
     streak = db.Column(db.Integer, default=0, nullable=False)
+    show_on_leaderboard = db.Column(db.Boolean, default=True, nullable=False)
     last_active = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     # Relationships
     progress = db.relationship("Progress", backref="user", lazy=True)
     attempts = db.relationship("Attempt", backref="user", lazy=True)
     badges = db.relationship("Badge", backref="user", lazy=True)
+
+    __table_args__ = (
+        db.Index("ix_users_xp", "xp"),
+    )
 
     def __repr__(self):
         return f"<User {self.email}>"
@@ -78,6 +84,7 @@ class Progress(db.Model):
 
     __table_args__ = (
         db.UniqueConstraint("user_id", "phase_id", name="uq_user_phase"),
+        db.Index("ix_progress_user_stars", "user_id", "stars"),
     )
 
     def __repr__(self):
@@ -117,4 +124,22 @@ class Badge(db.Model):
 
     def __repr__(self):
         return f"<Badge user={self.user_id} key={self.badge_key}>"
+
+
+class XPEvent(db.Model):
+    """Audit log of XP earned by users."""
+    __tablename__ = "xp_events"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    amount = db.Column(db.Integer, nullable=False)
+    reason = db.Column(db.String(100), nullable=False)
+    phase_id = db.Column(db.Integer, nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False, index=True)
+
+    # Relationship
+    user = db.relationship("User", backref=db.backref("xp_events", lazy=True))
+
+    def __repr__(self):
+        return f"<XPEvent user={self.user_id} amount={self.amount} reason={self.reason}>"
 

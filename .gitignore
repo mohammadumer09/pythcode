@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Flask & DB
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+# Node / Frontend
+node_modules/
+.npm/
+
+# Testing & IDE
+.pytest_cache/
+.vscode/
+.idea/
+*.swp
+*.swo
+

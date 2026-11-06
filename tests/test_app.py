@@ -27,8 +27,7 @@ from models import db as _db
 
 @pytest.fixture(scope="module")
 def app():
-    application = create_app()
-    application.config.update({
+    application = create_app({
         "TESTING": True,
         "AUTH_PROVIDER": "local",
         "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
@@ -84,6 +83,11 @@ def test_register_page(client):
 
 def test_profile_page(client):
     r = client.get("/profile")
+    assert r.status_code == 302
+    assert r.headers["Location"].endswith("/login")
+
+def test_dashboard_page(client):
+    r = client.get("/dashboard")
     assert r.status_code == 302
     assert r.headers["Location"].endswith("/login")
 

@@ -12,11 +12,12 @@ except ImportError:
     pass
 
 from flask import Flask, render_template, session, abort, redirect, url_for
+from flask_migrate import Migrate
 
 from models import db
 
 
-def create_app():
+def create_app(config_override=None):
     app = Flask(__name__)
 
     # ── Config ──────────────────────────────────────────────────────────────
@@ -24,9 +25,12 @@ def create_app():
     supabase_key = os.environ.get("SUPABASE_PUBLISHABLE_KEY") or os.environ.get("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "")
 
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-change-in-prod")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-        "DATABASE_URL", "sqlite:///pythcode.db"
-    )
+    raw_db_url = os.environ.get("DATABASE_URL", "sqlite:///pythcode.db")
+    if raw_db_url.startswith("postgres://"):
+        raw_db_url = raw_db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+    elif raw_db_url.startswith("postgresql://") and not raw_db_url.startswith("postgresql+"):
+        raw_db_url = raw_db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = raw_db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "pool_pre_ping": True,
@@ -42,11 +46,16 @@ def create_app():
     app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
     app.config["SESSION_COOKIE_SECURE"] = os.environ.get("SESSION_COOKIE_SECURE", "false").lower() == "true"
 
+    if config_override:
+        app.config.update(config_override)
+
     # ── Extensions ──────────────────────────────────────────────────────────
     db.init_app(app)
+    Migrate(app, db)
 
-    with app.app_context():
-        db.create_all()
+    if app.config["SQLALCHEMY_DATABASE_URI"].startswith("sqlite"):
+        with app.app_context():
+            db.create_all()
 
     # ── Context processor ───────────────────────────────────────────────────
     @app.context_processor
@@ -98,15 +107,15 @@ def create_app():
 
     @app.route("/login")
     def login():
-        from api.supabase_auth import is_authenticated
-        if is_authenticated():
+        from api.supabase_auth import current_user_id
+        if current_user_id():
             return redirect(url_for("profile"))
         return render_template("login.html")
 
     @app.route("/register")
     def register():
-        from api.supabase_auth import is_authenticated
-        if is_authenticated():
+        from api.supabase_auth import current_user_id
+        if current_user_id():
             return redirect(url_for("profile"))
         return render_template("register.html")
 
@@ -114,6 +123,11 @@ def create_app():
     @login_required
     def profile():
         return render_template("profile.html")
+
+    @app.route("/dashboard")
+    @login_required
+    def dashboard():
+        return render_template("dashboard.html")
 
     @app.route("/project/<int:project_id>")
     def project(project_id):
@@ -150,4 +164,7 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    host = os.environ.get("HOST", "127.0.0.1")
+    debug = os.environ.get("FLASK_DEBUG", "0").strip() in ("1", "true", "True")
+    app.run(host=host, port=port, debug=debug)

@@ -74,11 +74,13 @@ python tools/check_map.py
 | `templates/playground.html` | Code playground | — | base.html, playground.js |
 | `templates/phase_map.html` | Visual phase map | — | base.html, phase_map.js |
 | `templates/profile.html` | User profile, XP, badges, streak | — | base.html |
+| `templates/dashboard.html` | Protected learner dashboard (progress overview, quick actions) | — | base.html |
 | `templates/about.html` | About page | — | base.html |
 | `templates/login.html` | Login form | — | base.html |
 | `templates/register.html` | Register form | — | base.html |
 | `templates/404.html` | 404 error page | — | base.html |
 | `docs/CONTENT_STANDARD.md` | Lesson writing standard (7 sections, challenge rules) | — | — |
+| `docs/DEPLOY_RENDER.md` | Deployment guide for Render with commands and environment variables | — | — |
 | `docs/TECH_STACK.md` | Tech stack + Phase JSON schema reference | — | — |
 | `docs/PROJECT_MAP.md` | **This file** | — | — |
 | `files/DESIGN.md` | Design spec (colors, typography, components) | — | — |
@@ -90,11 +92,16 @@ python tools/check_map.py
 | `tests/__init__.py` | Test package marker | — | — |
 | `tests/test_app.py` | 87 pytest tests covering all routes, grading & projects | — | app.py |
 | `Procfile` | Heroku/gunicorn entry point | `web: gunicorn app:app` | — |
-| `requirements.txt` | Python dependencies | — | — |
-| `.env.example` | Safe production Auth environment-variable template | `AUTH_PROVIDER`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` | deployment environment |
-| `.env.example` | Environment variables template | — | — |
+| `requirements.txt` | Python dependencies (Flask, SQLAlchemy, psycopg2-binary, dotenv) | — | — |
+| `.gitignore` | Git ignore rules for virtual environments, secrets, caches, and local databases | — | — |
+| `.env.example` | Safe environment variable template with placeholders | `DATABASE_URL`, `AUTH_PROVIDER`, `SUPABASE_URL` | deployment environment |
 | `hello.txt` | Temp file from phase 21 file I/O test | — | — |
 | `test_server.ps1` | PowerShell server test script | — | — |
+| `migrations/alembic.ini` | Alembic configuration for Flask-Migrate | — | — |
+| `migrations/env.py` | Migration runtime environment configuration | — | — |
+| `migrations/script.py.mako` | Migration template | — | — |
+| `migrations/versions/875c0c33b844_baseline_existing_tables.py` | Baseline migration representing existing initial database tables | — | — |
+| `migrations/versions/c7b02afa39ff_add_username_show_on_leaderboard_xp_.py` | Migration adding username, show_on_leaderboard, xp_events, and performance indexes | — | — |
 
 ---
 
@@ -109,6 +116,7 @@ python tools/check_map.py
 | GET | `/lesson/<phase_id>` | Lesson + challenges |
 | GET | `/playground` | Code playground |
 | GET | `/profile` | User profile (**authentication required**; redirects to `/login`) |
+| GET | `/dashboard` | Protected learner dashboard (**authentication required**; redirects to `/login`) |
 | GET | `/about` | About page |
 | GET | `/login` | Login page |
 | GET | `/register` | Register page |
@@ -141,13 +149,16 @@ python tools/check_map.py
 
 | Table | Columns | Notes |
 |-------|---------|-------|
-| `users` | `id`, `name`, `email` (unique), `password_hash`, `xp` (int, default 0), `streak` (int), `last_active` (date) | Password: Werkzeug `generate_password_hash` |
-| `progress` | `id`, `user_id` (FK→users), `phase_id` (int), `best_score` (float 0–1), `stars` (int 1–3), `completed_at` | One row per user+phase; upserted on submit |
-| `attempts` | `id`, `user_id` (FK→users), `phase_id`, `score` (float), `created_at` | Append-only history |
-| `badges` | `id`, `user_id` (FK→users), `badge_key` (str), `earned_at` | Unique per user+badge_key |
-| `auth_sessions` | `id`, `session_key` (unique opaque value), `user_id` (FK→users), `supabase_user_id`, `access_token`, `refresh_token`, timestamps | Server-side Supabase session data; provider tokens are never put in Flask's browser cookie |
+| `users` | `id`, `name`, `username` (unique, nullable), `email` (unique), `password_hash`, `xp` (int, default 0, indexed), `streak` (int), `show_on_leaderboard` (bool, default true), `last_active` (timestamptz) | Password: Werkzeug or Supabase-managed; RLS enabled |
+| `progress` | `id`, `user_id` (FK→users), `phase_id` (int), `best_score` (float 0–1), `stars` (int 1–3), `completed_at` | Unique on user_id+phase_id; indexed on (user_id, stars); RLS enabled |
+| `attempts` | `id`, `user_id` (FK→users), `phase_id`, `score` (float), `created_at` | Append-only history; indexed on (user_id, phase_id); RLS enabled |
+| `badges` | `id`, `user_id` (FK→users), `badge_key` (str), `earned_at` | Unique per user+badge_key; RLS enabled |
+| `auth_sessions` | `id`, `session_key` (unique opaque value), `user_id` (FK→users), `supabase_user_id`, `access_token`, `refresh_token`, timestamps | Server-side Supabase session data; tokens never sent to browser; RLS enabled |
+| `auth_identities` | `id`, `user_id` (FK→users), `supabase_user_id` (unique), `created_at` | Permanent mapping between Supabase Auth UID and local User record; RLS enabled |
+| `xp_events` | `id`, `user_id` (FK→users), `amount` (int), `reason` (str), `phase_id` (nullable int), `created_at` (timestamptz) | Audit log of XP transactions; indexed on user_id and created_at; RLS enabled |
 
-**Relationships:** User →(1:M) Progress, Attempts, Badges.
+**Relationships:** User →(1:M) Progress, Attempts, Badges, XP Events, Auth Sessions.
+**Row Level Security (RLS):** Enabled on all public tables with zero public access policies (protected from PostgREST/Data API while Flask backend superuser retains full access).
 
 ---
 
@@ -337,6 +348,12 @@ python tools/check_map.py
 
 | Date | What changed | Files changed |
 |------|-------------|---------------|
+| 2026-11-06 | Prepared project for Render deployment: pinned psycopg2-binary and SQLAlchemy in requirements.txt, verified Procfile and app instance, configured dynamic port/host/debug binding, created docs/DEPLOY_RENDER.md, and unstaged cached artifacts from git | requirements.txt, app.py, .env.example, docs/DEPLOY_RENDER.md, docs/PROJECT_MAP.md |
+| 2026-11-06 | Made server listening port configurable via PORT env var in app.py; diagnosed ERR_CONNECTION_REFUSED caused by background process lifecycle and sandbox network isolation | app.py, docs/PROJECT_MAP.md |
+| 2026-11-06 | Increased Supabase Auth timeout to 20s and hardened login/register redirect checks against stale sessions | app.py, api/supabase_auth.py, docs/PROJECT_MAP.md |
+| 2026-11-06 | Configured Flask-Migrate with baseline migration and upgrade migration (added username, show_on_leaderboard, xp_events, and indexes); enabled RLS on all public tables with zero public policies | app.py, models.py, requirements.txt, migrations/*, docs/PROJECT_MAP.md |
+| 2026-11-06 | Implemented git safety fixes: created .gitignore, unstaged .env, added psycopg2-binary and python-dotenv to requirements.txt, and refreshed .env.example placeholders | .gitignore, requirements.txt, .env.example, docs/PROJECT_MAP.md |
+| 2026-11-06 | Added protected /dashboard route and template with @login_required; added unit test coverage | app.py, templates/dashboard.html, tests/test_app.py, docs/PROJECT_MAP.md |
 | 2026-11-06 | Configured automatic .env loading and NEXT_PUBLIC_* variable aliases in app.py for Supabase integration; updated test fixture and ignored .env in check_map.py | app.py, tools/check_map.py, tests/test_app.py, docs/PROJECT_MAP.md |
 | 2026-11-06 | Added learning aids and projects: Code Tracer (step-by-step visual in 8 key phases), 5 Milestone Mini-Projects with guided steps, checklist, tests and badges, Lesson Helpers (Copy code, Open in Playground, Bookmark, Continue banner, search box, Printable Cheat Sheet), and Encouragement Results Screen with anime.js star pop and failure topic reviews | content/phase_03.json, phase_06.json, phase_10.json … phase_27.json, content/mini_projects.json, api/projects.py, api/badges.py, app.py, templates/project.html, templates/cheatsheet.html, static/js/project.js, static/js/lesson.js, static/js/home.js, static/js/phase_map.js, static/css/lesson.css, static/css/main.css, tests/test_app.py, docs/TECH_STACK.md, docs/PROJECT_MAP.md |
 | 2026-11-06 | Added Supabase Auth integration, server-side opaque session storage, protected `/profile` and authenticated APIs, configuration template, and Auth session regression coverage | app.py, models.py, api/auth.py, api/supabase_auth.py, api/content.py, api/progress.py, api/projects.py, templates/register.html, tests/test_app.py, .env.example, docs/PROJECT_MAP.md |

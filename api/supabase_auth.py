@@ -68,7 +68,7 @@ def _supabase_request(path: str, method: str = "GET", payload: dict | None = Non
 
     req = request.Request(f"{url}/auth/v1{path}", data=data, headers=headers, method=method)
     try:
-        with request.urlopen(req, timeout=5) as response:
+        with request.urlopen(req, timeout=20) as response:
             raw = response.read().decode("utf-8")
             return json.loads(raw) if raw else {}
     except error.HTTPError as exc:

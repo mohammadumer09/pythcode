@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — pythcode{% endblock %}
+
+{% block content %}
+<section class="section" aria-labelledby="dashboardHeading">
+  <div class="container" style="max-width:880px">
+
+    <div class="card" style="margin-bottom:1.5rem">
+      <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(198,255,26,0.12);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.6rem" aria-hidden="true">⚡</div>
+        <div>
+          <h1 id="dashboardHeading" style="font-size:1.5rem;font-weight:700">Learner Dashboard</h1>
+          <p class="text-muted" style="font-size:0.88rem">Welcome back, {{ current_user.name if current_user else 'Learner' }}! Here is your learning progress.</p>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:0.5rem">
+          <a href="/profile" class="btn btn-secondary btn-sm">View Profile</a>
+          <a href="/map" class="btn btn-primary btn-sm">Phase Map →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem">
+      <div class="card" style="text-align:center;padding:1.25rem">
+        <div class="stat-value" id="dashXP" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)">{{ current_user.xp if current_user else 0 }}</div>
+        <div class="text-muted" style="font-size:0.8rem;margin-top:0.25rem">Total XP</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1.25rem">
+        <div class="stat-value" id="dashStreak" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)">{{ current_user.streak if current_user else 0 }}</div>
+        <div class="text-muted" style="font-size:0.8rem;margin-top:0.25rem">🔥 Day Streak</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1.25rem">
+        <div class="stat-value" id="dashPhases" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)">—</div>
+        <div class="text-muted" style="font-size:0.8rem;margin-top:0.25rem">Phases Completed</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem">
+      <div class="card">
+        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Continue Learning</h2>
+        <p class="text-muted" style="font-size:0.88rem;margin-bottom:1rem">Jump directly to your next lesson and tackle interactive challenges.</p>
+        <a href="/map" class="btn btn-primary btn-sm">Explore Map</a>
+      </div>
+      <div class="card">
+        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Milestone Projects</h2>
+        <p class="text-muted" style="font-size:0.88rem;margin-bottom:1rem">Build real Python portfolio projects with guided checklists.</p>
+        <a href="/project/1" class="btn btn-secondary btn-sm">View Project 1</a>
+      </div>
+      <div class="card">
+        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">Code Playground</h2>
+        <p class="text-muted" style="font-size:0.88rem;margin-bottom:1rem">Experiment freely in the browser with Pyodide Web Worker runner.</p>
+        <a href="/playground" class="btn btn-secondary btn-sm">Open Playground</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+fetch('/api/progress')
+  .then(function(r) { return r.ok ? r.json() : null; })
+  .then(function(data) {
+    if (data && document.getElementById('dashPhases')) {
+      document.getElementById('dashPhases').textContent = data.phases_done + ' / 30';
+    }
+  })
+  .catch(function() {});
+</script>
+{% endblock %}
+
