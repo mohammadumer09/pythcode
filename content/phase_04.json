@@ -1,0 +1,116 @@
+{
+  "id": 4,
+  "title": "Data Types",
+  "level": "beginner",
+  "estimated_minutes": 12,
+  "lesson": [
+    {
+      "step": 1,
+      "heading": "The 4 Main Data Types",
+      "text": "Every value in Python has a **type** — it tells Python what kind of data you are working with.\n\nThe four most common types are:\n- **int** — whole numbers like `1`, `42`, `-7`\n- **float** — decimal numbers like `3.14`, `0.5`\n- **str** — text wrapped in quotes like `\"hello\"`\n- **bool** — either `True` or `False`\n\nPython automatically figures out the type when you create a variable.",
+      "code": "age = 20          # int\nprice = 9.99      # float\nname = \"Alice\"    # str\nis_happy = True   # bool",
+      "output": null
+    },
+    {
+      "step": 2,
+      "heading": "int and float",
+      "text": "An **int** (integer) is any whole number — positive, negative, or zero. It has no decimal point.\n\nA **float** (floating-point number) has a decimal point. Even `1.0` is a float, not an int.\n\nMixing an int and a float in a calculation always gives you a float.",
+      "code": "x = 10        # int\ny = 3.5       # float\nz = x + y     # float, because one value is float\nprint(z)\nprint(x * 2)  # still int",
+      "output": "13.5\n20"
+    },
+    {
+      "step": 3,
+      "heading": "str and bool",
+      "text": "A **str** (string) holds text. You can use single quotes `'hello'` or double quotes `\"hello\"` — both work the same way.\n\nA **bool** (boolean) can only be `True` or `False` (capital first letter — Python is case-sensitive). Booleans are very useful for making decisions in your programs.",
+      "code": "greeting = \"Hello, world!\"\nflag = False\nprint(greeting)\nprint(flag)",
+      "output": "Hello, world!\nFalse"
+    },
+    {
+      "step": 4,
+      "heading": "The type() Function",
+      "text": "You can ask Python what type a value is by using the built-in **`type()`** function. Pass any value or variable inside the parentheses and Python will tell you its type.\n\nThis is very handy for debugging — when you are not sure what type a variable holds, just print its type!",
+      "code": "print(type(42))\nprint(type(3.14))\nprint(type(\"hi\"))\nprint(type(True))",
+      "output": "<class 'int'>\n<class 'float'>\n<class 'str'>\n<class 'bool'>"
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "question": "What type does Python assign to the value `7.0`?",
+      "options": ["int", "float", "str", "bool"],
+      "answer": 1,
+      "hint": "Any number with a decimal point is a float.",
+      "explain": "`7.0` has a decimal point, so Python treats it as a `float` even though its decimal part is zero."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "question": "Which of the following is a valid bool value in Python?",
+      "options": ["true", "TRUE", "True", "1==1 printed"],
+      "answer": 2,
+      "hint": "Python booleans start with a capital letter.",
+      "explain": "Python's boolean literals are `True` and `False` — the first letter must be capitalised and the rest lowercase."
+    },
+    {
+      "id": 3,
+      "type": "mcq",
+      "question": "What will `type(\"100\")` return?",
+      "options": ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
+      "answer": 2,
+      "hint": "Look carefully — the number is inside quotes.",
+      "explain": "Because `100` is wrapped in quotes it is a string (`str`), not a number."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "question": "What will this code print?",
+      "code": "x = 5\ny = 2.0\nprint(type(x + y))",
+      "answer": "<class 'float'>",
+      "hint": "Adding an int and a float always gives a float.",
+      "explain": "When you add an `int` and a `float`, Python upgrades the result to `float`, so `type(5 + 2.0)` is `<class 'float'>`."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "question": "What will this code print?",
+      "code": "a = True\nb = False\nprint(type(a))\nprint(b)",
+      "answer": "<class 'bool'>\nFalse",
+      "hint": "type() shows the class name; printing a bool shows its value.",
+      "explain": "`type(True)` returns `<class 'bool'>` and printing `False` outputs the word `False`."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "question": "Fill in the function name to check the type of a variable:",
+      "template": "To find out the data type of a variable `x`, you write ___( x ).",
+      "answer": "type",
+      "hint": "It is a built-in Python function covered in the last lesson step.",
+      "explain": "The `type()` function returns the data type of any value or variable passed to it."
+    },
+    {
+      "id": 7,
+      "type": "fill",
+      "question": "Fill in a floating point literal (with a decimal point) to assign to x:",
+      "template": "x = ___\nprint(type(x))  # <class 'float'>",
+      "answer": "3.14",
+      "hint": "A float is any number that includes a decimal point.",
+      "explain": "Any numeric literal with a decimal point, like `3.14`, is stored as a `float`."
+    },
+    {
+      "id": 8,
+      "type": "code",
+      "question": "Create a variable called `score` and set it to the integer `95`. Then print its type using `type()`.",
+      "starter": "# Create score and print its type\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "<class 'int'>"
+        }
+      ],
+      "hint": "Use type() and pass score to it inside print().",
+      "explain": "`score = 95` stores an integer. `print(type(score))` outputs `<class 'int'>`."
+    }
+  ],
+  "pass_score": 70
+}

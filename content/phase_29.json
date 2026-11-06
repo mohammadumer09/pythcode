@@ -1,0 +1,244 @@
+{
+  "id": 29,
+  "title": "Writing Clean Python",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Code is read ten times more often than it is written. Writing code that \"just works\" is not enough \u2014 messy, disorganized code with cryptic variable names and 100-line functions leads to bugs, frustrates teammates, and becomes impossible to maintain. Writing clean, Pythonic code that follows industry standards (PEP 8) is what makes you a trusted software developer.",
+      "code": "# Clean, typed, documented Python\ndef calculate_discount(price: float, rate: float = 0.10) -> float:\n    \"\"\"Return price after applying discount percentage.\"\"\"\n    assert 0 <= rate <= 1, \"Rate must be between 0 and 1\"\n    return round(price * (1 - rate), 2)\n\nprint(\"Final price:\", calculate_discount(50.0))",
+      "output": "Final price: 45.0"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "**PEP 8** is the official style guide for Python code. Key rules include:\n- **Indentation**: Exactly 4 spaces per indent level (never tabs).\n- **Naming Conventions**:\n  - `snake_case` for functions, methods, and variables (`user_count`, `get_data`).\n  - `PascalCase` for classes (`UserProfile`, `BankAccount`).\n  - `UPPER_SNAKE_CASE` for constants (`MAX_CONNECTIONS = 100`).\n- **Function Design**: Small functions (under 20-30 lines) that have a single responsibility.\n- **Type Hints**: Modern Python annotations documenting expected parameter and return types.",
+      "code": "MAX_USERS: int = 50  # Constant\n\ndef is_full(current_count: int) -> bool:\n    return current_count >= MAX_USERS\n\nprint(\"At capacity?\", is_full(50))",
+      "output": "At capacity? True"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Type Hints are Non-Enforcing**: Python does NOT check types at runtime. Writing `def add(x: int):` won't crash if you pass `'hello'`. Type hints exist for documentation, IDE autocomplete, and static analyzers like `mypy`.\n2. **Docstrings vs Comments**:\n   - **Comments** (`#`): Explain **why** you made a non-obvious design decision to future developers.\n   - **Docstrings** (`\"\"\"...\"\"\"`): Explain **what** the function or class does and how to call it. Stored in `func.__doc__` and displayed by `help(func)`.\n3. **Testing with `assert`**: Write small self-verifying test functions to guarantee functions work before deploying.",
+      "code": "def double(n: int) -> int:\n    \"\"\"Multiply n by two.\"\"\"\n    return n * 2\n\n# Self-testing with assert\nassert double(3) == 6, \"Test failed\"\nprint(\"Double of 7:\", double(7))\nprint(\"Docstring:\", double.__doc__)",
+      "output": "Double of 7: 14\nDocstring: Multiply n by two."
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore clean code principles:\n\n* **Guard Clauses**: Exit early on invalid conditions rather than deep nested `if-else`.\n* **Meaningful Naming**: `days_until_expiration` instead of `d`.\n* **Single Responsibility**: Separate calculating data from printing data.",
+      "code": "# Bad (deep nesting) vs Good (guard clauses)\ndef get_ticket_price(age: int) -> int:\n    if age < 0:\n        return 0  # Guard clause\n    if age < 12:\n        return 8\n    if age >= 65:\n        return 10\n    return 15\n\nprint(\"Senior price:\", get_ticket_price(65))",
+      "output": "Senior price: 10"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Obvious Comments**:\nWriting `# increment i by 1` above `i += 1` adds visual noise without information. Write comments that explain *why*, not *what*.\n\n2. **Single-Letter Variable Names**:\nNaming variables `a`, `b`, `x`, `temp2` makes code unreadable after 2 days. Name them after their real-world meaning.\n\n3. **Huge \"God Functions\"**:\nA 150-line function that reads files, parses JSON, calculates math, and prints formatted text should be broken into 4 clean sub-functions.",
+      "code": "# Clear naming makes code self-documenting\nis_admin = True\nhas_passed_quiz = True\ncan_access_dashboard = is_admin and has_passed_quiz\nprint(\"Dashboard access:\", can_access_dashboard)",
+      "output": "Dashboard access: True"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use Type Hints in function signatures**: Dramatically improves IDE auto-complete and team collaboration.\n2. **Keep functions pure when possible**: Functions that take inputs and return outputs without modifying global variables are trivial to test.\n3. **Automate testing with assertions**: Write tests for happy paths and edge cases (0, empty string, negative numbers).",
+      "code": "def format_name(first: str, last: str) -> str:\n    return f\"{first.strip().title()} {last.strip().title()}\"\n\nassert format_name(\" ada \", \"lovelace\") == \"Ada Lovelace\"\nprint(\"Verified:\", format_name(\" ada \", \"lovelace\"))",
+      "output": "Verified: Ada Lovelace"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **PEP 8**: 4 spaces, `snake_case` functions, `PascalCase` classes, `UPPER_CASE` constants.\n\u2022 **Type Hints**: `def f(x: int) -> str:` documents expected types.\n\u2022 **Docstrings**: `\"\"\"Triple quotes\"\"\"` explain what functions do; access with `__doc__`.\n\u2022 **Guard Clauses**: Return early to eliminate nested if statements.\n\u2022 **Self-Testing**: Use `assert func(input) == expected` to verify correctness.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "According to PEP 8, what casing convention should be used for Python constants?",
+      "options": [
+        "UPPER_SNAKE_CASE (e.g. MAX_USERS)",
+        "snake_case (e.g. max_users)",
+        "PascalCase (e.g. MaxUsers)",
+        "camelCase (e.g. maxUsers)"
+      ],
+      "answer": 0,
+      "hint": "All uppercase with underscores.",
+      "explanation": "PEP 8 specifies that constants should be written in all capital letters with underscores."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the docstring of this function?",
+      "code": "def add(a, b):\n    \"\"\"Add two numbers.\"\"\"\n    return a + b\nprint(add.__doc__)",
+      "answer": "Add two numbers.",
+      "hint": "The text inside the triple quotes immediately inside the function.",
+      "explanation": "add.__doc__ returns the triple-quoted docstring 'Add two numbers.'."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the return type annotation for a function that returns an integer.",
+      "template": "def count_items(items) -> ___:\n    return len(items)",
+      "answer": "int",
+      "hint": "Three-letter type name for integers.",
+      "explanation": "Type hint `-> int` specifies that the return value is an integer."
+    },
+    {
+      "id": 4,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Does Python enforce type hints at runtime (e.g. crashing if you pass a string to a parameter annotated as int)?",
+      "options": [
+        "No, type hints are for documentation, IDEs, and linters; Python runs dynamically",
+        "Yes, Python 3 raises TypeError immediately on mismatched types",
+        "Yes, but only in debug mode",
+        "Only for class methods"
+      ],
+      "answer": 0,
+      "hint": "Python remains a dynamically typed language.",
+      "explanation": "Type hints in Python are not enforced at runtime. They serve documentation, static analysis (mypy), and IDE tooling."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this assertion test output if the condition passes?",
+      "code": "def square(x):\n    return x * x\nassert square(4) == 16\nprint(\"Pass\")",
+      "answer": "Pass",
+      "hint": "assert does nothing if the condition is True.",
+      "explanation": "Since square(4) == 16 is True, the assertion passes silently and print(\"Pass\") runs."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What makes this code poor quality according to clean code principles?\n```python\ndef p(d, c):\n    # check\n    if c > 0:\n        return d / c\n```",
+      "options": [
+        "Cryptic single-letter variable and function names (p, d, c) and useless comment",
+        "c > 0 is invalid Python",
+        "Functions cannot take two parameters",
+        "return must be in parentheses"
+      ],
+      "answer": 0,
+      "hint": "What does p, d, and c stand for? It's impossible to tell without reading implementation.",
+      "explanation": "Clean code emphasizes descriptive naming (e.g. `calculate_average(total, count)`) over cryptic single-letter names."
+    },
+    {
+      "id": 7,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the type annotation syntax indicating parameter `name` is a string.",
+      "template": "def greet(name_ ____):\n    return f\"Hello, {name}\"",
+      "answer": ": str",
+      "hint": "Colon followed by type name.",
+      "explanation": "Parameters are type-hinted with a colon and type name: `name: str`."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this guard clause function return for negative input?",
+      "code": "def check_score(score: int) -> str:\n    if score < 0:\n        return \"Invalid\"\n    return \"Valid\"\nprint(check_score(-5))",
+      "answer": "Invalid",
+      "hint": "-5 is < 0, triggering the early return.",
+      "explanation": "The guard clause intercepts negative scores and returns 'Invalid'."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What exception occurs when an assertion fails?",
+      "options": [
+        "AssertionError",
+        "ValueError",
+        "TypeError",
+        "SyntaxError"
+      ],
+      "answer": 0,
+      "hint": "The keyword assert raises this error.",
+      "explanation": "A failed assertion raises `AssertionError`."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What is the difference between a comment (`#`) and a docstring (`\"\"\"...\"\"\"`)?",
+      "options": [
+        "Docstrings document what functions/classes do and are accessible via __doc__; comments explain implementation reasoning ('why')",
+        "Comments are compiled into bytecode; docstrings are ignored",
+        "Docstrings are only for variables",
+        "There is no difference"
+      ],
+      "answer": 0,
+      "hint": "One is metadata attached to objects; the other is skipped by the compiler.",
+      "explanation": "Docstrings are official documentation strings accessible programmatically via `obj.__doc__` and `help()`. Comments are ignored compiler notes explaining 'why'."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly structures a clean function with type hints, docstring, and test?",
+      "options": [
+        "1: def double(x: int) -> int: \\n 2:     \"\"\"Double input.\"\"\" \\n 3:     return x * 2 \\n 4: assert double(5) == 10",
+        "1: assert double(5) == 10 \\n 2: def double(x): pass",
+        "1: \"\"\"Double input.\"\"\" \\n 2: def double(x): pass",
+        "1: def double(x): return x * 2 \\n 2: \"\"\"Doc\"\"\""
+      ],
+      "answer": 0,
+      "hint": "Function definition header, then docstring, then body, then assertion test.",
+      "explanation": "The docstring must be the very first statement inside the function body, and tests follow after definition."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Write a clean function `is_valid_username(name: str) -> bool`:\n- Returns `True` if `len(name) >= 4` and `name.isalnum()` (alphanumeric), otherwise `False`.\nInclude an assertion `assert is_valid_username('alex99') is True` and print `is_valid_username('alex99')`.\nExpected output:\nTrue",
+      "starter": "# Define is_valid_username with type hints and assert test, then print result for 'alex99'\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "True"
+        }
+      ],
+      "hints": [
+        "def is_valid_username(name: str) -> bool: return len(name) >= 4 and name.isalnum()",
+        "assert is_valid_username('alex99') is True",
+        "def is_valid_username(name: str) -> bool:\n    return len(name) >= 4 and name.isalnum()\nassert is_valid_username('alex99') is True\nprint(is_valid_username('alex99'))"
+      ],
+      "explanation": "'alex99' has length 6 and is alphanumeric, returning True."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Clean Financial Rounder with Assertions\nWrite a clean, documented function `apply_tax(subtotal: float, rate: float = 0.05) -> float`:\n1. Docstring: `\"\"\"Calculate total with tax rounded to 2 decimals.\"\"\"`\n2. Guard clause with assert: `assert subtotal >= 0 and rate >= 0, 'Values must be non-negative'`\n3. Return `round(subtotal * (1 + rate), 2)`.\nVerify with `assert apply_tax(100.0, 0.08) == 108.0` and print: `Total: ${apply_tax(100.0, 0.08):.2f}`\nExpected output:\nTotal: $108.00",
+      "starter": "# Define apply_tax with type hints, docstring, assertions, and print formatted total\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Total: $108.00"
+        }
+      ],
+      "hints": [
+        "def apply_tax(subtotal: float, rate: float = 0.05) -> float:",
+        "\"\"\"Calculate total with tax rounded to 2 decimals.\"\"\"",
+        "def apply_tax(subtotal: float, rate: float = 0.05) -> float:\n    \"\"\"Calculate total with tax rounded to 2 decimals.\"\"\"\n    assert subtotal >= 0 and rate >= 0, 'Values must be non-negative'\n    return round(subtotal * (1 + rate), 2)\nassert apply_tax(100.0, 0.08) == 108.0\nprint(f\"Total: ${apply_tax(100.0, 0.08):.2f}\")"
+      ],
+      "explanation": "This mini-task brings together PEP 8 naming, type annotations, docstrings, defensive assertions, and f-string currency formatting."
+    }
+  ]
+}

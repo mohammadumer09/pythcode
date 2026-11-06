@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Profile — pythcode{% endblock %}
+
+{% block content %}
+<section class="section" aria-labelledby="profileHeading">
+  <div class="container" style="max-width:720px">
+
+    <div id="profileLoading" style="text-align:center;padding:3rem">
+      <div class="spinner" style="width:32px;height:32px;margin:auto"></div>
+    </div>
+
+    <div id="profileShell" style="display:none">
+      <!-- Header -->
+      <div class="card" style="margin-bottom:1.5rem">
+        <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(198,255,26,0.12);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.8rem" aria-hidden="true">👤</div>
+          <div>
+            <h1 id="profileHeading" style="font-size:1.4rem;font-weight:700" id="profileName">—</h1>
+            <p class="text-muted" id="profileEmail" style="font-size:0.85rem">—</p>
+          </div>
+          <div style="margin-left:auto">
+            <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+        <div class="card" style="text-align:center;padding:1.25rem">
+          <div class="stat-value" id="profileXP" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)">0</div>
+          <div class="text-muted" style="font-size:0.8rem;margin-top:0.25rem">XP earned</div>
+        </div>
+        <div class="card" style="text-align:center;padding:1.25rem">
+          <div class="stat-value" id="profileStreak" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)">0</div>
+          <div class="text-muted" style="font-size:0.8rem;margin-top:0.25rem">🔥 Day streak</div>
+        </div>
+        <div class="card" style="text-align:center;padding:1.25rem">
+          <div class="stat-value" id="profileDone" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)">0</div>
+          <div class="text-muted" style="font-size:0.8rem;margin-top:0.25rem">Phases done</div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="card">
+        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem">Badges</h2>
+        <div id="badgeWall" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.75rem"></div>
+        <p id="noBadges" class="text-muted" style="display:none;font-size:0.88rem">Complete phases to earn badges!</p>
+      </div>
+
+      <div class="text-center mt-3">
+        <a href="/map" class="btn btn-primary">Back to Phase Map →</a>
+      </div>
+    </div>
+
+    <!-- Guest mode message -->
+    <div id="guestProfile" style="display:none;text-align:center;padding:3rem">
+      <p style="font-size:2rem" aria-hidden="true">👤</p>
+      <h2 style="margin-top:1rem">You are in <span class="accent-word">guest mode</span></h2>
+      <p class="text-muted mt-1 mb-3">Create a free account to save your progress, XP, and badges.</p>
+      <a href="/register" class="btn btn-primary">Create account →</a>
+      <a href="/login" class="btn btn-secondary" style="margin-left:0.5rem">Log in</a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Check if logged in
+  try {
+    const res = await fetch('/api/me');
+    if (!res.ok) {
+      // Not logged in — check guest
+      if (localStorage.getItem('pc_guest') === '1') {
+        showGuest();
+      } else {
+        window.location.href = '/login';
+      }
+      return;
+    }
+    const user = await res.json();
+    const prog = await fetch('/api/progress').then(r => r.json()).catch(() => ({}));
+    renderProfile(user, prog);
+  } catch {
+    showGuest();
+  }
+});
+
+function renderProfile(user, prog) {
+  document.getElementById('profileLoading').style.display = 'none';
+  document.getElementById('profileShell').style.display   = 'block';
+
+  document.getElementById('profileName').textContent  = user.name;
+  document.getElementById('profileEmail').textContent = user.email;
+  document.getElementById('profileXP').textContent    = user.xp;
+  document.getElementById('profileStreak').textContent = user.streak;
+  document.getElementById('profileDone').textContent  = prog.phases_done || 0;
+
+  const badges = user.badges || [];
+  const wall   = document.getElementById('badgeWall');
+  const none   = document.getElementById('noBadges');
+
+  if (badges.length === 0) {
+    none.style.display = 'block';
+  } else {
+    const BADGE_META = {
+      first_print:      { label:'First Print',      icon:'🖨️' },
+      syntax_star:      { label:'Syntax Star',       icon:'✨' },
+      variable_vault:   { label:'Variable Vault',    icon:'📦' },
+      type_master:      { label:'Type Master',       icon:'🏷️' },
+      converter:        { label:'Converter',         icon:'🔄' },
+      number_cruncher:  { label:'Number Cruncher',   icon:'🔢' },
+      string_wizard:    { label:'String Wizard',     icon:'🧵' },
+      format_pro:       { label:'Format Pro',        icon:'🎨' },
+      logic_hero:       { label:'Logic Hero',        icon:'⚡' },
+      brancher:         { label:'Brancher',          icon:'🌿' },
+      beginner_complete:{ label:'Beginner Complete', icon:'🏁' },
+      streak_3:         { label:'On a Roll',         icon:'🔥' },
+      streak_7:         { label:'Week Warrior',      icon:'🗓️' },
+      century:          { label:'Century Club',      icon:'💯' },
+      perfect_score:    { label:'Perfect Score',     icon:'⭐' },
+    };
+    badges.forEach(b => {
+      const meta = BADGE_META[b.key] || { label: b.key, icon: '🏅' };
+      const div  = document.createElement('div');
+      div.style.cssText = 'background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:1rem;text-align:center';
+      div.innerHTML = `
+        <div style="font-size:1.8rem;margin-bottom:0.4rem">${meta.icon}</div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--text)">${meta.label}</div>
+      `;
+      wall.appendChild(div);
+    });
+  }
+
+  // Animate XP counter with anime.js
+  if (typeof anime !== 'undefined') {
+    const target = { val: 0 };
+    anime({
+      targets: target,
+      val: user.xp,
+      round: 1,
+      duration: 1200,
+      easing: 'easeOutExpo',
+      update: () => { document.getElementById('profileXP').textContent = target.val; },
+    });
+  }
+}
+
+function showGuest() {
+  document.getElementById('profileLoading').style.display = 'none';
+  document.getElementById('guestProfile').style.display   = 'block';
+}
+
+async function logout() {
+  await fetch('/api/logout', { method: 'POST' });
+  window.location.href = '/';
+}
+</script>
+{% endblock %}
+

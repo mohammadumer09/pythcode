@@ -1,0 +1,243 @@
+{
+  "id": 7,
+  "title": "Strings",
+  "level": "beginner",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Every real software application deals with text. Whether you are validating a user email on a signup form, extracting stock symbols from news headlines, or formatting a customer receipt, strings are the fundamental tool. Learning how Python indexes, slices, and checks strings gives you complete control over text manipulation.",
+      "code": "user_id = \"USR-94821\"\naccount_prefix = user_id[0:3]\nprint(\"System prefix:\", account_prefix)\nprint(\"Is valid ID:\", \"USR\" in user_id)",
+      "output": "System prefix: USR\nIs valid ID: True"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **string** (`str`) is an ordered sequence of characters surrounded by quotes. Because strings are ordered, every character has a specific position called an **index** starting at `0`. You can retrieve individual characters with square brackets `[]`, slice out substrings with `[start:stop:step]`, check length with `len()`, and test membership using `in`.\n\nCrucially, Python strings are **immutable** \u2014 once created in memory, they cannot be changed in place.",
+      "code": "lang = \"Python\"\nprint(\"First char:\", lang[0])\nprint(\"Last char:\", lang[-1])\nprint(\"Slice:\", lang[0:2])\nprint(\"Length:\", len(lang))",
+      "output": "First char: P\nLast char: n\nSlice: Py\nLength: 6"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "When Python evaluates `text = 'Code'`: \n1. **Memory Allocation**: Python creates a contiguous sequence of characters in memory: `'C'` at index 0, `'o'` at 1, `'d'` at 2, `'e'` at 3.\n2. **Negative Indexing**: Python also maps indices from the right: index `-1` points to the last character `'e'`, `-2` to `'d'`, down to `-4` for `'C'`.\n3. **Slicing**: When evaluating `text[1:3]`, Python copies the characters from index 1 up to (but not including) index 3, producing a new string `'od'`.\n4. **Immutability**: Strings cannot be edited in-place. If you write `text + '!'`, Python does not modify `'Code'`; it allocates a completely new string `'Code!'` in memory.",
+      "code": "text = \"Code\"\nprint(text[1:3])   # 'od' (index 1 and 2, stops before 3)\nprint(text[-1])    # 'e' (last character)\nnew_text = text + \"!\"\nprint(new_text)    # 'Code!'",
+      "output": "od\ne\nCode!"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Here are the primary ways to work with strings:\n\n* **Slicing with Step & Reversing**: `text[::2]` skips every second character. `text[::-1]` reverses the entire string.\n* **Concatenation & Repetition**: `+` joins strings; `*` repeats a string multiple times.\n* **Escape Characters & Raw Strings**: `\\n` creates a newline, `\\t` creates a tab. Prefix with `r` (e.g. `r'C:\\new\\folder'`) to treat backslashes as raw literal characters.\n* **Multi-line Strings**: Triple quotes `'''` or `\"\"\"` preserve newlines.\n* **Looping & Membership**: Use `for char in text:` to inspect each character, or `if 'cat' in text:` to search.",
+      "code": "word = \"Antigravity\"\nprint(\"Reversed:\", word[::-1])\nprint(\"Repeated:\", \"Ha\" * 3)\nraw_path = r\"C:\\notes\\new_project\"\nprint(\"Path:\", raw_path)\nprint(\"Has 'grav':\", \"grav\" in word)",
+      "output": "Reversed: ytivargitnA\nRepeated: HaHaHa\nPath: C:\\notes\\new_project\nHas 'grav': True"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "Watch out for these frequent beginner errors:\n\n1. **Trying to mutate a string**:\n```python\nname = 'Alice'\nname[0] = 'E'  # TypeError: 'str' object does not support item assignment\n```\n*Fix*: Rebuild a new string: `name = 'E' + name[1:]`.\n\n2. **Index out of range**:\n```python\nmsg = 'Hi'\nprint(msg[5])  # IndexError: string index out of range\n```\n*Fix*: Valid indices are `0` to `len(msg) - 1`. Slices like `msg[0:5]` do not error.\n\n3. **Unintended escape sequences in paths**:\n```python\npath = 'C:\\tools\\new'  # \\t turns into a tab, \\n into a newline\n```\n*Fix*: Use raw string: `r'C:\\tools\\new'` or double slashes `\\\\`.\n\n4. **Off-by-one in slice stop**:\nRemember `text[0:3]` extracts indices 0, 1, 2 (3 characters total). The stop index is never included.",
+      "code": "# Demonstration of safe slicing vs index error\nmsg = \"Hi\"\nprint(\"Slice is safe:\", msg[0:10])\n# Rebuilding instead of mutating\nname = \"Alice\"\nnew_name = \"E\" + name[1:]\nprint(\"Rebuilt:\", new_name)",
+      "output": "Slice is safe: Hi\nRebuilt: Elice"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use `in` instead of complex checks**: Write `if \"@\" in email:` rather than looping character-by-character.\n2. **Use raw strings for paths & regex**: Whenever a string contains backslashes (such as Windows file paths), prefix with `r` (`r\"C:\\docs\"`).\n3. **Prefer descriptive variable names**: Name strings by what they hold (e.g. `customer_email`, `product_code`) instead of vague letters like `s` or `x`.",
+      "code": "email = \"dev@example.com\"\nif \"@\" in email and \".\" in email:\n    print(\"Basic email check passed\")",
+      "output": "Basic email check passed"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Zero-based indexing**: First character is `[0]`, last character is `[-1]`.\n\u2022 **Slicing syntax**: `[start:stop:step]` \u2014 `stop` is non-inclusive; negative step reverses.\n\u2022 **Immutability**: Strings cannot be edited in-place; modifications always create new strings.\n\u2022 **Escapes vs Raw**: `\\n` is newline, `\\t` is tab; `r\"raw\"` ignores escape sequences.\n\u2022 **Membership & length**: `len(text)` returns total count; `'sub' in text` returns `True` or `False`.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the index of the first character in any non-empty Python string?",
+      "options": [
+        "1",
+        "0",
+        "-1",
+        "None"
+      ],
+      "answer": 1,
+      "hint": "Python uses zero-based numbering for sequence indexing.",
+      "explanation": "In Python, sequences start at index 0. The first character is always at index 0."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Which index retrieves the very last character of a string without knowing its length?",
+      "options": [
+        "len(s)",
+        "-1",
+        "last",
+        "-0"
+      ],
+      "answer": 1,
+      "hint": "Negative indices count backwards from the right end.",
+      "explanation": "Index -1 refers to the last character in the string."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "word = \"Python\"\nprint(word[0:2])",
+      "answer": "Py",
+      "hint": "Slicing [0:2] extracts indices 0 and 1, stopping before index 2.",
+      "explanation": "The slice [0:2] takes characters at indices 0 ('P') and 1 ('y'). Output is Py."
+    },
+    {
+      "id": 4,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the built-in function name to measure the length of the string.",
+      "template": "message = \"Antigravity\"\nprint(____(message))  # 11",
+      "answer": "len",
+      "hint": "Three-letter built-in function that counts items in a sequence.",
+      "explanation": "len() returns the total number of characters in a string."
+    },
+    {
+      "id": 5,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What exception does Python raise when executing this code?\n```python\ntext = 'hello'\ntext[0] = 'H'\n```",
+      "options": [
+        "ValueError",
+        "IndexError",
+        "TypeError",
+        "SyntaxError"
+      ],
+      "answer": 2,
+      "hint": "Strings are immutable; mutating an item by index raises a type error.",
+      "explanation": "Strings in Python are immutable. Attempting item assignment raises `TypeError: 'str' object does not support item assignment`."
+    },
+    {
+      "id": 6,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "tag = \"code\"\nprint(tag * 3)",
+      "answer": "codecodecode",
+      "hint": "The * operator with a string and an integer repeats the string.",
+      "explanation": "'code' * 3 duplicates the string 3 times, yielding 'codecodecode'."
+    },
+    {
+      "id": 7,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the operator that checks if 'key' is inside 'keyboard'.",
+      "template": "print(\"key\" ___ \"keyboard\")  # True",
+      "answer": "in",
+      "hint": "A two-letter membership operator.",
+      "explanation": "The 'in' operator checks for substring membership and returns True if found."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this slicing code print?",
+      "code": "s = \"abcdef\"\nprint(s[1::2])",
+      "answer": "bdf",
+      "hint": "Start at index 1 ('b'), step by 2 through the end.",
+      "explanation": "Indices selected are 1 ('b'), 3 ('d'), and 5 ('f'). The output is 'bdf'."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "order",
+      "question": "Which line order correctly reverses `word = 'live'` and prints it as `'evil'`?",
+      "options": [
+        "1: word = 'live' \\n 2: rev = word[::-1] \\n 3: print(rev)",
+        "1: rev = word[::-1] \\n 2: word = 'live' \\n 3: print(rev)",
+        "1: word = 'live' \\n 2: print(word[0:4]) \\n 3: rev = word",
+        "1: word = 'live' \\n 2: word.reverse() \\n 3: print(word)"
+      ],
+      "answer": 0,
+      "hint": "Define the word first, slice with step -1 to reverse, then print.",
+      "explanation": "We first define `word = 'live'`, slice it backwards with `word[::-1]` into `rev`, then `print(rev)`."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What is the output of this reverse slice?",
+      "code": "name = \"Python\"\nprint(name[::-1])",
+      "answer": "nohtyP",
+      "hint": "A step of -1 steps backwards character by character.",
+      "explanation": "name[::-1] reverses 'Python' to produce 'nohtyP'."
+    },
+    {
+      "id": 11,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "find_bug",
+      "question": "Find the bug and fix it: The programmer wants to print a Windows path `C:\\new\\test` without `\\n` and `\\t` turning into a newline and tab.",
+      "starter": "# Fix this line so backslashes are literal\npath = \"C:\\new\\test\"\nprint(path)\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "C:\\new\\test"
+        }
+      ],
+      "hints": [
+        "Notice how \\n and \\t act as escape characters.",
+        "Prefix the string with r to make it a raw string.",
+        "Use: path = r\"C:\\new\\test\""
+      ],
+      "explanation": "Raw strings prefixed with `r` prevent backslashes from being treated as escape characters."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Given `code = 'DEV-9482'`, extract the prefix (first 3 letters), the suffix (last 4 characters), and print them separated by a space.\nExpected output:\nDEV 9482",
+      "starter": "code = \"DEV-9482\"\n# Extract prefix and suffix using slicing, then print them\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "DEV 9482"
+        }
+      ],
+      "hints": [
+        "Use code[:3] to get 'DEV'.",
+        "Use code[-4:] to get '9482'.",
+        "print(code[:3], code[-4:])"
+      ],
+      "explanation": "code[:3] slices indices 0,1,2 ('DEV') and code[-4:] grabs the last 4 characters ('9482')."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Username Formatter & Validator\nGiven `username = '  alex_coder  '`, do the following:\n1. Check if the string `'coder'` is in `username`.\n2. Slice out the core username without the surrounding spaces: `alex_coder`.\n3. Print the reversed core username followed by its character count.\nExpected output:\nTrue\nredoc_xela 10",
+      "starter": "username = \"  alex_coder  \"\n# 1. Print if 'coder' is in username (True or False)\n# 2. Slice out core 'alex_coder' (characters from index 2 to 12)\n# 3. Print the reversed core and its length separated by a space\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "True\nredoc_xela 10"
+        }
+      ],
+      "hints": [
+        "Use 'coder' in username for the boolean check.",
+        "Slice the core with username[2:12], reverse it with core[::-1], and find its length with len(core).",
+        "core = username[2:12]\nprint('coder' in username)\nprint(core[::-1], len(core))"
+      ],
+      "explanation": "This task combines membership checking ('coder' in username), slicing [2:12], reversal [::-1], and len()."
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "id": 24,
+  "title": "Inheritance & OOP",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "In large software projects, many entities share common behavior. An Employee and a Manager both have names, emails, and employee IDs, but a Manager also has a department budget and manages a team. Instead of duplicating all Employee logic inside Manager, **inheritance** allows the Manager class to inherit all features of Employee and customize only what is unique.",
+      "code": "class Employee:\n    def __init__(self, name, salary):\n        self.name = name\n        self.salary = salary\n\nclass Manager(Employee):\n    def get_role(self):\n        return \"Team Leader\"\n\nm = Manager(\"Sarah\", 95000)\nprint(f\"{m.name}: ${m.salary} ({m.get_role()})\")",
+      "output": "Sarah: $95000 (Team Leader)"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "* **Inheritance**: `class Child(Parent):` establishes an \"is-a\" relationship. The child automatically receives all methods and attributes from the parent.\n* **`super()`**: Calls parent methods from inside the child (most commonly `super().__init__(...)` to initialize inherited attributes).\n* **Method Overriding**: A child class can redefine a method to replace or extend parent behavior.\n* **Polymorphism**: Different classes can implement the same method name, allowing callers to treat them interchangeably.",
+      "code": "class Animal:\n    def speak(self):\n        return \"Some sound\"\n\nclass Dog(Animal):\n    def speak(self):       # Method overriding\n        return \"Woof!\"\n\nclass Cat(Animal):\n    def speak(self):\n        return \"Meow!\"\n\nfor pet in [Dog(), Cat()]:\n    print(pet.speak())   # Polymorphism in action",
+      "output": "Woof!\nMeow!"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Method Resolution Order (MRO)**: When calling `obj.method()`, Python checks the instance's class first. If not found, it walks up the inheritance tree. You can inspect this path with `ClassName.__mro__`.\n2. **`super()` Binding**: When `super().__init__(name)` is called inside a child class, Python automatically looks up the parent's `__init__` and binds `self` to it.\n3. **Encapsulation by Convention**:\n   - `_single_leading_underscore`: Indicates internal/private use by convention (gentlemen's agreement).\n   - `__double_leading_underscore`: Triggers **name mangling** (Python renames it to `_ClassName__var`) to prevent accidental subclass collisions.\n4. **Composition vs Inheritance**: Prefer **composition** (\"has-a\": a Car *has an* Engine) over inheritance (\"is-a\") when entities merely use features rather than being specialized variants.",
+      "code": "class Engine:\n    def start(self):\n        return \"Vroom\"\n\nclass Car:  # Composition: Car HAS AN Engine\n    def __init__(self):\n        self.engine = Engine()\n    def drive(self):\n        return self.engine.start()\n\nprint(Car().drive())",
+      "output": "Vroom"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Advanced OOP decorators:\n\n* **`@property`**: Turns a method into a getter that can be accessed like an attribute (`obj.name` instead of `obj.get_name()`).\n* **`@staticmethod`**: A function that lives inside a class for organizational purposes but does not receive `self` or access class state.\n* **`@classmethod`**: Receives `cls` (the class itself) as its first argument; often used for alternative constructors.",
+      "code": "class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n    @property\n    def fahrenheit(self):\n        return self._celsius * 9/5 + 32\n    @staticmethod\n    def is_freezing(c):\n        return c <= 0\n\nt = Temperature(25)\nprint(\"Fahrenheit:\", t.fahrenheit)\nprint(\"Freezing?\", Temperature.is_freezing(-2))",
+      "output": "Fahrenheit: 77.0\nFreezing? True"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Forgetting `super().__init__()` in child class**:\nIf a child defines its own `__init__` without calling `super().__init__()`, the parent attributes are never created!\n\n2. **Deep inheritance trees (Spaghetti OOP)**:\nInheriting 5 levels deep (`A -> B -> C -> D -> E`) creates brittle, tangled code. Keep hierarchies shallow (1-2 levels).\n\n3. **Calling static methods with `self`**:\n`@staticmethod` methods do not take `self`. Defining `def my_stat(self):` raises an argument error when called from the class.",
+      "code": "# Proper super().__init__() call\nclass Person:\n    def __init__(self, name):\n        self.name = name\nclass Member(Person):\n    def __init__(self, name, member_id):\n        super().__init__(name)  # Parent init\n        self.member_id = member_id\n\nm = Member(\"Leo\", 104)\nprint(f\"{m.name}: #{m.member_id}\")",
+      "output": "Leo: #104"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Favor Composition over Inheritance**: If relationship is \"has-a\" (Order has Customer), use composition.\n2. **Use `@property` for computed attributes**: Expose read-only calculated values cleanly.\n3. **Respect `_underscore` conventions**: Don't access private `_` attributes from outside their declaring class.",
+      "code": "class Circle:\n    def __init__(self, radius):\n        self.radius = radius\n    @property\n    def diameter(self):\n        return self.radius * 2\n\nc = Circle(10)\nprint(\"Diameter:\", c.diameter)",
+      "output": "Diameter: 20"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Inheritance**: `class Child(Parent):` inherits attributes and methods.\n\u2022 **`super()`**: Calls parent class methods, especially `super().__init__()`.\n\u2022 **Method Overriding**: Child replaces parent implementation with its own.\n\u2022 **Polymorphism**: Different classes provide matching method signatures.\n\u2022 **`@property`**: Exposes methods as clean attribute-style getters.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the syntax to make class `Dog` inherit from class `Animal`?",
+      "options": [
+        "class Dog(Animal):",
+        "class Dog extends Animal:",
+        "class Dog inherits Animal:",
+        "class Animal -> Dog:"
+      ],
+      "answer": 0,
+      "hint": "Put the parent class name in parentheses after the child class name.",
+      "explanation": "In Python, inheritance is declared with `class Child(Parent):`."
+    },
+    {
+      "id": 2,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the built-in function to call the parent class constructor.",
+      "template": "class Child(Parent):\n    def __init__(self, name):\n        _______().__init__(name)",
+      "answer": "super",
+      "hint": "Five-letter function that references the parent class.",
+      "explanation": "`super()` references the parent class in an inheritance hierarchy."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this overridden method print?",
+      "code": "class Bird:\n    def fly(self):\n        return \"Flying\"\nclass Penguin(Bird):\n    def fly(self):\n        return \"Cannot fly\"\n\nprint(Penguin().fly())",
+      "answer": "Cannot fly",
+      "hint": "The child class overrides the parent's fly() method.",
+      "explanation": "The Penguin class overrides fly() to return 'Cannot fly'."
+    },
+    {
+      "id": 4,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What does polymorphism allow in Python OOP?",
+      "options": [
+        "Treating different object types through a uniform method interface",
+        "Encrypting class attributes",
+        "Running classes on multiple CPU cores",
+        "Preventing methods from being overridden"
+      ],
+      "answer": 0,
+      "hint": "'Poly' = many, 'morph' = forms. Different classes providing the same method interface.",
+      "explanation": "Polymorphism allows different classes to implement matching methods, letting external code interact with them uniformly."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this inherited attribute print?",
+      "code": "class Vehicle:\n    def __init__(self, brand):\n        self.brand = brand\nclass Bike(Vehicle):\n    pass\n\nb = Bike(\"Yamaha\")\nprint(b.brand)",
+      "answer": "Yamaha",
+      "hint": "Because Bike has no __init__, it inherits Vehicle.__init__ directly.",
+      "explanation": "Bike inherits the parent's __init__ constructor, setting self.brand to 'Yamaha'."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the decorator to make a method accessible like a read-only attribute.",
+      "template": "class Account:\n    @________\n    def balance(self):\n        return self._balance",
+      "answer": "property",
+      "hint": "Built-in decorator named 'property'.",
+      "explanation": "The `@property` decorator turns a getter method into an attribute-accessible property."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this super() extension print?",
+      "code": "class Greeter:\n    def greet(self):\n        return \"Hello\"\nclass FriendlyGreeter(Greeter):\n    def greet(self):\n        return super().greet() + \" my friend!\"\n\nprint(FriendlyGreeter().greet())",
+      "answer": "Hello my friend!",
+      "hint": "super().greet() returns 'Hello', then ' my friend!' is concatenated.",
+      "explanation": "`super().greet()` calls the parent method ('Hello') and appends ' my friend!'."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the problem in this subclass constructor?\n```python\nclass Parent:\n    def __init__(self, name):\n        self.name = name\nclass Child(Parent):\n    def __init__(self, name, age):\n        self.age = age\n```",
+      "options": [
+        "Child overrides __init__ but never calls super().__init__(name), so self.name is never set",
+        "age cannot be passed to a child",
+        "Child must not have an __init__ method",
+        "super() is called automatically"
+      ],
+      "answer": 0,
+      "hint": "Without super().__init__, parent attributes are never initialized.",
+      "explanation": "When a child defines `__init__`, it must explicitly invoke `super().__init__(name)` to initialize parent attributes."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this @staticmethod call print?",
+      "code": "class MathUtils:\n    @staticmethod\n    def add(a, b):\n        return a + b\n\nprint(MathUtils.add(10, 15))",
+      "answer": "25",
+      "hint": "Static methods can be called directly on the class without instantiation.",
+      "explanation": "MathUtils.add(10, 15) invokes the static method and returns 25."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What is the difference between composition and inheritance?",
+      "options": [
+        "Inheritance is an 'is-a' relationship (Manager is an Employee); composition is a 'has-a' relationship (Car has an Engine)",
+        "Composition uses super(), inheritance does not",
+        "Inheritance only works on functions, composition works on classes",
+        "There is no difference"
+      ],
+      "answer": 0,
+      "hint": "Think about 'is-a' versus 'has-a'.",
+      "explanation": "Inheritance models 'is-a' relationships via subclassing. Composition models 'has-a' relationships by storing component instances as attributes."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly defines inheritance with parent initialization?",
+      "options": [
+        "1: class Employee: def __init__(self, n): self.n = n \\n 2: class Dev(Employee): def __init__(self, n, lang): super().__init__(n); self.lang = lang \\n 3: d = Dev('Ada', 'Python')",
+        "1: class Dev(Employee): super().__init__(n) \\n 2: class Employee: pass \\n 3: d = Dev('Ada')",
+        "1: d = Dev('Ada', 'Python') \\n 2: class Employee: pass \\n 3: class Dev(Employee): pass",
+        "1: class Employee: pass \\n 2: d = Dev('Ada') \\n 3: class Dev(Employee): pass"
+      ],
+      "answer": 0,
+      "hint": "Parent class first, then child with super(), then instantiation.",
+      "explanation": "Parent must be declared first, child calls super().__init__, and then the child can be instantiated."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Create parent class `Shape` with method `area(self)` that returns 0.\nCreate child class `Square(Shape)` with `__init__(self, side)` that stores `self.side = side`, and overrides `area(self)` to return `self.side ** 2`.\nPrint `Square(6).area()`.\nExpected output:\n36",
+      "starter": "# Define Shape and Square classes, then print Square(6).area()\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "36"
+        }
+      ],
+      "hints": [
+        "class Shape: def area(self): return 0",
+        "class Square(Shape): def __init__(self, side): self.side = side\n    def area(self): return self.side ** 2",
+        "class Shape:\n    def area(self):\n        return 0\nclass Square(Shape):\n    def __init__(self, side):\n        self.side = side\n    def area(self):\n        return self.side ** 2\nprint(Square(6).area())"
+      ],
+      "explanation": "Square overrides the area() method of Shape, computing 6 * 6 = 36."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Employee Hierarchy System\n1. Create parent `Employee(name, salary)`: initializes `self.name`, `self.salary`.\n2. Create child `Developer(Employee, prog_lang)`: calls `super().__init__(name, salary)` and sets `self.prog_lang`.\n3. Add method `profile(self)` to `Developer` returning: `\"{self.name} earns ${self.salary} writing {self.prog_lang}\"`.\nTest with `dev = Developer('Maya', 90000, 'Python')` and print `dev.profile()`.\nExpected output:\nMaya earns $90000 writing Python",
+      "starter": "# Define Employee and Developer, instantiate Maya, and print profile()\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Maya earns $90000 writing Python"
+        }
+      ],
+      "hints": [
+        "class Employee: def __init__(self, name, salary): self.name = name; self.salary = salary",
+        "class Developer(Employee): def __init__(self, name, salary, prog_lang): super().__init__(name, salary); self.prog_lang = prog_lang",
+        "class Employee:\n    def __init__(self, name, salary):\n        self.name = name\n        self.salary = salary\nclass Developer(Employee):\n    def __init__(self, name, salary, prog_lang):\n        super().__init__(name, salary)\n        self.prog_lang = prog_lang\n    def profile(self):\n        return f\"{self.name} earns ${self.salary} writing {self.prog_lang}\"\ndev = Developer('Maya', 90000, 'Python')\nprint(dev.profile())"
+      ],
+      "explanation": "This mini-task brings together inheritance, super() constructor delegation, child-specific attributes, and custom formatting methods."
+    }
+  ]
+}

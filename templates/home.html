@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% block title %}pythcode — Learn Python Step by Step{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ──────────────────────────────────────────────── -->
+<section class="hero" aria-label="Hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="container">
+
+    <div class="hero-eyebrow" id="heroEyebrow">
+      <span>✦</span> Free &amp; beginner-friendly
+    </div>
+
+    <h1 class="hero-title" id="heroTitle">
+      Learn <span class="accent-word">Python</span><br>
+      step by step.
+    </h1>
+
+    <p class="hero-subtitle" id="heroSubtitle">
+      30 phases, hands-on challenges, and a live code editor — all in your browser.
+      No setup. No fees. Just code.
+    </p>
+
+    <div class="hero-cta" id="heroCta">
+      <a href="{{ url_for('phase_map') }}" class="btn btn-primary">Start learning →</a>
+      <a href="{{ url_for('cheatsheet') }}" class="btn btn-secondary">Cheat Sheet</a>
+      <a href="{{ url_for('playground') }}" class="btn btn-secondary">Try the editor</a>
+    </div>
+
+    <!-- Continue where you left off banner -->
+    <div id="continueBanner" class="continue-banner" style="display:none;margin-top:2rem">
+      <div class="continue-info">
+        <span class="stat-label" id="continueBadge" style="color:var(--accent);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em">⚡ Continue where you left off</span>
+        <div class="continue-banner-title" id="continueTitle">Phase 1: What is Python?</div>
+      </div>
+      <a id="continueBtn" href="/lesson/1" class="btn btn-primary btn-sm">Resume Phase →</a>
+    </div>
+
+    <!-- Floating stat chips -->
+    <div class="hero-stats" id="heroStats" aria-label="Quick stats">
+      <div class="stat-chip">
+        <span class="stat-value">30</span>
+        <span class="stat-label">Phases</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-value">200+</span>
+        <span class="stat-label">Challenges</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-value">0</span>
+        <span class="stat-label">Setup needed</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-value">15</span>
+        <span class="stat-label">Badges</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SVG Line Chart section ───────────────────────────────── -->
+<section class="section" style="padding-block:3rem" aria-hidden="true">
+  <div class="container">
+    <div style="position:relative;max-width:720px;margin:auto">
+      <!-- Floating mini stat cards around the chart -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:1rem">
+        <div class="stat-chip" style="transform:translateY(-10px)">
+          <span class="stat-value" style="font-size:1.1rem">🔥 Streak</span>
+          <span class="stat-label">Keep coding daily</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-value" style="font-size:1.1rem">⭐ XP</span>
+          <span class="stat-label">Earn on every phase</span>
+        </div>
+        <div class="stat-chip" style="transform:translateY(-6px)">
+          <span class="stat-value" style="font-size:1.1rem">🏅 Badges</span>
+          <span class="stat-label">Unlock achievements</span>
+        </div>
+      </div>
+
+      <!-- SVG curved progress line -->
+      <svg viewBox="0 0 700 120" xmlns="http://www.w3.org/2000/svg"
+           style="width:100%;height:auto;overflow:visible" role="img" aria-label="Progress chart">
+        <!-- Grid lines -->
+        <line x1="0"   y1="20"  x2="700" y2="20"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="0"   y1="60"  x2="700" y2="60"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="0"   y1="100" x2="700" y2="100" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+        <!-- Green area fill -->
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#C6FF1A" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#C6FF1A" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,100 C60,90 120,80 180,70 S280,45 350,40 S480,30 560,22 S650,15 700,10 L700,120 L0,120 Z"
+              fill="url(#chartGrad)"/>
+
+        <!-- Animated stroke line -->
+        <path id="chartPath"
+              d="M0,100 C60,90 120,80 180,70 S280,45 350,40 S480,30 560,22 S650,15 700,10"
+              fill="none"
+              stroke="#C6FF1A"
+              stroke-width="2.5"
+              stroke-linecap="round"/>
+
+        <!-- Phase dots -->
+        <circle class="chart-dot" cx="175"  cy="70"  r="4" fill="#C6FF1A" opacity="0"/>
+        <circle class="chart-dot" cx="350"  cy="40"  r="4" fill="#C6FF1A" opacity="0"/>
+        <circle class="chart-dot" cx="525"  cy="22"  r="5" fill="#C6FF1A" opacity="0"/>
+        <circle class="chart-dot" cx="700"  cy="10"  r="5" fill="#C6FF1A" opacity="0"/>
+      </svg>
+
+      <p class="text-muted text-center mt-2" style="font-size:0.8rem">
+        Your XP grows with every phase you complete.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ──────────────────────────────────────── -->
+<section class="section" style="padding-top:1rem" aria-labelledby="howHeading">
+  <div class="container">
+    <div class="section-heading" data-reveal>
+      <h2 id="howHeading">How it <span class="accent-word">works</span></h2>
+      <p>Three steps. One phase at a time.</p>
+    </div>
+
+    <div class="card-row" id="howCards">
+      <div class="card" data-reveal>
+        <div class="card-number">01</div>
+        <div class="icon-badge" aria-hidden="true">📖</div>
+        <h3>Learn</h3>
+        <p class="text-muted mt-1">
+          Read a short lesson in plain English. See runnable examples. No jargon.
+        </p>
+      </div>
+
+      <div class="card card-highlight" data-reveal>
+        <div class="card-number">02</div>
+        <div class="icon-badge" style="background:rgba(10,10,10,0.15);border-color:rgba(10,10,10,0.2)" aria-hidden="true">⌨️</div>
+        <h3>Practice</h3>
+        <p class="mt-1">
+          Solve 6–10 challenges: multiple choice, predict output, fill blanks, write real code.
+        </p>
+        <a href="{{ url_for('phase_map') }}" class="btn btn-secondary mt-3" style="border-color:rgba(10,10,10,0.3);color:var(--on-accent)">
+          See phases →
+        </a>
+      </div>
+
+      <div class="card" data-reveal>
+        <div class="card-number">03</div>
+        <div class="icon-badge" aria-hidden="true">🏆</div>
+        <h3>Pass &amp; unlock</h3>
+        <p class="text-muted mt-1">
+          Score 70%+ on the phase test. Earn XP, stars, and badges. Unlock the next phase.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── What you will learn ───────────────────────────────── -->
+<section class="section" style="padding-top:0" aria-labelledby="learnHeading">
+  <div class="container">
+    <div class="section-heading" data-reveal>
+      <h2 id="learnHeading">What you will <span class="accent-word">learn</span></h2>
+      <p>30 phases across three progressive levels, plus 5 milestone mini-projects. Start from zero, finish at intermediate.</p>
+    </div>
+
+    <!-- Quick Lesson Search -->
+    <div class="phase-search-wrap" style="margin:1.5rem auto;max-width:550px">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="homeSearchInput" class="phase-search-input" placeholder="Search Python topics (e.g. loops, functions, lists, files)..." aria-label="Search lessons" />
+    </div>
+    <div id="homeSearchResults" class="card" style="display:none;max-width:550px;margin:0 auto 2rem;padding:0.75rem"></div>
+
+    <div class="card-row" id="levelCards">
+      <div class="card" data-reveal>
+        <span class="level-badge beginner mb-2">Beginner</span>
+        <h3 class="mt-1">Phases 1–10</h3>
+        <p class="text-muted mt-1">
+          print, variables, data types, input, strings, booleans, if/elif/else.
+        </p>
+        <ul class="text-muted mt-2" style="padding-left:1.2rem;line-height:2">
+          <li>What is Python?</li>
+          <li>Variables &amp; Data types</li>
+          <li>Strings &amp; Operators</li>
+          <li>Control flow</li>
+        </ul>
+      </div>
+
+      <div class="card card-highlight" data-reveal>
+        <span class="level-badge" style="background:rgba(10,10,10,0.15);color:var(--on-accent)">Core</span>
+        <h3 class="mt-2">Phases 11–18</h3>
+        <p class="mt-1">
+          Loops, lists, tuples, sets, dictionaries, functions, nested data.
+        </p>
+        <ul class="mt-2" style="padding-left:1.2rem;line-height:2">
+          <li>For &amp; while loops</li>
+          <li>Lists, dicts, sets</li>
+          <li>Functions &amp; scope</li>
+          <li>Nested data</li>
+        </ul>
+      </div>
+
+      <div class="card" data-reveal>
+        <span class="level-badge intermediate mb-2">Intermediate</span>
+        <h3 class="mt-1">Phases 19–30</h3>
+        <p class="text-muted mt-1">
+          Comprehensions, errors, files, modules, OOP, debugging, algorithms, clean code, capstone.
+        </p>
+        <ul class="text-muted mt-2" style="padding-left:1.2rem;line-height:2">
+          <li>Classes &amp; inheritance</li>
+          <li>Error handling &amp; files</li>
+          <li>Debugging &amp; algorithms</li>
+          <li>Capstone projects</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-center mt-3" data-reveal style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="{{ url_for('phase_map') }}" class="btn btn-primary">View all 30 phases →</a>
+      <a href="{{ url_for('cheatsheet') }}" class="btn btn-secondary">Printable Cheat Sheet</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Progress preview ───────────────────────────────────── -->
+<section class="section" style="padding-top:0" aria-label="Progress preview">
+  <div class="container">
+    <div class="card" style="max-width:640px;margin-inline:auto;text-align:center" data-reveal>
+      <h3 style="font-size:1.3rem">Track your <span class="accent-word">progress</span></h3>
+      <p class="text-muted mt-1 mb-3">XP, daily streaks, and badges keep you motivated.</p>
+      <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap">
+        <div class="stat-chip">
+          <span class="stat-value">⭐ XP</span>
+          <span class="stat-label">Earn points every phase</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-value">🔥 Streak</span>
+          <span class="stat-label">Code every day</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-value">🏅 Badges</span>
+          <span class="stat-label">Unlock achievements</span>
+        </div>
+      </div>
+      <div class="mt-3">
+        <a href="{{ url_for('phase_map') }}" class="btn btn-primary">Start phase 1 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

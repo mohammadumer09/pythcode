@@ -1,0 +1,234 @@
+{
+  "id": 22,
+  "title": "Modules & Packages",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "You don't have to reinvent the wheel for every project. Need cryptographic hashes, random numbers, square roots, or date arithmetic? Python's philosophy is **\"Batteries Included\"** \u2014 it comes with a vast Standard Library of pre-built modules. In addition, the Python Package Index (PyPI) gives you access to hundreds of thousands of open-source packages like requests, pandas, and flask.",
+      "code": "import math\nimport random\n\nprint(\"Square root of 144:\", math.isqrt(144))\nprint(\"Random choice:\", random.choice([\"Heads\", \"Tails\"]))",
+      "output": "Square root of 144: 12\nRandom choice: Heads"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **module** is simply a Python file (`.py`) containing functions, classes, and variables. A **package** is a directory of modules.\n\nPython provides three primary import styles:\n- `import math` -> access with `math.sqrt()`\n- `from math import sqrt, pi` -> access directly as `sqrt()` and `pi`\n- `import math as m` -> creates an alias `m.sqrt()`\n\nTo make your own module, save functions in `utils.py`, then write `import utils` in your main script.",
+      "code": "from datetime import date\nimport math as m\n\nprint(\"Pi rounded:\", round(m.pi, 4))\nprint(\"Current year:\", date.today().year)",
+      "output": "Pi rounded: 3.1416\nCurrent year: 2026"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Module Caching (`sys.modules`)**: When you `import math`, Python locates the file, compiles it to bytecode, executes top-level code, and stores it in `sys.modules`. Repeated `import math` statements in the same program don't re-execute the file \u2014 they reuse the cached module.\n2. **The `if __name__ == '__main__':` Guard**: Every Python file has a special `__name__` variable:\n   - When run directly (`python script.py`), `__name__` is `'__main__'`. \n   - When imported by another file (`import script`), `__name__` is `'script'`.\n   - Using `if __name__ == '__main__':` ensures your testing/demo code only runs when the file is executed directly, NOT when it is imported!",
+      "code": "# Demonstration of collections.Counter standard library\nfrom collections import Counter\nletters = Counter(\"mississippi\")\nprint(\"Most common letter:\", letters.most_common(1))",
+      "output": "Most common letter: [('i', 4)]"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Key Standard Library modules to know:\n\n* **`math`**: `ceil()`, `floor()`, `sqrt()`, `isqrt()`, `pi`.\n* **`random`**: `randint(a, b)` (inclusive), `choice(seq)`, `shuffle(list)`.\n* **`datetime`**: `date.today()`, `datetime.now()`, `timedelta`.\n* **`collections`**: `Counter` (frequency tallying), `defaultdict` (dict with default factory).\n* **`os`**: `os.path.join()`, `os.path.exists()`, `os.getcwd()`.\n* **`pip` (Package Installer)**: External packages installed via `pip install requests`.",
+      "code": "import random\nimport os\n\nrandom.seed(42)  # Predictable for testing\nprint(\"Random int:\", random.randint(1, 10))\nprint(\"Path separator:\", os.path.sep)",
+      "output": "Random int: 2\nPath separator: \\"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Naming your file the same as a standard module**:\nNaming your file `random.py` or `math.py` causes `import random` to import *your* file instead of Python's library, resulting in `AttributeError: module 'random' has no attribute 'randint'`!\n\n2. **Using wildcard imports `from module import *`**:\nPollutes your namespace, obscures where functions come from, and can accidentally overwrite existing variables.\n\n3. **Putting executable code outside `if __name__ == '__main__':`**:\nRuns unwanted code and prints output whenever another file imports your module.",
+      "code": "# Why explicit import is cleaner than wildcard\nfrom math import sqrt\nprint(\"Explicit sqrt:\", sqrt(49))",
+      "output": "Explicit sqrt: 7.0"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Group imports at top of file**: PEP 8 specifies imports should be at the top in 3 groups: standard library, third-party packages, local application modules.\n2. **Always include `if __name__ == '__main__':`**: Wrap main script entry points in this guard.\n3. **Use aliases sparingly and conventionally**: Use accepted community aliases like `as np` or `as pd`, but avoid cryptic single-letter aliases for standard modules.",
+      "code": "def calculate_circle_area(radius):\n    import math\n    return round(math.pi * (radius ** 2), 2)\n\nprint(\"Area:\", calculate_circle_area(5))",
+      "output": "Area: 78.54"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Import styles**: `import mod`, `from mod import func`, `import mod as alias`.\n\u2022 **Standard Library**: `math`, `random`, `datetime`, `collections`, `os`.\n\u2022 **Module Name Guard**: `if __name__ == '__main__':` separates library code from execution.\n\u2022 **Name Shadowing**: Never name script files after standard libraries (e.g. `random.py`).\n\u2022 **pip**: The package installer for downloading third-party modules from PyPI.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this math module call print?",
+      "code": "import math\nprint(math.floor(3.9))",
+      "answer": "3",
+      "hint": "math.floor rounds down to the nearest integer.",
+      "explanation": "math.floor(3.9) rounds down to 3."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the value of `__name__` when a script is executed directly from the terminal?",
+      "options": [
+        "'__main__'",
+        "'main'",
+        "'module'",
+        "'script'"
+      ],
+      "answer": 0,
+      "hint": "Python sets __name__ to this string with double underscores.",
+      "explanation": "When executed directly, Python assigns the special string '__main__' to __name__."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword to import a module under an alias.",
+      "template": "import math __ m\nprint(m.pi)",
+      "answer": "as",
+      "hint": "Two-letter aliasing keyword.",
+      "explanation": "`import ... as ...` creates an alias for the module."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this selective import print?",
+      "code": "from math import isqrt\nprint(isqrt(64))",
+      "answer": "8",
+      "hint": "isqrt returns the integer square root of 64.",
+      "explanation": "isqrt(64) computes the integer square root, which is 8."
+    },
+    {
+      "id": 5,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "A beginner names their script `random.py` and writes `import random; print(random.randint(1, 6))`. Why does it fail?",
+      "options": [
+        "Python imports their own random.py instead of the standard library module (module shadowing)",
+        "randint() requires three arguments",
+        "random is not a standard module",
+        "import statements cannot be used in files named random"
+      ],
+      "answer": 0,
+      "hint": "Python searches the current directory first before standard library modules.",
+      "explanation": "Python checks the current working directory first. A file named `random.py` shadows the standard library module."
+    },
+    {
+      "id": 6,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this collections.Counter tally print?",
+      "code": "from collections import Counter\nc = Counter([\"apple\", \"banana\", \"apple\"])\nprint(c[\"apple\"])",
+      "answer": "2",
+      "hint": "'apple' appeared twice in the list.",
+      "explanation": "Counter tallies the occurrences of each item. 'apple' count is 2."
+    },
+    {
+      "id": 7,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the function from the `random` module that picks one element from a list.",
+      "template": "import random\npick = random.______(['rock', 'paper', 'scissors'])",
+      "answer": "choice",
+      "hint": "Six-letter function name meaning 'select one'.",
+      "explanation": "`random.choice(sequence)` randomly selects a single element."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Why is wildcard import `from math import *` generally considered bad practice?",
+      "options": [
+        "It pollutes the current namespace and can silently overwrite existing variable names",
+        "It causes a SyntaxError in Python 3",
+        "It causes Python to download external packages",
+        "Wildcard imports only import functions, not variables"
+      ],
+      "answer": 0,
+      "hint": "It dumps dozens of unknown names into your local scope.",
+      "explanation": "Wildcard imports pollute the namespace, make it unclear where functions originate, and risk shadowing local variables."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this datetime code print?",
+      "code": "from datetime import date\nd = date(2026, 1, 15)\nprint(d.month)",
+      "answer": "1",
+      "hint": "date(year, month, day). What is the month?",
+      "explanation": "The second parameter is the month, which is 1 (January)."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line arrangement correctly guards script execution with the standard entry point check?",
+      "options": [
+        "1: def main(): print('Running') \\n 2: if __name__ == '__main__': \\n 3:     main()",
+        "1: if __name__ == '__main__': \\n 2:     def main(): print('Running') \\n 3:     main()",
+        "1: main() \\n 2: def main(): print('Running') \\n 3: if __name__ == '__main__':",
+        "1: def main(): print('Running') \\n 2: main() \\n 3: if __name__ == '__main__':"
+      ],
+      "answer": 0,
+      "hint": "Define functions first, then place the if __name__ == '__main__': block at the bottom.",
+      "explanation": "Standard convention: define functions and classes first, then invoke main() inside `if __name__ == '__main__':` at the bottom."
+    },
+    {
+      "id": 11,
+      "type": "fill",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Fill in the os.path function that joins directory names safely across Windows and Linux.",
+      "template": "import os\nfull_path = os.path.____(\"folder\", \"file.txt\")",
+      "answer": "join",
+      "hint": "Four-letter function name to concatenate paths.",
+      "explanation": "`os.path.join()` concatenates path components using the operating system's correct separator."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Use the `math` module to calculate the hypotenuse of a right-angled triangle with sides `a = 3` and `b = 4` using `math.hypot(a, b)`, and print the result.\nExpected output:\n5.0",
+      "starter": "import math\na = 3\nb = 4\n# Calculate hypotenuse and print result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "5.0"
+        }
+      ],
+      "hints": [
+        "Use math.hypot(a, b)",
+        "print(math.hypot(a, b))",
+        "import math\nprint(math.hypot(3, 4))"
+      ],
+      "explanation": "math.hypot(3, 4) calculates sqrt(3^2 + 4^2) = 5.0."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Vote Tally Reporter\nGiven votes `ballots = ['A', 'B', 'A', 'C', 'A', 'B']`:\n1. Use `collections.Counter` to tally votes.\n2. Find the winner using `.most_common(1)[0]`.\n3. Print: `Winner: {candidate} with {votes} votes`\nExpected output:\nWinner: A with 3 votes",
+      "starter": "from collections import Counter\nballots = ['A', 'B', 'A', 'C', 'A', 'B']\n# Use Counter to count and print winner with vote count\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Winner: A with 3 votes"
+        }
+      ],
+      "hints": [
+        "counts = Counter(ballots)",
+        "winner, count = counts.most_common(1)[0]",
+        "from collections import Counter\ncounts = Counter(ballots)\nwinner, count = counts.most_common(1)[0]\nprint(f\"Winner: {winner} with {count} votes\")"
+      ],
+      "explanation": "This mini-task brings together standard library importing, Counter data structures, tuple unpacking, and f-string reporting."
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": 15,
+  "title": "Dictionaries",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "In the real world, data is structured as labeled attributes: a user profile has a name, email, and subscription level; a weather report has temperature, humidity, and wind speed. While lists store values by numeric index, Python dictionaries store values associated with named keys, allowing instant retrieval by name.",
+      "code": "user = {\"username\": \"alex99\", \"email\": \"alex@test.com\", \"role\": \"admin\"}\nprint(\"Username:\", user[\"username\"])\nprint(\"Has role:\", \"role\" in user)",
+      "output": "Username: alex99\nHas role: True"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **dictionary** (`dict`) is an unordered-by-nature, mutable collection of **key-value pairs** enclosed in curly braces `{}` with keys separated from values by colons `:`. \n\nKeys must be immutable (like strings or numbers) and unique. You retrieve and update values using square brackets `d[key]`, or safely using `d.get(key, default)`.",
+      "code": "car = {\"brand\": \"Tesla\", \"model\": \"Model 3\", \"year\": 2022}\ncar[\"year\"] = 2024          # Update value\ncar[\"color\"] = \"Red\"        # Add new key-value pair\nprint(car[\"model\"])         # 'Model 3'\nprint(car.get(\"price\", 0))  # 0 (fallback, no KeyError)",
+      "output": "Model 3\n0"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Hash Map Architecture**: Like sets, Python dictionaries are implemented as high-performance hash tables. Looking up `user['email']` does not scan from start to finish \u2014 it hashes the string `'email'` and immediately jumps to the value in O(1) time.\n2. **Direct Access vs `.get()`**:\n   - `d['missing']` immediately raises a `KeyError`.\n   - `d.get('missing', default)` safely returns `default` (or `None`) without throwing an exception.\n3. **Insertion Order**: Since Python 3.7, dictionaries remember the exact order in which keys were inserted.",
+      "code": "profile = {\"name\": \"Jordan\"}\n# Safe lookup\nprint(\"Age:\", profile.get(\"age\", \"Not specified\"))\n# Deletion\nprofile[\"temp\"] = 100\ndel profile[\"temp\"]\nprint(\"Keys:\", list(profile.keys()))",
+      "output": "Age: Not specified\nKeys: ['name']"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore common dictionary patterns:\n\n* **Looping**:\n  - `for key in d:` iterates over keys.\n  - `for val in d.values():` iterates over values.\n  - `for key, val in d.items():` iterates over key-value pairs.\n* **Counting Pattern**: Tracking frequencies (e.g. `counts[word] = counts.get(word, 0) + 1`).\n* **Updating & Deleting**: `d.update({\"a\": 1, \"b\": 2})`, `d.pop(\"a\")`, `d.clear()`.\n* **Nested Dictionaries**: Dictionaries holding dictionaries.",
+      "code": "votes = [\"yes\", \"no\", \"yes\", \"yes\"]\ncounts = {}\nfor vote in votes:\n    counts[vote] = counts.get(vote, 0) + 1\nfor choice, total in counts.items():\n    print(f\"{choice}: {total}\")",
+      "output": "yes: 3\nno: 1"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Missing Key Access**:\n```python\nd = {'name': 'Sam'}\nprint(d['age'])  # KeyError: 'age'\n```\n*Fix*: Use `d.get('age')` or check `if 'age' in d:`.\n\n2. **Using a list as a dictionary key**:\n`d = {[1, 2]: 'val'}` raises `TypeError: unhashable type: 'list'` because keys must be immutable.\n\n3. **Checking for value with `in`**:\n`'admin' in user` checks if `'admin'` is a **key**, not a value! To check values, write `'admin' in user.values()`.\n\n4. **Forgetting `.items()` when looping key and value**:\nWriting `for k, v in d:` raises `ValueError: not enough values to unpack`.",
+      "code": "user = {\"role\": \"admin\"}\nprint(\"Is 'role' a key?\", \"role\" in user)\nprint(\"Is 'admin' a value?\", \"admin\" in user.values())",
+      "output": "Is 'role' a key? True\nIs 'admin' a value? True"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Prefer `.get()` when keys might be missing**: Avoid clunky `try...except KeyError` or redundant `if key in d:` checks.\n2. **Use `.items()` for key-value unpacking**: `for k, v in data.items():` is clean and idiomatic.\n3. **Use dictionary vs list appropriately**: Use a list for an ordered sequence of identical entities; use a dictionary for labeled attributes.",
+      "code": "config = {\"timeout\": 30}\ntimeout = config.get(\"timeout\", 10)\nretries = config.get(\"retries\", 3)\nprint(f\"Timeout: {timeout}s | Retries: {retries}\")",
+      "output": "Timeout: 30s | Retries: 3"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Key-value pairs**: Enclosed in `{}`; keys must be immutable and unique.\n\u2022 **Access**: `d[key]` (raises `KeyError` if absent) vs `d.get(key, default)` (safe fallback).\n\u2022 **Mutation**: `d[key] = val` adds or updates; `d.pop(key)` removes & returns.\n\u2022 **Iteration**: Loop keys with `for k in d`, key-value pairs with `for k, v in d.items()`.\n\u2022 **Membership**: `'key' in d` checks keys in O(1) time.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this dictionary lookup print?",
+      "code": "user = {\"name\": \"Alex\", \"age\": 25}\nprint(user[\"name\"])",
+      "answer": "Alex",
+      "hint": "user['name'] retrieves the value corresponding to key 'name'.",
+      "explanation": "Looking up the key 'name' returns its paired value 'Alex'."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What happens when you look up a non-existent key using square bracket syntax: `d['missing']`?",
+      "options": [
+        "Python raises a KeyError",
+        "Returns None",
+        "Returns False",
+        "Creates the key automatically"
+      ],
+      "answer": 0,
+      "hint": "Square brackets raise an error if the key doesn't exist.",
+      "explanation": "Accessing a missing key via `d[key]` raises a `KeyError`. Use `d.get(key)` to avoid the error."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the method to safely look up key 'city' with fallback 'Unknown'.",
+      "template": "data = {\"name\": \"Sam\"}\nprint(data.____(\"city\", \"Unknown\"))",
+      "answer": "get",
+      "hint": "Three-letter safe lookup method.",
+      "explanation": "`.get(key, default)` returns the default value if the key is not in the dictionary."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "d = {\"a\": 1}\nd[\"a\"] = 10\nd[\"b\"] = 20\nprint(len(d))",
+      "answer": "2",
+      "hint": "Key 'a' is updated, and key 'b' is added.",
+      "explanation": "The dictionary has 2 unique keys: 'a' and 'b'. The length is 2."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does `\"admin\" in user` evaluate to?",
+      "code": "user = {\"role\": \"admin\"}\nprint(\"admin\" in user)",
+      "answer": "False",
+      "hint": "The 'in' operator checks keys, not values.",
+      "explanation": "'admin' is a value, not a key in `user`. `user` keys are ['role']. So 'admin' in user is False."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the method to loop over both keys and values simultaneously.",
+      "template": "scores = {\"math\": 90, \"eng\": 85}\nfor subject, score in scores._____():\n    print(subject, score)",
+      "answer": "items",
+      "hint": "Returns key-value tuple pairs.",
+      "explanation": "`.items()` returns an iterable of `(key, value)` tuples."
+    },
+    {
+      "id": 7,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you use a list as a dictionary key?\n```python\nd = {[1, 2]: 'point'}\n```",
+      "options": [
+        "TypeError",
+        "KeyError",
+        "ValueError",
+        "SyntaxError"
+      ],
+      "answer": 0,
+      "hint": "Lists are mutable and unhashable.",
+      "explanation": "Dictionary keys must be hashable. Lists are unhashable, raising `TypeError: unhashable type: 'list'`."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this dictionary frequency counter print?",
+      "code": "words = [\"cat\", \"dog\", \"cat\"]\ncounts = {}\nfor w in words:\n    counts[w] = counts.get(w, 0) + 1\nprint(counts[\"cat\"])",
+      "answer": "2",
+      "hint": "'cat' appeared twice in the list.",
+      "explanation": "'cat' is encountered twice. The count is incremented: 0+1=1, then 1+1=2."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "A developer wrote:\n```python\nfor k, v in d:\n    print(k, v)\n```\nWhy does this raise `ValueError: not enough values to unpack`?",
+      "options": [
+        "Iterating directly over a dict yields only keys, not (key, value) pairs",
+        "Dictionaries cannot be looped over",
+        "k and v must be capital letters",
+        "d must be converted to a list first"
+      ],
+      "answer": 0,
+      "hint": "Looping directly over d yields just keys. How do you get both keys and values?",
+      "explanation": "Direct iteration `for k in d:` produces only keys. To unpack both key and value, use `d.items()`."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this nested dictionary lookup print?",
+      "code": "company = {\n    \"dev\": {\"lead\": \"Alice\", \"count\": 5}\n}\nprint(company[\"dev\"][\"lead\"])",
+      "answer": "Alice",
+      "hint": "company['dev'] returns the inner dictionary, and ['lead'] gets 'Alice'.",
+      "explanation": "Chaining bracket lookups traverses nested dictionaries: company['dev']['lead'] produces 'Alice'."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which order of statements correctly updates `user` with new email and deletes 'temp_token'?",
+      "options": [
+        "1: user['email'] = 'new@test.com' \\n 2: user.pop('temp_token', None)",
+        "1: user.clear() \\n 2: user['email'] = 'new@test.com'",
+        "1: del user \\n 2: user['email'] = 'new@test.com'",
+        "1: user.pop('email') \\n 2: user['temp_token'] = None"
+      ],
+      "answer": 0,
+      "hint": "Assign the new email directly, and safely remove temp_token with pop.",
+      "explanation": "`user['email'] = ...` updates the email, and `user.pop('temp_token', None)` safely deletes the token without raising KeyError if absent."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Given `scores = {'math': 80, 'science': 95, 'english': 85}`, calculate the total score and print: `Total: {total}`\nExpected output:\nTotal: 260",
+      "starter": "scores = {'math': 80, 'science': 95, 'english': 85}\n# Calculate the sum of all scores using scores.values() and print the result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Total: 260"
+        }
+      ],
+      "hints": [
+        "Use sum(scores.values()) to get the sum.",
+        "total = sum(scores.values())",
+        "print(f\"Total: {sum(scores.values())}\")"
+      ],
+      "explanation": "scores.values() returns the numeric values [80, 95, 85]. sum() calculates 260."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Word Frequency Counter\nGiven `sentence = 'apple banana apple cherry apple banana'`:\n1. Split the sentence into words.\n2. Count occurrences of each word using a dictionary.\n3. Print the count of `'apple'` and `'banana'` in the format: `apple: {count1} | banana: {count2}`\nExpected output:\napple: 3 | banana: 2",
+      "starter": "sentence = 'apple banana apple cherry apple banana'\ncounts = {}\n# Split words, build frequency dictionary, and print count of apple and banana\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "apple: 3 | banana: 2"
+        }
+      ],
+      "hints": [
+        "words = sentence.split()",
+        "for w in words: counts[w] = counts.get(w, 0) + 1",
+        "print(f\"apple: {counts['apple']} | banana: {counts['banana']}\")"
+      ],
+      "explanation": "This mini-task brings together string splitting, dictionary frequency counting with .get(), and formatted output."
+    }
+  ]
+}

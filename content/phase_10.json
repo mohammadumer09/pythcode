@@ -1,0 +1,265 @@
+{
+  "id": 10,
+  "title": "If, elif, else",
+  "level": "beginner",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Real-world applications must adapt to different scenarios: applying discount codes if a cart exceeds $100, showing warning alerts when battery drops below 15%, or routing support tickets based on severity. The `if`, `elif`, and `else` statements are how you give programs the power to choose different execution paths.",
+      "code": "temperature = 32\nif temperature > 30:\n    status = \"Hot day, drink water!\"\nelif temperature > 15:\n    status = \"Mild weather.\"\nelse:\n    status = \"Chilly, bring a jacket.\"\nprint(status)",
+      "output": "Hot day, drink water!"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "An `if` statement tests a condition. If the condition is `True`, Python executes the indented block beneath it. You can chain alternative checks using `elif` (short for \"else if\"), and provide a catch-all block using `else` if none of the preceding conditions met.\n\nPython also features the **ternary conditional expression** for concise one-line choices: `value_if_true if condition else value_if_false`.",
+      "code": "score = 85\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelse:\n    grade = \"C\"\nprint(\"Grade:\", grade)\n# Ternary expression:\nstatus = \"Pass\" if score >= 70 else \"Retry\"\nprint(\"Status:\", status)",
+      "output": "Grade: B\nStatus: Pass"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Top-to-Bottom Evaluation**: Python evaluates conditions in order from top to bottom.\n2. **First Match Wins**: As soon as a condition evaluates to `True`, Python executes that block and **skips all remaining `elif` and `else` blocks in the chain**.\n3. **Indentation Enforces Blocks**: Python does not use curly braces `{}`. It relies strictly on consistent 4-space indentation to determine which statements belong inside the conditional block.\n4. **Nested Conditionals**: You can place `if` statements inside other `if` blocks to handle multi-tiered decisions.",
+      "code": "cart_total = 120\nis_member = True\n\nif cart_total >= 100:\n    if is_member:\n        discount = 0.20  # 20% discount\n    else:\n        discount = 0.10  # 10% discount\nelse:\n    discount = 0.0\n\nprint(f\"Discount rate: {discount * 100}%\")",
+      "output": "Discount rate: 20.0%",
+      "trace": {
+        "title": "Branching & Conditionals Tracer",
+        "code": "cart_total = 120\nis_member = True\nif cart_total >= 100:\n    if is_member:\n        discount = 0.20\n    else:\n        discount = 0.10\nelse:\n    discount = 0.0",
+        "steps": [
+          {
+            "line": 1,
+            "vars": {"cart_total": 120},
+            "note": "Line 1: cart_total initialized to 120."
+          },
+          {
+            "line": 2,
+            "vars": {"cart_total": 120, "is_member": true},
+            "note": "Line 2: is_member initialized to True."
+          },
+          {
+            "line": 3,
+            "vars": {"cart_total": 120, "is_member": true},
+            "note": "Line 3: Tests 'cart_total >= 100' (120 >= 100 is True). Enters outer if block."
+          },
+          {
+            "line": 4,
+            "vars": {"cart_total": 120, "is_member": true},
+            "note": "Line 4: Tests 'if is_member' (True). Enters inner if block."
+          },
+          {
+            "line": 5,
+            "vars": {"cart_total": 120, "is_member": true, "discount": 0.2},
+            "note": "Line 5: discount set to 0.20 (20%). Inner else and outer else are skipped entirely!"
+          }
+        ]
+      }
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore different conditional patterns:\n\n* **Checking Ranges**: `if 0 <= score <= 100:` verifies boundaries.\n* **Combining Conditions with Logical Operators**: `if age >= 18 and has_id:` combines multiple criteria.\n* **Multiple Independent `if`s vs `elif`**: Use separate `if`s when multiple conditions can trigger simultaneously; use `elif` when only one outcome is desired.\n* **One-Line Ternary Assignment**: `ticket = 10 if is_student else 20`.",
+      "code": "hour = 14\n# Independent checks\nif 12 <= hour < 17:\n    print(\"Afternoon\")\n# Ternary check\nrole = \"admin\"\ncan_edit = True if role == \"admin\" else False\nprint(\"Can edit:\", can_edit)",
+      "output": "Afternoon\nCan edit: True"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Wrong `elif` order (Shadowing)**:\n```python\nif score >= 60:\n    grade = 'Pass'\nelif score >= 90:\n    grade = 'Honors'  # NEVER reached! 95 triggers the >= 60 check first!\n```\n*Fix*: Order conditions from most specific to least specific (highest to lowest threshold).\n\n2. **Inconsistent Indentation**:\nMixing tabs and spaces causes `IndentationError: unindent does not match any outer indentation level`.\n\n3. **Missing Colon `:`**:\nForgetting `:` at the end of `if`, `elif`, or `else` raises a `SyntaxError`.\n\n4. **Using `=` instead of `==` in conditions**:\n`if count = 5:` is a `SyntaxError`.",
+      "code": "# Proper ordered checking from top to bottom\nscore = 95\nif score >= 90:\n    grade = \"Honors\"\nelif score >= 60:\n    grade = \"Pass\"\nelse:\n    grade = \"Fail\"\nprint(\"Proper grade:\", grade)",
+      "output": "Proper grade: Honors"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Guard Clauses / Early Exits**: Check failure conditions early to avoid deeply nested code.\n2. **Order `elif` chains logically**: Always verify stricter conditions before broader catch-alls.\n3. **Keep ternary expressions simple**: Only use `x if c else y` when both sides are short and readable; avoid nesting ternaries.",
+      "code": "def check_code(code):\n    if not code:             # Guard clause\n        return \"Empty code\"\n    if len(code) < 4:\n        return \"Too short\"\n    return \"Valid\"\n\nprint(check_code(\"PYTH\"))",
+      "output": "Valid"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **`if` executes on `True`**: Followed by optional `elif` and fallback `else`.\n\u2022 **First match wins**: Subsequent `elif`/`else` branches are skipped once a branch matches.\n\u2022 **Indentation**: 4 spaces define the block; colons `:` start each branch.\n\u2022 **Ternary**: `value_if_true if condition else value_if_false` for compact decisions.\n\u2022 **Condition Order**: Always place stricter, higher-priority checks first.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What character must come at the end of an `if`, `elif`, or `else` statement line?",
+      "options": [
+        ": (colon)",
+        "; (semicolon)",
+        "{ (curly brace)",
+        "No character"
+      ],
+      "answer": 0,
+      "hint": "Python lines that start a block always end with this punctuation mark.",
+      "explanation": "In Python, compound statements like if, elif, else, for, and while must end with a colon (:)."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "x = 10\nif x > 5:\n    print(\"Greater\")\nelse:\n    print(\"Lesser\")",
+      "answer": "Greater",
+      "hint": "10 > 5 is True, so the if-block executes.",
+      "explanation": "Since x > 5 is True, Python prints 'Greater' and skips the else block."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword for the secondary condition in an if-chain.",
+      "template": "score = 75\nif score >= 90:\n    print(\"A\")\n____ score >= 70:\n    print(\"B\")",
+      "answer": "elif",
+      "hint": "Python's shorthand for 'else if'.",
+      "explanation": "The `elif` keyword introduces an alternative condition if the preceding `if` was false."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this ternary expression print?",
+      "code": "is_admin = True\nmsg = \"Welcome Admin\" if is_admin else \"Welcome Guest\"\nprint(msg)",
+      "answer": "Welcome Admin",
+      "hint": "Because is_admin is True, the expression takes the value before the if.",
+      "explanation": "The ternary expression evaluates to 'Welcome Admin' because is_admin is True."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "val = 20\nif val < 10:\n    print(\"Low\")\nelif val < 30:\n    print(\"Medium\")\nelif val < 50:\n    print(\"High\")\nelse:\n    print(\"Max\")",
+      "answer": "Medium",
+      "hint": "Python checks conditions in order. Which is the first condition to be True?",
+      "explanation": "val < 10 is False. val < 30 (20 < 30) is True, so Python prints 'Medium' and skips the rest."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the logical bug in this grading program?\n```python\nscore = 95\nif score >= 50:\n    grade = 'Pass'\nelif score >= 90:\n    grade = 'A*'\n```",
+      "options": [
+        "score >= 90 is never reached because any score >= 90 is also >= 50",
+        "grade is undefined",
+        "score cannot be an integer",
+        "elif requires an else block"
+      ],
+      "answer": 0,
+      "hint": "When score is 95, which condition evaluates to True first?",
+      "explanation": "Because 95 >= 50 is True, the first branch executes and assigns 'Pass', never reaching the 'A*' branch. Stricter conditions must be checked first."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this nested condition print?",
+      "code": "age = 19\nhas_id = True\nif age >= 18:\n    if has_id:\n        print(\"Entry allowed\")\n    else:\n        print(\"No ID\")\nelse:\n    print(\"Underage\")",
+      "answer": "Entry allowed",
+      "hint": "Both age >= 18 and has_id are True.",
+      "explanation": "The outer check age >= 18 is True, and the inner check has_id is True. Result: 'Entry allowed'."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error will Python raise on this code?\n```python\nx = 5\nif x == 5\n    print('Five')\n```",
+      "options": [
+        "SyntaxError",
+        "IndentationError",
+        "ValueError",
+        "NameError"
+      ],
+      "answer": 0,
+      "hint": "Notice what is missing at the end of the if line.",
+      "explanation": "A missing colon (:) at the end of an if statement causes a SyntaxError."
+    },
+    {
+      "id": 9,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the blank to assign 'Discount' if `is_member` is True, otherwise 'Regular'.",
+      "template": "price_tier = \"Discount\" ___ is_member else \"Regular\"",
+      "answer": "if",
+      "hint": "Ternary expression syntax is: value1 if condition else value2.",
+      "explanation": "The ternary operator uses the syntax: `value_if_true if condition else value_if_false`."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line arrangement correctly assigns a shipping rate: free ($0) if `total >= 50`, otherwise standard ($5)?",
+      "options": [
+        "1: total = 60 \\n 2: shipping = 0 if total >= 50 else 5 \\n 3: print(shipping)",
+        "1: shipping = 0 if total >= 50 else 5 \\n 2: total = 60 \\n 3: print(shipping)",
+        "1: total = 60 \\n 2: print(shipping) \\n 3: shipping = 0 if total >= 50 else 5",
+        "1: total = 60 \\n 2: shipping = 5 if total >= 50 else 0 \\n 3: print(shipping)"
+      ],
+      "answer": 0,
+      "hint": "Define total first, calculate shipping with the ternary condition, then print.",
+      "explanation": "total must be defined before evaluating the condition. `shipping = 0 if total >= 50 else 5` sets 0 for total >= 50."
+    },
+    {
+      "id": 11,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "num = -5\nif num > 0:\n    result = \"Positive\"\nelif num == 0:\n    result = \"Zero\"\nelse:\n    result = \"Negative\"\nprint(result)",
+      "answer": "Negative",
+      "hint": "-5 is neither > 0 nor == 0.",
+      "explanation": "Since num is -5, both the if and elif conditions are False, executing the else block to output 'Negative'."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Write an if-elif-else program for traffic light `color = 'yellow'`:\n- If color is 'red', print 'Stop'\n- If color is 'yellow', print 'Prepare'\n- If color is 'green', print 'Go'\n- Otherwise print 'Invalid'\nExpected output:\nPrepare",
+      "starter": "color = \"yellow\"\n# Write your if-elif-else logic here\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Prepare"
+        }
+      ],
+      "hints": [
+        "Use if color == 'red': ... elif color == 'yellow': ...",
+        "Make sure each print has the exact casing: 'Stop', 'Prepare', 'Go', 'Invalid'.",
+        "if color == 'red':\n    print('Stop')\nelif color == 'yellow':\n    print('Prepare')\nelif color == 'green':\n    print('Go')\nelse:\n    print('Invalid')"
+      ],
+      "explanation": "The if-elif-else structure tests each traffic light state and executes the 'yellow' branch."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Movie Ticket Pricing\nGiven `age = 16` and `is_student = True`:\n- If `age < 12`, ticket is 8\n- Elif `age < 18` or `is_student`: ticket is 12\n- Else: ticket is 18\nCalculate `ticket` and print: `Ticket price: ${ticket}`\nExpected output:\nTicket price: $12",
+      "starter": "age = 16\nis_student = True\n# Determine ticket price using if-elif-else, then print formatted result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Ticket price: $12"
+        }
+      ],
+      "hints": [
+        "Use if age < 12: ticket = 8",
+        "Use elif age < 18 or is_student: ticket = 12",
+        "ticket = 12\nprint(f\"Ticket price: ${ticket}\")"
+      ],
+      "explanation": "This mini-task brings together conditional branching, logical OR combining age and student status, and f-string output."
+    }
+  ]
+}

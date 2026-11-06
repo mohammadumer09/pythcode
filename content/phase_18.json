@@ -1,0 +1,229 @@
+{
+  "id": 18,
+  "title": "Nested Data & Loops",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Real databases and web APIs never send simple flat values. When you query GitHub's API for repositories, fetch a user's order history with line items, or process a spreadsheet of student grades, the data comes as nested structures: lists of dictionaries, dictionaries of lists, or 2D matrices. Navigating and transforming nested data is essential for modern software engineering.",
+      "code": "students = [\n    {\"name\": \"Alice\", \"grades\": [90, 95, 88]},\n    {\"name\": \"Bob\", \"grades\": [78, 82, 85]}\n]\nfor s in students:\n    avg = sum(s[\"grades\"]) / len(s[\"grades\"])\n    print(f\"{s['name']} average: {avg:.1f}\")",
+      "output": "Alice average: 91.0\nBob average: 81.7"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **nested data structure** is a container that holds other containers. \n- **List of lists (2D Grid / Matrix)**: `grid[row][col]`\n- **List of dictionaries (Table of records)**: `records[0]['email']`\n- **Dictionary of lists**: `departments['engineering'][0]`\n\nTo access deeply nested elements, you chain index brackets from outside to inside: `data['users'][1]['name']`.",
+      "code": "matrix = [\n    [1, 2, 3],\n    [4, 5, 6]\n]\nprint(\"Row 0, Col 1:\", matrix[0][1])  # 2\nprint(\"Row 1, Col 2:\", matrix[1][2])  # 6",
+      "output": "Row 0, Col 1: 2\nRow 1, Col 2: 6"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Left-to-Right Subscripting**: When evaluating `grid[0][1]`, Python first accesses `grid[0]` (which returns reference to the list `[1, 2, 3]`), then immediately executes `[1]` on that resulting list to extract `2`.\n2. **Nested Iteration**: To process a 2D matrix, an outer loop iterates over each row, and an inner loop iterates over each cell inside that row.\n3. **Shallow vs Deep Copy**: `grid.copy()` creates a new outer list, but the inner lists are still shared! Modifying `grid_copy[0][0]` will still alter `grid[0][0]`! To duplicate nested structures completely, use `import copy; deep = copy.deepcopy(grid)`.",
+      "code": "grid = [[1, 2], [3, 4]]\nfor row in grid:\n    for val in row:\n        print(val, end=\" \")\n    print()",
+      "output": "1 2 \n3 4 "
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore practical nested data patterns:\n\n* **List of Dictionaries (Database Records)**: Iterating and filtering records.\n* **Dictionary of Lists (Category Grouping)**: Looking up group members.\n* **Updating Nested Data**: `users[0]['score'] += 10`.\n* **2D Grid Generation**: Creating a 3x3 board filled with zeros.",
+      "code": "catalog = {\n    \"electronics\": [\"phone\", \"tablet\"],\n    \"books\": [\"python guide\", \"algorithms\"]\n}\nfor category, items in catalog.items():\n    print(f\"{category.title()}: {', '.join(items)}\")",
+      "output": "Electronics: phone, tablet\nBooks: python guide, algorithms"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Multiplying a nested list to duplicate rows**:\n```python\nbad_grid = [[0] * 3] * 3  # DANGEROUS!\nbad_grid[0][0] = 1\nprint(bad_grid)  # [[1, 0, 0], [1, 0, 0], [1, 0, 0]] \u2014 all 3 rows reference the SAME list!\n```\n*Fix*: Use a list comprehension or loop: `grid = [[0 for _ in range(3)] for _ in range(3)]`.\n\n2. **Wrong Bracket Order**: Writing `matrix[col][row]` instead of `matrix[row][col]`.\n\n3. **Missing Keys in Nested Dictionaries**: Accessing `item['meta']['tag']` raises `KeyError` if either `'meta'` or `'tag'` is missing.\n*Fix*: Use `item.get('meta', {}).get('tag')`.",
+      "code": "# Proper 2D grid creation\ncorrect_grid = [[0] * 3 for _ in range(3)]\ncorrect_grid[0][0] = 1\nprint(\"Row 0:\", correct_grid[0])\nprint(\"Row 1:\", correct_grid[1])",
+      "output": "Row 0: [1, 0, 0]\nRow 1: [0, 0, 0]"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use clear loop variable names**: In nested loops, write `for student in students: for grade in student['grades']:` instead of `for x in a: for y in x:`.\n2. **Use `copy.deepcopy()` for nested copies**: Avoid shallow copy surprises when duplicating nested configurations.\n3. **Extract deeply nested lookups into local helper variables**: Improves readability and debugging.",
+      "code": "team = [{\"name\": \"Dev A\", \"skills\": [\"Python\", \"SQL\"]}]\nskills = team[0][\"skills\"]\nif \"Python\" in skills:\n    print(\"Python skill verified\")",
+      "output": "Python skill verified"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Chained Indexing**: `data[outer][inner]` navigates from outer to inner containers.\n\u2022 **Nested Loops**: Outer loop handles rows/records; inner loop handles cells/attributes.\n\u2022 **Shallow vs Deep Copy**: Nested lists require `copy.deepcopy()` for complete isolation.\n\u2022 **Row Multiplication Bug**: Never use `[[0]*3]*3`; all rows share one memory reference.\n\u2022 **Data Modeling**: Lists of dicts represent tables; dicts of lists represent grouped categories.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this 2D matrix lookup print?",
+      "code": "grid = [\n    [10, 20],\n    [30, 40]\n]\nprint(grid[1][0])",
+      "answer": "30",
+      "hint": "grid[1] accesses the second row [30, 40]. Index 0 is the first item in that row.",
+      "explanation": "grid[1] is [30, 40]. grid[1][0] retrieves 30."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this list of dictionaries access print?",
+      "code": "users = [\n    {\"name\": \"Alice\", \"role\": \"admin\"},\n    {\"name\": \"Bob\", \"role\": \"user\"}\n]\nprint(users[0][\"name\"])",
+      "answer": "Alice",
+      "hint": "users[0] is the first dictionary. What is its 'name'?",
+      "explanation": "users[0] gives the dictionary for Alice. ['name'] accesses 'Alice'."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the syntax to access the second score (index 1) of student 'Sam'.",
+      "template": "data = {\"Sam\": [88, 92, 79]}\nprint(data[\"Sam\"][_])  # 92",
+      "answer": "1",
+      "hint": "Index for the second element in a list.",
+      "explanation": "data['Sam'][1] extracts the item at index 1 of the list: 92."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this nested loop count print?",
+      "code": "grid = [[1, 2], [3, 4], [5, 6]]\nprint(len(grid) * len(grid[0]))",
+      "answer": "6",
+      "hint": "3 rows times 2 columns.",
+      "explanation": "The grid has 3 rows, each with 2 items. Total cells = 3 * 2 = 6."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this nested update output?",
+      "code": "accounts = [{\"id\": 1, \"balance\": 100}]\naccounts[0][\"balance\"] += 50\nprint(accounts[0][\"balance\"])",
+      "answer": "150",
+      "hint": "100 + 50 = 150.",
+      "explanation": "accounts[0]['balance'] is incremented by 50 to 150."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What bug happens when you create a 2D grid with `grid = [[0] * 3] * 3`?",
+      "options": [
+        "All 3 rows reference the exact same list in memory, so changing one row modifies all rows",
+        "It causes an immediate MemoryError",
+        "Python does not allow the * operator on lists",
+        "The elements become strings instead of integers"
+      ],
+      "answer": 0,
+      "hint": "List multiplication repeats the reference to the inner list.",
+      "explanation": "`[[0] * 3] * 3` creates an outer list holding three references to the *same* inner list. Changing `grid[0][0]` changes all rows simultaneously."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this nested sum print?",
+      "code": "matrix = [\n    [1, 2],\n    [3, 4]\n]\ntotal = 0\nfor row in matrix:\n    total += sum(row)\nprint(total)",
+      "answer": "10",
+      "hint": "Sum of row 1 (1+2=3) plus sum of row 2 (3+4=7). 3 + 7 = ?",
+      "explanation": "sum(row 1) = 3; sum(row 2) = 7. Total sum is 3 + 7 = 10."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you run this nested lookup?\n```python\nstudent = {'name': 'Leo'}\nprint(student['grades'][0])\n```",
+      "options": [
+        "KeyError",
+        "IndexError",
+        "TypeError",
+        "AttributeError"
+      ],
+      "answer": 0,
+      "hint": "The key 'grades' does not exist in student.",
+      "explanation": "Looking up `student['grades']` fails first with `KeyError: 'grades'` before index 0 is ever evaluated."
+    },
+    {
+      "id": 9,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the module name to perform a deep copy of nested data.",
+      "template": "import ____\ndeep_grid = copy.deepcopy(grid)",
+      "answer": "copy",
+      "hint": "Standard library module named 'copy'.",
+      "explanation": "The standard `copy` module provides `copy.deepcopy()`."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What does this nested filtering code print?",
+      "code": "employees = [\n    {\"name\": \"Eva\", \"dept\": \"Sales\"},\n    {\"name\": \"Dan\", \"dept\": \"Engineering\"},\n    {\"name\": \"Zoe\", \"dept\": \"Engineering\"}\n]\neng_count = 0\nfor e in employees:\n    if e[\"dept\"] == \"Engineering\":\n        eng_count += 1\nprint(eng_count)",
+      "answer": "2",
+      "hint": "Dan and Zoe are in Engineering.",
+      "explanation": "Two employees have dept == 'Engineering', so eng_count reaches 2."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly creates a 2D coordinate grid and calculates its diagonal sum (`grid[0][0] + grid[1][1]`)?",
+      "options": [
+        "1: grid = [[5, 2], [1, 9]] \\n 2: diag_sum = grid[0][0] + grid[1][1] \\n 3: print(diag_sum)",
+        "1: diag_sum = grid[0][0] + grid[1][1] \\n 2: grid = [[5, 2], [1, 9]] \\n 3: print(diag_sum)",
+        "1: grid = [[5, 2], [1, 9]] \\n 2: print(diag_sum) \\n 3: diag_sum = grid[0][0] + grid[1][1]",
+        "1: print(grid[0][0] + grid[1][1]) \\n 2: grid = [[5, 2], [1, 9]]"
+      ],
+      "answer": 0,
+      "hint": "Define the grid first, compute the diagonal sum, then print.",
+      "explanation": "The grid must be defined before accessing indices; then calculate and print."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Given `sales_data = [{'month': 'Jan', 'sales': 120}, {'month': 'Feb', 'sales': 150}, {'month': 'Mar', 'sales': 180}]`, calculate total sales across all months and print: `Total: ${total}`\nExpected output:\nTotal: $450",
+      "starter": "sales_data = [{'month': 'Jan', 'sales': 120}, {'month': 'Feb', 'sales': 150}, {'month': 'Mar', 'sales': 180}]\n# Calculate total sales and print formatted result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Total: $450"
+        }
+      ],
+      "hints": [
+        "total = sum(item['sales'] for item in sales_data)",
+        "Or use a for loop: total = 0; for item in sales_data: total += item['sales']",
+        "total = sum(item['sales'] for item in sales_data)\nprint(f\"Total: ${total}\")"
+      ],
+      "explanation": "120 + 150 + 180 = 450."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Student Grade Book Processor\nGiven student marks data:\n`students = [{'name': 'Alice', 'scores': [90, 80]}, {'name': 'Bob', 'scores': [70, 60]}]`\n1. Find the student with the highest average score.\n2. Print the top student and their average formatted: `Top: {name} ({avg:.1f})`\nExpected output:\nTop: Alice (85.0)",
+      "starter": "students = [{'name': 'Alice', 'scores': [90, 80]}, {'name': 'Bob', 'scores': [70, 60]}]\n# Calculate each student's average, find the top student, and print formatted result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Top: Alice (85.0)"
+        }
+      ],
+      "hints": [
+        "For Alice: (90 + 80) / 2 = 85.0. For Bob: (70 + 60) / 2 = 65.0.",
+        "Loop through students, calculate sum(s['scores'])/len(s['scores']), track max.",
+        "best_name = ''\nbest_avg = -1\nfor s in students:\n    avg = sum(s['scores']) / len(s['scores'])\n    if avg > best_avg:\n        best_avg = avg\n        best_name = s['name']\nprint(f\"Top: {best_name} ({best_avg:.1f})\")"
+      ],
+      "explanation": "This mini-task brings together lists of dictionaries, inner lists, aggregation with sum() and len(), comparison tracking, and f-string formatting."
+    }
+  ]
+}

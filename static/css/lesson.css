@@ -1,0 +1,852 @@
+/* ============================================================
+   lesson.css — Lesson page, challenge types, feedback
+   ============================================================ */
+
+/* ── Lesson layout ─────────────────────────────────────────── */
+.lesson-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  padding-block: 2rem;
+}
+
+/* ── Sidebar (lesson steps) ─────────────────────────────────── */
+.lesson-sidebar {
+  position: sticky;
+  top: 80px;
+}
+
+.lesson-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.lesson-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.lesson-nav-item:hover { background: var(--surface-2); color: var(--text); }
+
+.lesson-nav-item.active {
+  background: rgba(198, 255, 26, 0.1);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.lesson-nav-item.done { color: var(--success); }
+
+.step-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.lesson-nav-item.active .step-dot {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+
+.lesson-nav-item.done .step-dot {
+  background: var(--success);
+  color: #000;
+  border-color: var(--success);
+}
+
+/* ── Main content area ──────────────────────────────────────── */
+.lesson-main { min-width: 0; }
+
+/* Phase header bar */
+.phase-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.phase-header-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+}
+
+.phase-meta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* ── Lesson step panel ──────────────────────────────────────── */
+.lesson-step { display: none; }
+.lesson-step.active { display: block; }
+
+.lesson-step-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.lesson-text {
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+.lesson-text strong { color: var(--text); }
+
+.lesson-text code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  background: var(--surface-2);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+/* Code example block */
+.code-block {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.code-block pre {
+  padding: 1rem 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  color: var(--text);
+  overflow-x: auto;
+  margin: 0;
+  white-space: pre;
+}
+
+.output-block {
+  background: rgba(74, 222, 128, 0.04);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--success);
+  margin-bottom: 1.25rem;
+}
+
+.output-block::before {
+  content: '▶ Output: ';
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* Step navigation buttons */
+.step-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+/* ── Challenges section ─────────────────────────────────────── */
+.challenges-section { display: none; }
+.challenges-section.active { display: block; }
+
+.challenges-header {
+  margin-bottom: 1.5rem;
+}
+
+.challenges-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.challenge-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color var(--transition);
+}
+
+.challenge-card.answered-correct { border-color: var(--success); }
+.challenge-card.answered-wrong   { border-color: var(--error);   }
+
+.challenge-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.diff-badge {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+}
+.diff-badge.easy   { background: rgba(74, 222, 128, 0.12); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.25); }
+.diff-badge.medium { background: rgba(251, 191, 36, 0.12);  color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.25); }
+.diff-badge.hard   { background: rgba(248, 113, 113, 0.12); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.25); }
+
+.subtype-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.hint-level-item {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.challenge-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.challenge-question {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* MCQ */
+.mcq-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.mcq-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.mcq-option:hover { background: var(--surface-2); border-color: rgba(255,255,255,0.15); }
+
+.mcq-option.selected  { border-color: var(--accent); background: rgba(198,255,26,0.07); }
+.mcq-option.correct   { border-color: var(--success); background: rgba(74,222,128,0.08); color: var(--success); }
+.mcq-option.incorrect { border-color: var(--error);   background: rgba(255,92,92,0.08);  color: var(--error); }
+
+.mcq-option input[type="radio"] { accent-color: var(--accent); width: 16px; height: 16px; }
+
+/* Predict / Fill */
+.text-input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.text-input:focus  { border-color: var(--accent); }
+.text-input.correct  { border-color: var(--success); }
+.text-input.incorrect{ border-color: var(--error);   }
+
+/* Fill template */
+.fill-template {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  background: var(--surface-2);
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* Code editor */
+.code-editor {
+  width: 100%;
+  min-height: 120px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition);
+  tab-size: 4;
+}
+
+.code-editor:focus { border-color: var(--accent); }
+
+/* Feedback box */
+.challenge-feedback {
+  display: none;
+  margin-top: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.challenge-feedback.correct {
+  display: block;
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  color: var(--success);
+}
+
+.challenge-feedback.wrong {
+  display: block;
+  background: rgba(255, 92, 92, 0.08);
+  border: 1px solid rgba(255, 92, 92, 0.2);
+  color: var(--error);
+}
+
+.challenge-explain {
+  display: none;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.challenge-explain.show { display: block; }
+
+/* Hint button */
+.hint-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hint-btn:hover { color: var(--accent); }
+
+.challenge-hint {
+  display: none;
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+.challenge-hint.show { display: block; }
+
+/* Submit bar */
+.submit-bar {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ── Results panel ──────────────────────────────────────────── */
+.results-panel {
+  display: none;
+  text-align: center;
+  padding: 2.5rem 2rem;
+}
+
+.results-panel.show { display: block; }
+
+.results-score {
+  font-family: 'Syne', sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.results-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+.results-stars {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.results-message {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.results-message.pass  { color: var(--success); }
+.results-message.fail  { color: var(--error);   }
+
+.results-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+/* ── Loading spinner ────────────────────────────────────────── */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Toast ──────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.88rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--success); color: var(--success); }
+.toast.error   { border-color: var(--error);   color: var(--error);   }
+
+/* ── Code block actions (Copy & Open in Playground) ────────── */
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.code-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.code-action-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: inherit;
+}
+
+.code-action-btn:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.code-action-btn.copied {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--success);
+  border-color: var(--success);
+}
+
+/* ── Bookmark Button ────────────────────────────────────────── */
+.bookmark-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.bookmark-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.bookmark-btn.bookmarked {
+  background: rgba(198, 255, 26, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Code Tracer Component ─────────────────────────────────── */
+.code-tracer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.tracer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tracer-title {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tracer-controls {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.tracer-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.3rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tracer-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tracer-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tracer-btn.active {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.tracer-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 220px;
+}
+
+@media (max-width: 768px) {
+  .tracer-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tracer-code-pane {
+  background: #0d100d;
+  padding: 1rem;
+  border-right: 1px solid var(--border);
+  overflow-x: auto;
+  font-family: var(--font-code, 'JetBrains Mono', monospace);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.tracer-line {
+  display: flex;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.tracer-line.active {
+  background: rgba(198, 255, 26, 0.18);
+  border-left: 3px solid var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tracer-line-num {
+  width: 2rem;
+  color: var(--text-muted);
+  user-select: none;
+  text-align: right;
+  margin-right: 0.8rem;
+  opacity: 0.6;
+}
+
+.tracer-vars-pane {
+  background: var(--surface);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tracer-vars-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.tracer-vars-table th {
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.tracer-vars-table td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.tracer-var-val {
+  font-family: var(--font-code, monospace);
+  color: var(--accent);
+  background: rgba(198, 255, 26, 0.1);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.tracer-stack-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.tracer-stack-frame {
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 2px solid var(--accent);
+  margin-bottom: 0.25rem;
+  font-family: monospace;
+}
+
+.tracer-note-box {
+  background: rgba(198, 255, 26, 0.08);
+  border-left: 3px solid var(--accent);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  color: var(--text);
+  margin-top: auto;
+}
+
+/* ── Enhanced Results Encouragement ────────────────────────── */
+.what-learned-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  text-align: left;
+}
+
+.what-learned-title {
+  color: var(--accent);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.what-learned-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.what-learned-list li {
+  font-size: 0.85rem;
+  color: var(--text);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.what-learned-list li span.check {
+  color: var(--success);
+  font-weight: bold;
+}
+
+.review-topics-card {
+  background: rgba(255, 92, 92, 0.08);
+  border: 1px solid rgba(255, 92, 92, 0.25);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  text-align: left;
+}
+
+.review-topics-title {
+  color: var(--error);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.review-pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.review-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.review-pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .lesson-layout {
+    grid-template-columns: 1fr;
+  }
+  .lesson-sidebar {
+    position: static;
+  }
+  .lesson-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .lesson-nav-item {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* BUG FIX: submit button cut off on phones */
+@media (max-width: 640px) {
+  .submit-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+    margin-bottom: 2.5rem;
+  }
+  .submit-bar .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 0.85rem 1.25rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  .submit-bar span {
+    text-align: center;
+  }
+  .challenge-card {
+    padding: 1rem;
+  }
+  .results-score {
+    font-size: 3rem;
+  }
+  .results-panel {
+    padding: 1.5rem 1rem;
+  }
+  /* Keep code editor usable on small screens */
+  .CodeMirror, .challenge-editor-wrap .CodeMirror {
+    font-size: 0.82rem !important;
+  }
+}
+

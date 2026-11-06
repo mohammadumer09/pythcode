@@ -1,0 +1,229 @@
+{
+  "id": 25,
+  "title": "Useful Built-ins",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Writing custom loops for every minor data operation is slow and error-prone. Python includes dozens of battle-tested, high-performance built-in functions written directly in C. Functions like `zip()`, `enumerate()`, `any()`, and `sorted(..., key=...)` let you solve complex data manipulation problems in one clean, readable, Pythonic line.",
+      "code": "names = [\"Alice\", \"Bob\"]\nscores = [95, 88]\nfor name, score in zip(names, scores):\n    print(f\"{name}: {score}\")",
+      "output": "Alice: 95\nBob: 88"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "Key built-in sequence and transformation functions:\n- `zip(*iterables)`: Pairs elements from multiple sequences side by side into tuples.\n- `enumerate(iterable, start=0)`: Yields index-element pairs `(0, item)`.\n- `any(iterable)` / `all(iterable)`: `any` returns `True` if at least one item is truthy; `all` returns `True` only if ALL items are truthy.\n- `sorted(iterable, key=func, reverse=bool)`: Returns a new sorted list according to custom criteria.",
+      "code": "nums = [10, -5, 20]\nprint(\"Are all > 0?\", all(x > 0 for x in nums))  # False\nprint(\"Is any > 0?\", any(x > 0 for x in nums))   # True\nprint(\"Sorted by absolute:\", sorted(nums, key=abs))",
+      "output": "Are all > 0? False\nIs any > 0? True\nSorted by absolute: [-5, 10, 20]"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Iterators & Lazy Evaluation**: `map()`, `filter()`, `zip()`, and `reversed()` do NOT build full lists in memory! They return **lazy iterators** that compute the next item on demand when requested by a for loop or `list()` call. This saves huge amounts of memory on large datasets.\n2. **Generators & `yield`**: When a function contains the `yield` keyword instead of `return`, calling it produces a generator object. Execution freezes at `yield` and resumes on the next `next()` call.\n3. **Extended Unpacking**: Python supports starred unpacking: `first, *middle, last = [1, 2, 3, 4, 5]` captures variable-length elements cleanly.",
+      "code": "first, *rest, last = [10, 20, 30, 40, 50]\nprint(\"First:\", first)\nprint(\"Middle:\", rest)\nprint(\"Last:\", last)",
+      "output": "First: 10\nMiddle: [20, 30, 40]\nLast: 50"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore practical built-ins:\n\n* **`min()` and `max()` with key**: Find the longest string: `max(words, key=len)`.\n* **`map(func, seq)` and `filter(func, seq)`**: Functional mapping and filtering.\n* **Generator function with `yield`**: Generates infinite or large sequences on demand.\n* **`dict(zip(keys, values))`**: Instantly combines two lists into a dictionary.",
+      "code": "keys = [\"id\", \"role\"]\nvalues = [101, \"admin\"]\nuser_dict = dict(zip(keys, values))\nprint(\"Created dict:\", user_dict)\n\nwords = [\"apple\", \"banana\", \"fig\"]\nprint(\"Longest word:\", max(words, key=len))",
+      "output": "Created dict: {'id': 101, 'role': 'admin'}\nLongest word: banana"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Trying to index a `zip` or `map` object directly**:\n`z = zip(a, b); print(z[0])` raises `TypeError: 'zip' object is not subscriptable` because `zip` is an iterator. Convert with `list(z)` if indexing is needed.\n\n2. **Re-iterating an exhausted generator/iterator**:\nIterators can only be looped over **once**! Once consumed, a second loop will be completely empty.\n\n3. **`zip()` truncating to shortest iterable**:\n`zip([1, 2], ['a', 'b', 'c'])` stops at 2 pairs. Use `itertools.zip_longest()` if you need all elements.",
+      "code": "# Showing exhausted iterator trap\nnumbers = [1, 2, 3]\nit = (x * 2 for x in numbers)  # Generator\nprint(\"First pass:\", list(it))\nprint(\"Second pass:\", list(it))  # Empty! Already consumed!",
+      "output": "First pass: [2, 4, 6]\nSecond pass: []"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use `dict(zip(k, v))` for parallel lists**: Fastest, cleanest way to build dictionaries.\n2. **Prefer list comprehensions over `map`/`filter`**: `[x*2 for x in nums]` is widely considered more readable in Python than `list(map(lambda x: x*2, nums))`.\n3. **Use `any()` and `all()` with generator expressions**: Benefit from immediate short-circuiting: `any(u.is_admin for u in users)`.",
+      "code": "users = [{\"name\": \"Alice\", \"active\": True}, {\"name\": \"Bob\", \"active\": False}]\nhas_inactive = any(not u[\"active\"] for u in users)\nprint(\"Contains inactive user?\", has_inactive)",
+      "output": "Contains inactive user? True"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **`zip(a, b)`**: Pairs iterables side by side into tuples.\n\u2022 **`enumerate(seq)`**: Generates `(index, item)` pairs.\n\u2022 **`any()` / `all()`**: Fast boolean evaluation on sequences.\n\u2022 **`sorted(seq, key=f)`**: Custom sorting without mutating original.\n\u2022 **`yield`**: Produces values lazily on demand without storing in RAM.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this zip call print?",
+      "code": "keys = [\"a\", \"b\"]\nvals = [1, 2]\nprint(dict(zip(keys, vals)))",
+      "answer": "{'a': 1, 'b': 2}",
+      "hint": "zip pairs 'a' with 1 and 'b' with 2 into dictionary key-values.",
+      "explanation": "dict(zip(keys, vals)) combines corresponding elements into {'a': 1, 'b': 2}."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this all() call output?",
+      "code": "nums = [2, 4, 6, 8]\nprint(all(n % 2 == 0 for n in nums))",
+      "answer": "True",
+      "hint": "Are all numbers in the list even?",
+      "explanation": "Every number is divisible by 2, so all() evaluates to True."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the built-in function to check if AT LEAST ONE element meets the condition.",
+      "template": "has_zero = ___(x == 0 for x in [1, 0, 5])  # True",
+      "answer": "any",
+      "hint": "Three-letter built-in function.",
+      "explanation": "`any()` returns True if any element in the iterable is truthy."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this max with key code print?",
+      "code": "words = [\"hi\", \"elephant\", \"cat\"]\nprint(max(words, key=len))",
+      "answer": "elephant",
+      "hint": "Finds the word with the maximum length.",
+      "explanation": "max(words, key=len) compares string lengths; 'elephant' is the longest."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this starred unpacking code print?",
+      "code": "first, *rest, last = [1, 2, 3, 4, 5]\nprint(rest)",
+      "answer": "[2, 3, 4]",
+      "hint": "*rest captures all items between first and last as a list.",
+      "explanation": "first captures 1, last captures 5, and *rest captures [2, 3, 4]."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you try to index `z = zip([1, 2], [3, 4]); print(z[0])`?",
+      "options": [
+        "TypeError",
+        "IndexError",
+        "ValueError",
+        "KeyError"
+      ],
+      "answer": 0,
+      "hint": "zip objects are lazy iterators, not subscriptable sequences.",
+      "explanation": "zip produces a generator-like iterator that does not support indexing, raising `TypeError: 'zip' object is not subscriptable`."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this generator function print?",
+      "code": "def count_up(n):\n    for i in range(1, n + 1):\n        yield i\n\ngen = count_up(3)\nprint(list(gen))",
+      "answer": "[1, 2, 3]",
+      "hint": "yield produces 1, then 2, then 3.",
+      "explanation": "The generator yields 1, 2, and 3, which list() aggregates into [1, 2, 3]."
+    },
+    {
+      "id": 8,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the keyword used inside a generator to produce a value lazily.",
+      "template": "def numbers():\n    _____ 10\n    _____ 20",
+      "answer": "yield",
+      "hint": "Five-letter keyword starting with 'y'.",
+      "explanation": "The `yield` keyword turns a normal function into a generator."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this custom sorted call print?",
+      "code": "pairs = [(\"a\", 3), (\"b\", 1), (\"c\", 2)]\nprint(sorted(pairs, key=lambda p: p[1])[0][0])",
+      "answer": "b",
+      "hint": "Sorted by second element: ('b', 1) is first. What is its first element?",
+      "explanation": "Sorting by p[1] puts ('b', 1) at index 0. Accessing [0][0] yields 'b'."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "find_bug",
+      "question": "What happens if you iterate over an iterator a second time?\n```python\nnums = (x * 2 for x in [1, 2])\nlist1 = list(nums)\nlist2 = list(nums)\n```",
+      "options": [
+        "list2 will be empty ([]) because iterators are exhausted after one pass",
+        "list2 will contain the exact same items as list1",
+        "It raises an IteratorError",
+        "Python restarts the iterator automatically"
+      ],
+      "answer": 0,
+      "hint": "Iterators consume values and cannot be rewound.",
+      "explanation": "Once an iterator has produced all its values, it is exhausted; subsequent iteration attempts return nothing."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly creates two lists, zips them into a dict, and queries a key?",
+      "options": [
+        "1: keys = ['a', 'b'] \\n 2: vals = [1, 2] \\n 3: d = dict(zip(keys, vals)) \\n 4: print(d['a'])",
+        "1: d = dict(zip(keys, vals)) \\n 2: keys = ['a', 'b'] \\n 3: vals = [1, 2] \\n 4: print(d['a'])",
+        "1: print(d['a']) \\n 2: keys = ['a', 'b'] \\n 3: vals = [1, 2] \\n 4: d = dict(zip(keys, vals))",
+        "1: keys = ['a', 'b'] \\n 2: d = dict(zip(keys, vals)) \\n 3: vals = [1, 2] \\n 4: print(d['a'])"
+      ],
+      "answer": 0,
+      "hint": "Define the lists first, then create the dict with zip, then access the key.",
+      "explanation": "Variables keys and vals must exist before calling zip()."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Given `words = ['code', 'python', 'ai', 'developer']`, sort them by length in descending order (longest first) using `sorted()` with `key=len` and `reverse=True`, and print the result.\nExpected output:\n['developer', 'python', 'code', 'ai']",
+      "starter": "words = ['code', 'python', 'ai', 'developer']\n# Sort by length descending and print\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "['developer', 'python', 'code', 'ai']"
+        }
+      ],
+      "hints": [
+        "sorted(words, key=len, reverse=True)",
+        "print(sorted(words, key=len, reverse=True))",
+        "words = ['code', 'python', 'ai', 'developer']\nprint(sorted(words, key=len, reverse=True))"
+      ],
+      "explanation": "sorted() with key=len and reverse=True orders strings from longest to shortest."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Parallel Leaderboard Generator\nGiven players `names = ['Alice', 'Bob', 'Charlie']` and `scores = [150, 300, 220]`:\n1. Pair names and scores using `zip`.\n2. Sort them by score descending (highest score first).\n3. Print the top player: `Winner: {name} with {score} pts`\nExpected output:\nWinner: Bob with 300 pts",
+      "starter": "names = ['Alice', 'Bob', 'Charlie']\nscores = [150, 300, 220]\n# Zip, sort by score descending, and print winner\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Winner: Bob with 300 pts"
+        }
+      ],
+      "hints": [
+        "pairs = list(zip(names, scores))",
+        "pairs.sort(key=lambda p: p[1], reverse=True)",
+        "names = ['Alice', 'Bob', 'Charlie']\nscores = [150, 300, 220]\npairs = sorted(zip(names, scores), key=lambda p: p[1], reverse=True)\nwinner, score = pairs[0]\nprint(f\"Winner: {winner} with {score} pts\")"
+      ],
+      "explanation": "This mini-task brings together zip() pairing, custom key sorting, tuple unpacking, and formatted string output."
+    }
+  ]
+}

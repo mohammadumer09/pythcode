@@ -1,0 +1,265 @@
+{
+  "id": 13,
+  "title": "Lists",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Real software programs almost never work with single isolated values. An e-commerce store tracks items in a shopping cart, a music app maintains a playlist, and a flight tracker monitors waypoint coordinates. Python lists give you an ordered, flexible, and powerful way to store and manipulate collections of data.",
+      "code": "cart = [\"Keyboard\", \"Mouse\", \"Monitor\"]\ncart.append(\"Headphones\")\nprint(f\"Cart ({len(cart)} items):\", cart)\nprint(\"First item:\", cart[0])",
+      "output": "Cart (4 items): ['Keyboard', 'Mouse', 'Monitor', 'Headphones']\nFirst item: Keyboard"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **list** is an ordered, **mutable** (changeable) collection of items enclosed in square brackets `[]`. Because lists are ordered, every element has an index starting at `0`.\n\nUnlike strings, you can alter lists in place: add elements (`.append()`, `.insert()`, `.extend()`), remove elements (`.remove()`, `.pop()`, `del`), and reorder elements (`.sort()`, `.reverse()`).",
+      "code": "scores = [85, 92, 78]\nscores.append(95)       # Adds to end\nscores[0] = 88          # Modifies item at index 0\nprint(scores)           # [88, 92, 78, 95]\nprint(\"Highest:\", max(scores))",
+      "output": "[88, 92, 78, 95]\nHighest: 95"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Memory & References**: A list in Python is an array of memory pointers referencing objects. When you assign `b = a`, Python does NOT copy the list \u2014 `b` and `a` point to the **exact same list in memory**. Mutating `b` will also change `a`! To create an independent clone, write `b = a.copy()` or `b = a[:]`.\n2. **In-place vs New Object**: \n   - `scores.sort()` modifies the existing list in memory and returns `None`.\n   - `sorted(scores)` leaves the original list untouched and returns a brand-new sorted list.\n3. **Insertion & Removal Cost**: `.append()` and `.pop()` at the end are fast. Inserting (`.insert(0, val)`) or deleting at index 0 requires shifting all subsequent elements in memory.",
+      "code": "a = [1, 2, 3]\nb = a            # Reference copy!\nb.append(4)\nprint(\"a after b.append:\", a)  # a is changed!\n\nc = a.copy()     # Independent clone\nc.append(99)\nprint(\"a stays safe:\", a)\nprint(\"c clone:\", c)",
+      "output": "a after b.append: [1, 2, 3, 4]\na stays safe: [1, 2, 3, 4]\nc clone: [1, 2, 3, 4, 99]",
+      "trace": {
+        "title": "List Mutation & Reference Tracer",
+        "code": "a = [10, 20]\nb = a\nb.append(30)\nc = a.copy()\nc.append(40)",
+        "steps": [
+          {
+            "line": 1,
+            "vars": {"a": "[10, 20]"},
+            "note": "Line 1: List [10, 20] created in memory. Variable 'a' references it."
+          },
+          {
+            "line": 2,
+            "vars": {"a": "[10, 20]", "b": "[10, 20]"},
+            "note": "Line 2: 'b = a' copies reference only. Both 'a' and 'b' point to the exact same list."
+          },
+          {
+            "line": 3,
+            "vars": {"a": "[10, 20, 30]", "b": "[10, 20, 30]"},
+            "note": "Line 3: b.append(30) modifies the shared list. Notice 'a' changes as well!"
+          },
+          {
+            "line": 4,
+            "vars": {"a": "[10, 20, 30]", "b": "[10, 20, 30]", "c": "[10, 20, 30]"},
+            "note": "Line 4: a.copy() allocates a brand-new independent list in memory for 'c'."
+          },
+          {
+            "line": 5,
+            "vars": {"a": "[10, 20, 30]", "b": "[10, 20, 30]", "c": "[10, 20, 30, 40]"},
+            "note": "Line 5: c.append(40) modifies only 'c'. 'a' and 'b' remain untouched!"
+          }
+        ]
+      }
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore key list operations:\n\n* **Slicing & Stepping**: `nums[1:4]` extracts a slice; `nums[::-1]` returns reversed elements.\n* **Adding items**: `.append(x)` (single item), `.extend([x, y])` (merges multiple items), `.insert(1, x)` (places at index 1).\n* **Removing items**: `.pop()` (removes & returns last item), `.pop(0)` (removes index 0), `.remove(val)` (removes first matching value), `del items[i]`.\n* **Math & Aggregate helpers**: `len(items)`, `sum(items)`, `min(items)`, `max(items)`, `sum(items) / len(items)` (average).\n* **Searching**: `items.index(x)` (finds index), `items.count(x)` (counts occurrences), `x in items` (boolean check).",
+      "code": "grades = [80, 90, 70, 100]\navg = sum(grades) / len(grades)\nprint(f\"Average: {avg:.1f}\")\ngrades.remove(70)\nprint(\"After remove(70):\", grades)\nlast = grades.pop()\nprint(f\"Popped last: {last}, Remaining: {grades}\")",
+      "output": "Average: 85.0\nAfter remove(70): [80, 90, 100]\nPopped last: 100, Remaining: [80, 90]"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Modifying a list while looping over it**:\n```python\nnums = [1, 2, 3, 4]\nfor n in nums:\n    if n % 2 == 0:\n        nums.remove(n)  # Skips elements because indices shift during iteration!\n```\n*Fix*: Loop over a copy: `for n in nums.copy():` or build a new list.\n\n2. **Expecting `.sort()` or `.append()` to return a list**:\n```python\nnums = [3, 1, 2]\nnew_nums = nums.sort()  # new_nums is None!\n```\n*Fix*: Call `nums.sort()` then use `nums`, or use `new_nums = sorted(nums)`.\n\n3. **Index out of range**:\nAccessing `items[len(items)]` raises `IndexError` because indices stop at `len - 1`.\n\n4. **Unintended alias mutation**:\nThinking `b = a` copies the list, only to accidentally corrupt `a`.",
+      "code": "# Safe sorting vs sorting in place\nvals = [5, 2, 8]\nsorted_vals = sorted(vals)\nprint(\"Original:\", vals)\nprint(\"Sorted copy:\", sorted_vals)",
+      "output": "Original: [5, 2, 8]\nSorted copy: [2, 5, 8]"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Keep list types homogeneous**: A list of numbers or a list of strings is easy to process. Avoid mixing random unrelated types.\n2. **Use `.copy()` when cloning**: Always be explicit if you need a detached duplicate: `new_list = old_list.copy()`.\n3. **Use list methods idiomatically**: Prefer `.append()` over `items += [x]` for adding single items.",
+      "code": "tasks = [\"Email client\", \"Write tests\"]\nactive_tasks = tasks.copy()\nactive_tasks.append(\"Deploy\")\nprint(\"Original tasks:\", tasks)\nprint(\"Active tasks:\", active_tasks)",
+      "output": "Original tasks: ['Email client', 'Write tests']\nActive tasks: ['Email client', 'Write tests', 'Deploy']"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Lists are mutable & ordered**: Defined with `[]`, elements accessed via zero-based indexing.\n\u2022 **Adding items**: `.append(x)` adds to end, `.extend(iterable)` merges, `.insert(i, x)` adds at index.\n\u2022 **Removing items**: `.pop()` removes & returns, `.remove(x)` removes value, `del items[i]` deletes.\n\u2022 **Sorting**: `.sort()` changes in place (returns `None`); `sorted()` returns a new list.\n\u2022 **Aliasing vs Copying**: `b = a` creates an alias; `b = a.copy()` creates an independent duplicate.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this list append code print?",
+      "code": "items = [\"a\", \"b\"]\nitems.append(\"c\")\nprint(len(items))",
+      "answer": "3",
+      "hint": "items had 2 elements, and 'c' was appended to the end.",
+      "explanation": "append('c') adds one item to the list, increasing its length from 2 to 3."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the return value of `nums.sort()`?",
+      "options": [
+        "None",
+        "The sorted list",
+        "True",
+        "A new copy of the list"
+      ],
+      "answer": 0,
+      "hint": "In-place mutating methods in Python return a special singleton.",
+      "explanation": "`.sort()` modifies the list in place and returns `None`. Use `sorted(nums)` if you want a new sorted list."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the method name to remove and return the last element from `items`.",
+      "template": "items = [10, 20, 30]\nlast = items.____()  # 30",
+      "answer": "pop",
+      "hint": "Three-letter method name.",
+      "explanation": "`.pop()` removes and returns the last element by default."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this slicing code print?",
+      "code": "nums = [10, 20, 30, 40, 50]\nprint(nums[1:3])",
+      "answer": "[20, 30]",
+      "hint": "Slice from index 1 up to (but not including) index 3.",
+      "explanation": "Indices 1 ('20') and 2 ('30') are selected, producing `[20, 30]`."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this list aliasing code print?",
+      "code": "a = [1, 2]\nb = a\nb.append(3)\nprint(a)",
+      "answer": "[1, 2, 3]",
+      "hint": "Does b = a create a new list or reference the same list?",
+      "explanation": "`b = a` assigns a reference to the same list. Appending to b modifies the list that a points to."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs when accessing `items[3]` on `items = ['x', 'y', 'z']`?",
+      "options": [
+        "IndexError",
+        "ValueError",
+        "KeyError",
+        "TypeError"
+      ],
+      "answer": 0,
+      "hint": "The valid indices are 0, 1, 2.",
+      "explanation": "Indices for 3 items are 0, 1, 2. Index 3 is out of range, raising `IndexError: list index out of range`."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What is the output of this extend call?",
+      "code": "colors = [\"red\"]\ncolors.extend([\"blue\", \"green\"])\nprint(len(colors))",
+      "answer": "3",
+      "hint": "extend merges each element from the given iterable into the list.",
+      "explanation": "extend adds 'blue' and 'green' as separate elements, making the length 3."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the bug in this code?\n```python\nnums = [3, 1, 4]\nnums = nums.sort()\nprint(nums[0])\n```",
+      "options": [
+        "nums.sort() returns None, so nums becomes None and raises TypeError on nums[0]",
+        "nums.sort() only works on strings",
+        "nums is an immutable tuple",
+        "sort() requires an argument"
+      ],
+      "answer": 0,
+      "hint": "Remember what .sort() returns.",
+      "explanation": "`.sort()` returns None. Reassigning `nums = nums.sort()` overwrites nums with None, causing `TypeError: 'NoneType' object is not subscriptable`."
+    },
+    {
+      "id": 9,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the method to insert 'B' between 'A' and 'C' (at index 1).",
+      "template": "letters = [\"A\", \"C\"]\nletters.______(1, \"B\")\nprint(letters)  # ['A', 'B', 'C']",
+      "answer": "insert",
+      "hint": "Method name takes (index, object).",
+      "explanation": "`.insert(index, element)` places the element at the specified position."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which order of operations safely removes all odd numbers from `nums` without skipping elements?",
+      "options": [
+        "for n in nums.copy(): if n % 2 != 0: nums.remove(n)",
+        "for n in nums: if n % 2 != 0: nums.remove(n)",
+        "while nums: nums.remove(nums[0])",
+        "for i in range(len(nums)): if nums[i] % 2 != 0: nums.pop(i)"
+      ],
+      "answer": 0,
+      "hint": "Loop over a copy to avoid index shifting during iteration.",
+      "explanation": "Iterating over `nums.copy()` ensures that removing items from `nums` doesn't alter the iteration sequence."
+    },
+    {
+      "id": 11,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this list math code print?",
+      "code": "data = [10, 20, 30]\navg = sum(data) // len(data)\nprint(avg)",
+      "answer": "20",
+      "hint": "sum is 60, len is 3. 60 // 3 is?",
+      "explanation": "sum(data) = 60, len(data) = 3. 60 // 3 = 20."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Given `scores = [75, 90, 82, 60]`, calculate the average score and the highest score, and print them formatted as: `Avg: {avg:.1f} | Max: {max_score}`\nExpected output:\nAvg: 76.8 | Max: 90",
+      "starter": "scores = [75, 90, 82, 60]\n# Calculate average and max, then print formatted result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Avg: 76.8 | Max: 90"
+        }
+      ],
+      "hints": [
+        "avg = sum(scores) / len(scores)",
+        "max_score = max(scores)",
+        "print(f\"Avg: {avg:.1f} | Max: {max_score}\")"
+      ],
+      "explanation": "Using sum(), len(), max(), and f-string :.1f formatting calculates and formats the summary."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Shopping Cart Manager\nStart with `cart = ['Apples', 'Milk']`:\n1. Append `'Bread'`.\n2. Insert `'Eggs'` at index 1.\n3. Remove `'Milk'`.\n4. Sort the cart alphabetically.\n5. Print the final cart and item count: `Cart: {cart} ({count} items)`\nExpected output:\nCart: ['Apples', 'Bread', 'Eggs'] (3 items)",
+      "starter": "cart = [\"Apples\", \"Milk\"]\n# Perform operations: append Bread, insert Eggs at 1, remove Milk, sort cart\n# Print final result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Cart: ['Apples', 'Bread', 'Eggs'] (3 items)"
+        }
+      ],
+      "hints": [
+        "cart.append('Bread'); cart.insert(1, 'Eggs'); cart.remove('Milk'); cart.sort()",
+        "count = len(cart)",
+        "print(f\"Cart: {cart} ({len(cart)} items)\")"
+      ],
+      "explanation": "This mini-task exercises the fundamental list methods: .append(), .insert(), .remove(), .sort(), and len()."
+    }
+  ]
+}

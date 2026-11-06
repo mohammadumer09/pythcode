@@ -1,0 +1,117 @@
+{
+  "id": 2,
+  "title": "Print, Comments & Basic Syntax",
+  "level": "beginner",
+  "estimated_minutes": 12,
+  "lesson": [
+    {
+      "step": 1,
+      "heading": "print() in detail",
+      "text": "You already know `print()`. Let's go deeper.\n\nYou can print multiple values in one call by separating them with commas. Python puts a space between them automatically.",
+      "code": "print(\"My name is\", \"Alice\")\nprint(\"The answer is\", 42)",
+      "output": "My name is Alice\nThe answer is 42"
+    },
+    {
+      "step": 2,
+      "heading": "print() options: sep and end",
+      "text": "`sep` controls what goes **between** values (default is a space). `end` controls what goes **after** the line (default is a new line `\\n`).",
+      "code": "print(\"a\", \"b\", \"c\", sep=\"-\")\nprint(\"no newline\", end=\"!\")\nprint(\" same line\")",
+      "output": "a-b-c\nno newline! same line"
+    },
+    {
+      "step": 3,
+      "heading": "Indentation matters",
+      "text": "Python uses **indentation** (spaces at the start of a line) to group code. Using the wrong indentation causes an IndentationError.\n\nFor now, keep all your basic code at the leftmost column — no leading spaces unless told to.",
+      "code": "print(\"This is fine\")\n# print(\"This would error\")  <-- wrong indent if at top level",
+      "output": "This is fine"
+    },
+    {
+      "step": 4,
+      "heading": "Syntax rules",
+      "text": "- Strings must be wrapped in matching quotes: `\"hello\"` or `'hello'`.\n- Functions need round brackets: `print()`.\n- Python is case-sensitive: `Print` ≠ `print`.\n- One statement per line is the norm.",
+      "code": "print('single quotes work too')\nprint(\"so do double quotes\")",
+      "output": "single quotes work too\nso do double quotes"
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "question": "What does sep=\"-\" do in print(\"a\", \"b\", sep=\"-\")?",
+      "options": [
+        "Prints a dash before each value",
+        "Puts a dash between the values",
+        "Puts a dash at the end",
+        "Causes an error"
+      ],
+      "answer": 1,
+      "hint": "sep stands for separator — it goes between values.",
+      "explain": "sep sets what appears between the values. print(\"a\",\"b\",sep=\"-\") outputs a-b."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "question": "What is the default value of end in print()?",
+      "options": ["A space \" \"", "Nothing \"\"", "A newline \"\\n\"", "A dash \"-\""],
+      "answer": 2,
+      "hint": "After every print, the cursor moves to the next line by default.",
+      "explain": "By default, end=\"\\n\", so each print() ends with a new line."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "question": "What is the output?",
+      "code": "print(\"x\", \"y\", \"z\", sep=\"|\")",
+      "answer": "x|y|z",
+      "hint": "sep replaces the default space between items.",
+      "explain": "sep=\"|\" puts a pipe character between x, y and z."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "question": "What is the output?",
+      "code": "print(\"Hello\", end=\" \")\nprint(\"World\")",
+      "answer": "Hello World",
+      "hint": "end=\" \" means no newline — the next print continues on the same line.",
+      "explain": "The first print ends with a space instead of a newline, so World appears right after."
+    },
+    {
+      "id": 5,
+      "type": "fill",
+      "question": "Fill in the blank to separate values with a comma and space.",
+      "template": "print(\"a\", \"b\", sep=___)",
+      "answer": "\", \"",
+      "hint": "sep expects a string — wrap it in quotes.",
+      "explain": "sep=\", \" puts a comma then a space between each value."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "question": "Complete the line so it doesn't add a newline at the end.",
+      "template": "print(\"Loading\", ___=\"...\")",
+      "answer": "end",
+      "hint": "The keyword that controls what comes after the printed text.",
+      "explain": "end=\"...\" replaces the default newline with three dots."
+    },
+    {
+      "id": 7,
+      "type": "code",
+      "question": "Print the numbers 1, 2 and 3 on ONE line separated by spaces. Use a single print() call.",
+      "starter": "# one print() call\n",
+      "tests": [{"input": "", "expected": "1 2 3"}],
+      "hint": "print() separates values with a space by default.",
+      "explain": "print(1, 2, 3) outputs 1 2 3 — the default sep is a space."
+    },
+    {
+      "id": 8,
+      "type": "code",
+      "question": "Print \"Done\" without moving to a new line, then print \"!\" right after it. Final output: Done!",
+      "starter": "# two print() calls, output on one line\n",
+      "tests": [{"input": "", "expected": "Done!"}],
+      "hint": "Use end= in the first print.",
+      "explain": "print(\"Done\", end=\"\") then print(\"!\") produces Done! on one line."
+    }
+  ],
+  "pass_score": 70
+}
+

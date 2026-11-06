@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}pythcode{% endblock %}</title>
+  <meta name="description" content="{% block meta_desc %}Learn Python step by step — phases, challenges, and instant code running.{% endblock %}" />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+
+  <!-- anime.js 3.2.1 -->
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" defer></script>
+  <!-- motion (motion.dev) 10.18.0 -->
+  <script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.js" defer></script>
+
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+  <!-- ── Navbar ──────────────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar-inner">
+
+      <a href="{{ url_for('home') }}" class="navbar-logo" aria-label="pythcode home">
+        python<span>code</span>
+      </a>
+
+      <ul class="navbar-links" id="navLinks" role="list">
+        <li><a href="{{ url_for('home') }}"       {% if request.endpoint == 'home'       %}class="active"{% endif %}>Home</a></li>
+        <li><a href="{{ url_for('phase_map') }}"  {% if request.endpoint == 'phase_map'  %}class="active"{% endif %}>Phases</a></li>
+        <li><a href="{{ url_for('cheatsheet') }}" {% if request.endpoint == 'cheatsheet' %}class="active"{% endif %}>Cheat Sheet</a></li>
+        <li><a href="{{ url_for('playground') }}" {% if request.endpoint == 'playground' %}class="active"{% endif %}>Playground</a></li>
+        <li><a href="{{ url_for('about') }}"      {% if request.endpoint == 'about'      %}class="active"{% endif %}>About</a></li>
+      </ul>
+
+      <div class="navbar-actions">
+        {% if logged_in %}
+          <a href="{{ url_for('profile') }}" class="btn btn-secondary btn-sm">
+            {% if current_user %}{{ current_user.name.split()[0] }}{% else %}Profile{% endif %}
+            &nbsp;· {{ current_user.xp if current_user else 0 }} XP
+          </a>
+          <button class="btn btn-primary btn-sm" id="logoutBtn">Logout</button>
+        {% else %}
+          <a href="{{ url_for('login') }}"    class="btn btn-secondary btn-sm">Login</a>
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">Sign up</a>
+        {% endif %}
+      </div>
+
+      <button class="navbar-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ── Page content ────────────────────────────────────── -->
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-logo">python<span>code</span></span>
+      <span>Learn Python, one phase at a time.</span>
+      <span>Built with Flask &amp; ♥</span>
+    </div>
+  </footer>
+
+  <!-- Guest mode must load before page scripts -->
+  <script src="{{ url_for('static', filename='js/guest.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

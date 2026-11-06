@@ -1,0 +1,229 @@
+{
+  "id": 8,
+  "title": "String Methods and f-strings",
+  "level": "beginner",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Raw text entered by users is almost always messy: extra spaces, random casing, and mixed formatting. To build reliable systems \u2014 like cleaning search queries, formatting financial currencies, or generating customer invoices \u2014 you need Python's built-in string methods and formatted f-strings. They turn messy input into clean, structured data.",
+      "code": "raw_input = \"   ALEX@GMAIL.COM   \"\nclean_email = raw_input.strip().lower()\nprice = 49.95\nprint(f\"User: {clean_email} | Total: ${price:.2f}\")",
+      "output": "User: alex@gmail.com | Total: $49.95"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **method** is a function attached to a specific object. You call it using the dot syntax: `string.method()`. Because strings are immutable, methods never change the original string \u2014 they calculate and return a **new string**.\n\nPython also features **f-strings** (formatted string literals): prefix a string with `f` and place variables or expressions directly inside curly braces `{}`. Inside `{}` you can format decimals (`{val:.2f}`), add thousands separators (`{val:,}`), and control alignment/padding.",
+      "code": "msg = \"hello world\"\nprint(msg.upper())       # HELLO WORLD\nprint(msg)               # 'hello world' (unchanged!)\nitem = \"Laptop\"\ncost = 1250\nprint(f\"{item}: ${cost:,}\") # Laptop: $1,250",
+      "output": "HELLO WORLD\nhello world\nLaptop: $1,250"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Method Call & Immutability**: When `text.strip()` runs, Python inspects `text`, allocates a new memory block containing the trimmed characters, and returns the reference to that new string. The variable `text` remains bound to the original string unless you explicitly reassign it: `text = text.strip()`.\n2. **f-string Interpolation**: At runtime, Python encounters `f\"User {name} has {score + 5} pts\"`. It evaluates the Python expressions inside `{}` from left to right, converts results to strings, and concatenates them into one final string in memory.\n3. **Method Chaining**: Because string methods return strings, you can chain them: `text.strip().lower().replace(' ', '_')` runs left-to-right.",
+      "code": "raw = \"  Apples,Bananas,Oranges  \"\nclean = raw.strip().lower()\nfruit_list = clean.split(\",\")\nprint(fruit_list)",
+      "output": "['apples', 'bananas', 'oranges']"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore the essential string methods:\n\n* **Case**: `s.upper()`, `s.lower()`, `s.title()`\n* **Trimming**: `s.strip()` (both sides), `s.lstrip()`, `s.rstrip()`\n* **Search & Count**: `s.find('cat')` (returns first index or -1), `s.count('a')`, `s.startswith('https')`, `s.endswith('.png')`\n* **Splitting & Joining**: `'a,b,c'.split(',')` returns `['a', 'b', 'c']`. `'-'.join(['x', 'y'])` returns `'x-y'`.\n* **Character Type Checks**: `s.isdigit()` (all digits), `s.isalpha()` (all letters).\n* **f-string Precision & Alignment**: `{val:.2f}` (2 decimal places), `{val:10}` (pad to 10 chars), `{val:>10}` (right-align).",
+      "code": "data = [\"apple\", \"banana\", \"cherry\"]\njoined = \" | \".join(data)\nprint(\"Joined:\", joined)\nval = 1234567.891\nprint(f\"Formatted: ${val:,.2f}\")\nprint(f\"Centered: {'REPORT':^20}\")",
+      "output": "Joined: apple | banana | cherry\nFormatted: $1,234,567.89\nCentered:        REPORT       "
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Forgetting to save the method result**:\n```python\ntext = 'hello'\ntext.upper()  # Computes 'HELLO' and immediately discards it!\nprint(text)   # still 'hello'\n```\n*Fix*: Reassign the variable: `text = text.upper()`.\n\n2. **Calling `.split()` without understanding the output**:\n`.split()` returns a **list of strings**, not a single string.\n\n3. **Misunderstanding `.find()` on missing items**:\nIf a substring isn't found, `.find()` returns `-1`, NOT `False` or an error. If you write `if text.find('x'):`, remember `-1` is truthy in Python!\n*Fix*: Use `'x' in text` for boolean checks.\n\n4. **Forgetting the `f` prefix**:\n`\"{name} has score\"` just prints literal `{name} has score` without evaluating the variable.",
+      "code": "# Showing proper reassignment and join\nname = \"  ada lovelace  \"\nname = name.strip().title()\nprint(\"Cleaned:\", name)",
+      "output": "Cleaned: Ada Lovelace"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Always use f-strings for string interpolation**: Avoid old `%` formatting and `.format()` in modern Python. f-strings are faster, more readable, and concise.\n2. **Chain cleaning methods logically**: `user_input.strip().lower()` is standard for normalizing usernames and emails.\n3. **Use `.startswith()` / `.endswith()` over manual slices**: Write `if url.startswith('https')` instead of `if url[:5] == 'https'`.",
+      "code": "filename = \"chart_data.CSV\"\nif filename.lower().endswith(\".csv\"):\n    print(\"Valid CSV file detected\")",
+      "output": "Valid CSV file detected"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Methods return new strings**: Original string is never mutated; reassign to keep changes.\n\u2022 **Case & Cleaning**: `.lower()`, `.upper()`, `.title()`, and `.strip()` sanitize input.\n\u2022 **Splitting & Joining**: `.split(sep)` turns string to list; `sep.join(list)` merges list to string.\n\u2022 **Inspection**: `.startswith()`, `.endswith()`, `.isdigit()`, `.isalpha()`, `.find()`.\n\u2022 **f-strings**: `f\"{var:.2f}\"` handles decimal rounding; `f\"{var:,}\"` adds thousands commas.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What does `text.strip()` do in Python?",
+      "options": [
+        "Removes leading and trailing whitespace",
+        "Deletes all spaces in the entire string",
+        "Converts the string to lowercase",
+        "Splits the string into words"
+      ],
+      "answer": 0,
+      "hint": "It trims spaces from both ends of the string.",
+      "explanation": "`strip()` removes spaces, tabs, and newlines from the start and end of a string."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "s = \"python\"\ns.upper()\nprint(s)",
+      "answer": "python",
+      "hint": "Strings are immutable. Did the code reassign the result to s?",
+      "explanation": "Because strings are immutable, s.upper() returns 'PYTHON' but does not modify s. Since it wasn't reassigned (s = s.upper()), s is still 'python'."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this f-string output?",
+      "code": "item = \"Widget\"\nqty = 4\nprint(f\"{item} x {qty}\")",
+      "answer": "Widget x 4",
+      "hint": "The variables inside {} are evaluated and inserted.",
+      "explanation": "{item} becomes 'Widget' and {qty} becomes 4, producing 'Widget x 4'."
+    },
+    {
+      "id": 4,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the method name to turn 'hello world' into 'Hello World'.",
+      "template": "print(\"hello world\".____())  # Hello World",
+      "answer": "title",
+      "hint": "This method capitalizes the first letter of each word like a title.",
+      "explanation": "The `.title()` method converts the first character of each word to uppercase."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this split code print?",
+      "code": "tags = \"python,coding,ai\"\nparts = tags.split(\",\")\nprint(parts[1])",
+      "answer": "coding",
+      "hint": "split(',') returns ['python', 'coding', 'ai']. What is at index 1?",
+      "explanation": "tags.split(',') splits on commas to produce a list of 3 items. Index 1 is 'coding'."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Join the list `['a', 'b', 'c']` with hyphens `-` to produce `'a-b-c'`.",
+      "template": "print(\"-\".____([\"a\", \"b\", \"c\"]))",
+      "answer": "join",
+      "hint": "The separator string calls this method with an iterable as argument.",
+      "explanation": "The `.join()` method glues list elements together with the separator string."
+    },
+    {
+      "id": 7,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does `\"hello\".find(\"z\")` return?",
+      "options": [
+        "False",
+        "-1",
+        "None",
+        "Raises ValueError"
+      ],
+      "answer": 1,
+      "hint": "find() returns an integer index or -1 if the target is missing.",
+      "explanation": "When substring is not found, `.find()` returns -1."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this formatted f-string print?",
+      "code": "price = 19.5\nprint(f\"${price:.2f}\")",
+      "answer": "$19.50",
+      "hint": ":.2f rounds or pads to 2 decimal places.",
+      "explanation": "The formatting specifier :.2f outputs the float with exactly two decimal places: $19.50."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is wrong with this code?\n```python\nnum = '123a'\nif num.isdigit():\n    val = int(num)\n```",
+      "options": [
+        "Nothing, isdigit() correctly evaluates to False because of 'a'",
+        "isdigit() raises a ValueError on non-digit characters",
+        "isdigit() requires an argument",
+        "int() cannot convert digit strings"
+      ],
+      "answer": 0,
+      "hint": "Does '123a' consist only of numeric digits?",
+      "explanation": "The code is actually safe and correct: isdigit() checks if ALL characters are digits. Since 'a' is present, isdigit() returns False and avoids ValueError."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What does this method chain print?",
+      "code": "raw = \"   New_York_City   \"\nprint(raw.strip().lower().replace(\"_\", \" \"))",
+      "answer": "new york city",
+      "hint": "strip() removes outer spaces, lower() lowers chars, replace() swaps _ for space.",
+      "explanation": "The methods run sequentially: spaces trimmed -> 'New_York_City' -> lowercase -> 'new_york_city' -> underscores replaced with spaces -> 'new york city'."
+    },
+    {
+      "id": 11,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What does this number formatting f-string print?",
+      "code": "total = 1000000\nprint(f\"{total:,}\")",
+      "answer": "1,000,000",
+      "hint": "The comma specifier in an f-string adds thousands separators.",
+      "explanation": "f\"{total:,}\" formats the number with commas every three digits: 1,000,000."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Clean and format the raw book title `raw_title = '   the great gatsby   '`.\nStrip the whitespace, convert to title case, and print it.\nExpected output:\nThe Great Gatsby",
+      "starter": "raw_title = \"   the great gatsby   \"\n# Strip whitespace and convert to title case, then print\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "The Great Gatsby"
+        }
+      ],
+      "hints": [
+        "Use .strip() to eliminate outer spaces.",
+        "Use .title() to capitalize each word.",
+        "print(raw_title.strip().title())"
+      ],
+      "explanation": "Chaining .strip().title() cleans and formats the title string."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Receipt Formatter\nGiven product details `item = 'keyboard'`, `price = 49.9`, and `quantity = 2`:\n1. Title-case the item name.\n2. Calculate `total = price * quantity`.\n3. Print an formatted receipt line: `{Item} x {quantity}: ${total:.2f}`\nExpected output:\nKeyboard x 2: $99.80",
+      "starter": "item = \"keyboard\"\nprice = 49.9\nquantity = 2\n# Calculate total, format with title case and 2 decimal places, then print\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Keyboard x 2: $99.80"
+        }
+      ],
+      "hints": [
+        "item_title = item.title()",
+        "total = price * quantity",
+        "print(f\"{item.title()} x {quantity}: ${total:.2f}\")"
+      ],
+      "explanation": "This mini-task brings together string methods (.title()), math calculation, and f-string decimal formatting (:.2f)."
+    }
+  ]
+}

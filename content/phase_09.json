@@ -1,0 +1,234 @@
+{
+  "id": 9,
+  "title": "Booleans and Comparisons",
+  "level": "beginner",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Programs make decisions constantly. Should a user be granted access to an admin dashboard? Is an account balance greater than the checkout price? Has an inventory item reached zero? Every automated decision relies on booleans (`True` and `False`) and comparison operators.",
+      "code": "age = 20\nhas_license = True\ncan_rent_car = age >= 21 and has_license\nprint(\"Can rent car:\", can_rent_car)",
+      "output": "Can rent car: False"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "The **boolean** (`bool`) type has only two values: `True` and `False` (capitalized). You produce booleans using **comparison operators** (`==`, `!=`, `<`, `>`, `<=`, `>=`) and combine them using **logical operators** (`and`, `or`, `not`).\n\nIn addition, every value in Python has an inherent boolean truth value: empty or zero values (`0`, `\"\"`, `[]`, `None`) are **falsy**, while non-empty, non-zero values are **truthy**.",
+      "code": "print(10 > 5)         # True\nprint(4 == 4)         # True\nprint(3 != 3)         # False\nprint(bool(0))        # False (falsy)\nprint(bool(\"hello\"))  # True (truthy)",
+      "output": "True\nTrue\nFalse\nFalse\nTrue"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Chained Comparisons**: Python supports mathematical chaining: `10 < x < 20` is evaluated as `(10 < x) and (x < 20)`.\n2. **Short-Circuit Evaluation**: Python optimizes logical operators:\n   - In `A and B`: If `A` is `False`, Python immediately stops and returns `False` without ever evaluating `B`.\n   - In `A or B`: If `A` is `True`, Python stops immediately and returns `True` without looking at `B`.\n3. **`==` vs `is`**: `==` checks whether two objects have **equal values** (`[1, 2] == [1, 2]` is `True`). The `is` operator checks whether both variables point to the **exact same object in memory**.",
+      "code": "x = 15\nprint(10 < x < 20)           # True (chained)\na = [1, 2, 3]\nb = [1, 2, 3]\nprint(\"Value equality:\", a == b)    # True\nprint(\"Identity:\", a is b)          # False (different objects in memory)",
+      "output": "True\nValue equality: True\nIdentity: False"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore truth tables, string comparisons, and boolean logic:\n\n* **Logical Operators**:\n  - `True and False` \u2192 `False`\n  - `True or False` \u2192 `True`\n  - `not True` \u2192 `False`\n* **String Comparison**: Strings are compared lexicographically (by ASCII/Unicode code points). `'apple' < 'banana'` is `True`. Note that uppercase letters have lower numbers than lowercase letters (`'Z' < 'a'` is `True`).\n* **Safe Short-Circuiting**: `count != 0 and total / count > 5` safely avoids division by zero because Python skips the division when `count != 0` is false.",
+      "code": "print(\"apple < banana:\", \"apple\" < \"banana\")\nprint(\"Z < a:\", \"Z\" < \"a\")\ncount = 0\ntotal = 100\n# Won't crash because count != 0 is False, skipping the division\nsafe = count != 0 and total / count > 2\nprint(\"Safe check:\", safe)",
+      "output": "apple < banana: True\nZ < a: True\nSafe check: False"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Using `=` instead of `==` in comparisons**:\n```python\nif score = 100:  # SyntaxError: invalid syntax\n```\n*Fix*: `=` assigns a variable; `==` compares two values.\n\n2. **Using `is` to compare numbers or strings**:\n`is` tests memory address, not value. Always use `==` to compare values; reserve `is` for singletons like `None` (`x is None`).\n\n3. **Writing redundant comparisons with booleans**:\n```python\nif is_valid == True:  # Redundant!\n```\n*Fix*: Write directly `if is_valid:`.\n\n4. **Confusing string comparison casing**:\n`'apple' == 'Apple'` evaluates to `False`. Always normalize with `.lower()` before comparing user input.",
+      "code": "# Best practice comparisons\nis_logged_in = True\nif is_logged_in:\n    print(\"User active\")\nstatus = None\nif status is None:\n    print(\"Status not set yet\")",
+      "output": "User active\nStatus not set yet"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use chained comparisons**: Write `0 <= score <= 100` instead of `score >= 0 and score <= 100`.\n2. **Test `is None` explicitly**: Always use `if val is None:` rather than `if val == None:`.\n3. **Leverage truthy/falsy checks**: Check for empty strings or collections with `if not username:` rather than `if len(username) == 0:`.",
+      "code": "username = \"\"\nif not username:\n    print(\"Username cannot be empty\")",
+      "output": "Username cannot be empty"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Booleans**: Only two values: `True` and `False` (capitalized).\n\u2022 **Comparisons**: `==`, `!=`, `<`, `>`, `<=`, `>=` return booleans.\n\u2022 **Logical Operators**: `and` (both true), `or` (at least one true), `not` (inverts).\n\u2022 **Short-Circuiting**: Python halts evaluation as soon as the outcome is guaranteed.\n\u2022 **`==` vs `is`**: Use `==` for values; use `is` exclusively for identity checks (like `is None`).",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Which operator checks if two values are equal in Python?",
+      "options": [
+        "=",
+        "==",
+        "===",
+        "equals"
+      ],
+      "answer": 1,
+      "hint": "Single = is for variable assignment; double = is for comparison.",
+      "explanation": "In Python, == is the equality comparison operator. Single = is assignment."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this logical expression evaluate to?",
+      "code": "print(True and not False)",
+      "answer": "True",
+      "hint": "not False becomes True. What is True and True?",
+      "explanation": "not False evaluates to True. Then True and True evaluates to True."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the operator to check if 10 is NOT equal to 20.",
+      "template": "print(10 ___ 20)  # True",
+      "answer": "!=",
+      "hint": "Exclamation mark followed by equals.",
+      "explanation": "!= is the 'not equal to' operator in Python."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the boolean value of an empty string in Python?",
+      "code": "print(bool(\"\"))",
+      "answer": "False",
+      "hint": "Empty sequences and zero numbers are falsy in Python.",
+      "explanation": "Empty strings \"\" have a falsy value, so bool(\"\") returns False."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this chained comparison print?",
+      "code": "x = 15\nprint(10 < x < 20)",
+      "answer": "True",
+      "hint": "Python evaluates 10 < 15 and 15 < 20.",
+      "explanation": "10 < 15 is True, and 15 < 20 is True. Both hold, so the result is True."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What is the difference between `==` and `is` in Python?",
+      "options": [
+        "== compares values for equality, while is compares object memory identity",
+        "== is for strings, while is is for numbers",
+        "is compares values, while == checks variable names",
+        "There is no difference"
+      ],
+      "answer": 0,
+      "hint": "One checks contents, the other checks if both point to the exact same memory address.",
+      "explanation": "`==` checks if values match. `is` checks whether two variables reference the identical object in memory."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this string comparison print?",
+      "code": "print(\"apple\" < \"banana\")",
+      "answer": "True",
+      "hint": "Strings are compared alphabetically. Does 'a' come before 'b'?",
+      "explanation": "'a' (ASCII 97) is less than 'b' (ASCII 98), so 'apple' < 'banana' evaluates to True."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you run this line?\n```python\nif score = 100:\n    print('Perfect')\n```",
+      "options": [
+        "SyntaxError",
+        "TypeError",
+        "ValueError",
+        "NameError"
+      ],
+      "answer": 0,
+      "hint": "Using an assignment = inside an if condition is a syntax violation.",
+      "explanation": "Using single = (assignment) instead of == (equality comparison) in an if-statement raises a SyntaxError."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this short-circuit logic print?",
+      "code": "x = 0\nresult = x != 0 and (10 / x > 1)\nprint(result)",
+      "answer": "False",
+      "hint": "Because x != 0 is False, does Python evaluate the division (10 / x)?",
+      "explanation": "Short-circuiting: Since `x != 0` evaluates to False, Python stops immediately for `and` and returns False without executing `10 / x` (preventing ZeroDivisionError)."
+    },
+    {
+      "id": 10,
+      "type": "fill",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Fill in the recommended Pythonic keyword to check if variable `result` is None.",
+      "template": "result = None\nif result ___ None:\n    print(\"No data\")",
+      "answer": "is",
+      "hint": "PEP 8 recommends testing singleton identity with this keyword.",
+      "explanation": "Always use `is None` to test for None in Python."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which option correctly arranges a safe check: check that `text` is not empty, then check that its length is less than 10?",
+      "options": [
+        "if bool(text) and len(text) < 10:",
+        "if len(text) < 10 or bool(text):",
+        "if text == 10 and not text:",
+        "if not text and len(text) < 10:"
+      ],
+      "answer": 0,
+      "hint": "We need both conditions to be True, with the non-empty check first.",
+      "explanation": "`bool(text) and len(text) < 10` checks that text is non-empty (truthy) and then checks that len(text) < 10."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "find_bug",
+      "question": "Find the bug: The developer wants to test if `age` is between 18 and 65 (inclusive) using chained comparisons, but wrote an assignment by mistake.",
+      "starter": "age = 25\n# Fix the condition to check if 18 <= age <= 65 and print the result\nprint(18 <= age <= 65)\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "True"
+        }
+      ],
+      "hints": [
+        "Use chained comparison: 18 <= age <= 65",
+        "Check that age is at least 18 and at most 65.",
+        "print(18 <= age <= 65)"
+      ],
+      "explanation": "Chained comparisons `18 <= age <= 65` cleanly check ranges in Python."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Access Gatekeeper\nGiven `role = 'admin'` and `has_badge = True` and `strikes = 0`:\n1. A user is granted access if (`role == 'admin'` OR `has_badge`) AND `strikes == 0`.\n2. Calculate `access_allowed` as a boolean.\n3. Print `\"Access:\"` and the boolean value.\nExpected output:\nAccess: True",
+      "starter": "role = \"admin\"\nhas_badge = True\nstrikes = 0\n# Determine if access is allowed and print 'Access: True' or 'Access: False'\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Access: True"
+        }
+      ],
+      "hints": [
+        "Use parentheses to group the OR condition: (role == 'admin' or has_badge)",
+        "Combine with strikes == 0 using 'and'.",
+        "access_allowed = (role == 'admin' or has_badge) and strikes == 0\nprint(f\"Access: {access_allowed}\")"
+      ],
+      "explanation": "This mini-task brings together comparisons (==), logical operators (and, or), and grouping with parentheses."
+    }
+  ]
+}

@@ -1,0 +1,270 @@
+{
+  "id": 16,
+  "title": "Functions",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Imagine writing 50 lines of tax calculation code every single time a customer adds an item to their cart. If tax laws change, you would have to search and rewrite those 50 lines in hundreds of places. Functions allow you to package logic into reusable, named tools, adhering to the core programming principle: **DRY** (Don't Repeat Yourself).",
+      "code": "def calculate_tax(subtotal, rate=0.08):\n    \"\"\"Return tax rounded to 2 decimal places.\"\"\"\n    return round(subtotal * rate, 2)\n\nprint(\"Order 1 tax: $\", calculate_tax(100))\nprint(\"Order 2 tax: $\", calculate_tax(250, 0.10))",
+      "output": "Order 1 tax: $ 8.0\nOrder 2 tax: $ 25.0"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "You define a function using the `def` keyword, followed by the function name, parentheses `()`, and a colon `:`. The inputs inside the parentheses are **parameters**.\n\nA function executes its indented body and sends data back to the caller using the `return` statement. If a function reaches the end without a `return`, it implicitly returns `None`.\n\nCrucial distinction: **`return` gives data back to your program** so other code can use it, whereas **`print()` only displays text on the screen**.",
+      "code": "def add_numbers(a, b):\n    return a + b\n\nresult = add_numbers(10, 25)\nprint(\"The result is:\", result * 2)",
+      "output": "The result is: 70"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Definition vs Execution**: When Python reads `def greet():`, it compiles the body into a function object in memory and binds the name `greet` to it. The code inside does NOT run until the function is **called** with parentheses `greet()`.\n2. **Parameter Binding**: Calling `greet('Sam')` binds the local parameter variable to the argument object.\n3. **Return Termination**: As soon as Python encounters `return`, the function exits immediately. Any lines below `return` in that block are unreachable.\n4. **Returning Multiple Values**: Python lets you return comma-separated values (`return x, y`), which Python packages into a single `tuple`.",
+      "code": "def min_and_max(numbers):\n    return min(numbers), max(numbers)\n\nlowest, highest = min_and_max([5, 2, 9, 1])\nprint(f\"Lowest: {lowest}, Highest: {highest}\")",
+      "output": "Lowest: 1, Highest: 9",
+      "trace": {
+        "title": "Function Call & Return Tracer",
+        "code": "def double_add(x, y):\n    res = (x + y) * 2\n    return res\n\nval = double_add(3, 4)",
+        "steps": [
+          {
+            "line": 1,
+            "vars": {"double_add": "<function>"},
+            "note": "Line 1: Function 'double_add' defined in global scope. Body is compiled, not executed yet."
+          },
+          {
+            "line": 5,
+            "vars": {"double_add": "<function>"},
+            "note": "Line 5: double_add(3, 4) called with positional arguments x=3, y=4."
+          },
+          {
+            "line": 1,
+            "vars": {"x": 3, "y": 4},
+            "note": "Line 1: Entering double_add(). Local parameter frame created with x=3, y=4."
+          },
+          {
+            "line": 2,
+            "vars": {"x": 3, "y": 4, "res": 14},
+            "note": "Line 2: Local calculation (3 + 4) * 2 = 14, stored in local variable 'res'."
+          },
+          {
+            "line": 3,
+            "vars": {"x": 3, "y": 4, "res": 14, "return": 14},
+            "note": "Line 3: Returns 14 back to caller. Local frame is discarded."
+          },
+          {
+            "line": 5,
+            "vars": {"double_add": "<function>", "val": 14},
+            "note": "Line 5: Return value 14 assigned to 'val' in global scope."
+          }
+        ]
+      }
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore key function capabilities:\n\n* **Default Parameters**: `def greet(name, greeting=\"Hello\")` allows callers to omit `greeting`.\n* **Keyword Arguments**: Callers can pass arguments by name in any order: `calculate_tax(rate=0.05, subtotal=80)`.\n* **Docstrings**: A triple-quoted string immediately inside the function describing its purpose.\n* **Functions Calling Functions**: Breaking big problems into small, cooperating functions.",
+      "code": "def is_even(n):\n    return n % 2 == 0\n\ndef summarize_number(n):\n    label = \"Even\" if is_even(n) else \"Odd\"\n    return f\"{n} is {label}\"\n\nprint(summarize_number(7))\nprint(summarize_number(12))",
+      "output": "7 is Odd\n12 is Even"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Confusing `print()` with `return`**:\n```python\ndef square(n):\n    print(n * n)  # Displays 16, but returns None!\nx = square(4)\nprint(x + 1)      # TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'\n```\n*Fix*: Always use `return n * n`.\n\n2. **Forgetting Parentheses When Calling**:\n`x = my_func` assigns the function object itself to `x`, instead of executing it. Call it with `my_func()`.\n\n3. **Default parameters before non-default parameters**:\n`def bad(a=1, b):` raises `SyntaxError: non-default argument follows default argument`.\n\n4. **Unreachable Code After `return`**:\nPutting lines after `return` inside the same branch will never run.",
+      "code": "def proper_square(n):\n    return n * n\n\nval = proper_square(5)\nprint(\"Can use val in math:\", val + 10)",
+      "output": "Can use val in math: 35"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Single Responsibility**: Each function should do one thing and do it well.\n2. **Use Verb-Based Names**: Name functions with action verbs (e.g. `calculate_total`, `is_valid_email`, `format_report`).\n3. **Include Docstrings**: Always explain inputs and outputs for functions that perform non-trivial tasks.",
+      "code": "def clean_username(raw_name):\n    \"\"\"Strip whitespace and lowercase username.\"\"\"\n    return raw_name.strip().lower()\n\nprint(clean_username(\"  DevUser12  \"))",
+      "output": "devuser12"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Definition**: `def func_name(param1, param2):` creates a reusable routine.\n\u2022 **Return vs Print**: `return` produces data for your program; `print` only displays text.\n\u2022 **Defaults**: Default parameters must follow non-default parameters.\n\u2022 **Multiple Returns**: `return a, b` automatically packs values into a tuple.\n\u2022 **DRY Principle**: Functions eliminate duplicate code and localize bug fixes.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this function call print?",
+      "code": "def double(x):\n    return x * 2\n\nprint(double(5))",
+      "answer": "10",
+      "hint": "double(5) executes 5 * 2 and returns 10.",
+      "explanation": "The function returns 5 * 2 = 10, which print displays."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What value does a Python function return if it does not contain a `return` statement?",
+      "options": [
+        "None",
+        "0",
+        "False",
+        "Empty string \"\""
+      ],
+      "answer": 0,
+      "hint": "Python's built-in absence-of-value object.",
+      "explanation": "If a function reaches the end of its body without returning a value, it returns `None`."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword that defines a function in Python.",
+      "template": "___ multiply(a, b):\n    return a * b",
+      "answer": "def",
+      "hint": "Three-letter keyword.",
+      "explanation": "`def` is the keyword used to define functions."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this default parameter call output?",
+      "code": "def greet(name, greeting=\"Hi\"):\n    return f\"{greeting}, {name}!\"\n\nprint(greet(\"Bob\"))",
+      "answer": "Hi, Bob!",
+      "hint": "Since only 'Bob' is passed, greeting uses its default 'Hi'.",
+      "explanation": "The greeting parameter defaults to 'Hi', producing 'Hi, Bob!'."
+    },
+    {
+      "id": 5,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is wrong with this function definition?\n```python\ndef calculate(tax=0.05, amount):\n    return amount * (1 + tax)\n```",
+      "options": [
+        "Non-default argument (amount) follows default argument (tax)",
+        "Functions cannot calculate with decimals",
+        "tax cannot have a default value",
+        "return statement requires parentheses"
+      ],
+      "answer": 0,
+      "hint": "Arguments without defaults must always come before arguments with defaults.",
+      "explanation": "Python requires non-default parameters (`amount`) to precede default parameters (`tax=0.05`). Otherwise a SyntaxError is raised."
+    },
+    {
+      "id": 6,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "def compute(a, b):\n    return a + b\n    print(\"Finished\")  # Unreachable\n\nprint(compute(3, 4))",
+      "answer": "7",
+      "hint": "Does any code run after the return statement?",
+      "explanation": "`return a + b` immediately exits the function with 7. The print('Finished') line is never reached."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this multiple-return unpacking print?",
+      "code": "def stats(a, b):\n    return a + b, a * b\n\ns, p = stats(3, 5)\nprint(f\"{s} {p}\")",
+      "answer": "8 15",
+      "hint": "s gets sum (3 + 5 = 8), p gets product (3 * 5 = 15).",
+      "explanation": "stats(3, 5) returns (8, 15). Unpacking assigns s=8 and p=15."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you try to add 1 to the result of this function?\n```python\ndef show(x):\n    print(x * 2)\n\nval = show(5)\nprint(val + 1)\n```",
+      "options": [
+        "TypeError",
+        "ValueError",
+        "NameError",
+        "SyntaxError"
+      ],
+      "answer": 0,
+      "hint": "show(5) prints 10 but returns None. You cannot add int to NoneType.",
+      "explanation": "Because `show()` does not have a `return` statement, `val` is `None`. Adding `None + 1` raises `TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'`."
+    },
+    {
+      "id": 9,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the keyword argument name to pass 'Bob' as the name while keeping the default greeting.",
+      "template": "def greet(greeting=\"Hello\", name=\"Guest\"):\n    return f\"{greeting}, {name}\"\n\nprint(greet(____=\"Bob\"))  # Hello, Bob",
+      "answer": "name",
+      "hint": "Pass the parameter name explicitly.",
+      "explanation": "Calling `greet(name=\"Bob\")` sets the `name` keyword argument directly while leaving `greeting` as its default."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly defines and calls a temperature converter from Celsius to Fahrenheit?",
+      "options": [
+        "1: def c_to_f(c): return c * 9/5 + 32 \\n 2: temp_f = c_to_f(25) \\n 3: print(temp_f)",
+        "1: temp_f = c_to_f(25) \\n 2: def c_to_f(c): return c * 9/5 + 32 \\n 3: print(temp_f)",
+        "1: print(temp_f) \\n 2: temp_f = c_to_f(25) \\n 3: def c_to_f(c): return c * 9/5 + 32",
+        "1: def c_to_f(c): print(temp_f) \\n 2: temp_f = 25 \\n 3: c_to_f(25)"
+      ],
+      "answer": 0,
+      "hint": "Functions must be defined before they are called.",
+      "explanation": "Python executes sequentially from top to bottom; the function must be defined with def before calling it."
+    },
+    {
+      "id": 11,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What is the output of these cooperating functions?",
+      "code": "def square(n):\n    return n * n\n\ndef sum_squares(a, b):\n    return square(a) + square(b)\n\nprint(sum_squares(3, 4))",
+      "answer": "25",
+      "hint": "3*3 = 9, 4*4 = 16. What is 9 + 16?",
+      "explanation": "square(3) returns 9, square(4) returns 16. sum_squares returns 9 + 16 = 25."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Define a function `clamp(val, min_val, max_val)`:\n- If `val < min_val`, return `min_val`\n- If `val > max_val`, return `max_val`\n- Otherwise return `val`\nCall `clamp(15, 0, 10)` and print the result.\nExpected output:\n10",
+      "starter": "# Define clamp function, then test with clamp(15, 0, 10) and print\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "10"
+        }
+      ],
+      "hints": [
+        "def clamp(val, min_val, max_val):",
+        "if val < min_val: return min_val elif val > max_val: return max_val else: return val",
+        "def clamp(val, min_val, max_val):\n    if val < min_val:\n        return min_val\n    if val > max_val:\n        return max_val\n    return val\nprint(clamp(15, 0, 10))"
+      ],
+      "explanation": "Clamping restricts values within a min/max boundary."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Password Strength Checker Function\nDefine a function `check_password(pwd)`:\n1. If `len(pwd) < 8`: return `'Too short'`\n2. Elif `pwd.isalpha()` (all letters, no numbers): return `'Needs numbers'`\n3. Else: return `'Strong'`\nTest the function on `\"secret123\"` and print the returned status.\nExpected output:\nStrong",
+      "starter": "# Define check_password(pwd), test with 'secret123', and print result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Strong"
+        }
+      ],
+      "hints": [
+        "Check len(pwd) < 8 first.",
+        "Check pwd.isalpha() for the all-letters rule.",
+        "def check_password(pwd):\n    if len(pwd) < 8:\n        return 'Too short'\n    if pwd.isalpha():\n        return 'Needs numbers'\n    return 'Strong'\nprint(check_password(\"secret123\"))"
+      ],
+      "explanation": "This mini-task brings together function definition, parameter handling, early returns, string methods (.isalpha()), and len()."
+    }
+  ]
+}

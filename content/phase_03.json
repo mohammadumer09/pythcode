@@ -1,0 +1,133 @@
+{
+  "id": 3,
+  "title": "Variables",
+  "level": "beginner",
+  "estimated_minutes": 12,
+  "lesson": [
+    {
+      "step": 1,
+      "heading": "What is a variable?",
+      "text": "A **variable** is a named box that stores a value. You give the box a name, put something inside, and use the name later to get it back.\n\nCreate a variable with `=` (the assignment operator).",
+      "code": "name = \"Alice\"\nage = 17\nprint(name)\nprint(age)",
+      "output": "Alice\n17"
+    },
+    {
+      "step": 2,
+      "heading": "Naming rules",
+      "text": "Variable names:\n- Can contain letters, digits and underscores `_`.\n- Must **not** start with a digit.\n- Are case-sensitive: `score` ≠ `Score`.\n- Should be short and descriptive (use `snake_case` for multiple words).\n\nBad names: `1score`, `my-score`. Good names: `score`, `my_score`, `playerName`.",
+      "code": "my_score = 95\nplayer_name = \"Bob\"\nprint(player_name, \"scored\", my_score)",
+      "output": "Bob scored 95"
+    },
+    {
+      "step": 3,
+      "heading": "3. How Python Runs It: Updating Variables",
+      "text": "When Python updates a variable, it evaluates the expression on the right side of the `=` first, and then binds that new result to the variable name on the left. Step through the tracer below to see variables updated line-by-line:",
+      "code": "points = 10\npoints = 20\npoints = points + 5\nprint(points)",
+      "output": "25",
+      "trace": {
+        "title": "Variable Reassignment Step-by-Step",
+        "code": "points = 10\npoints = 20\npoints = points + 5",
+        "steps": [
+          {
+            "line": 1,
+            "vars": {"points": 10},
+            "note": "Line 1: Python allocates integer 10 and binds variable name 'points' to it."
+          },
+          {
+            "line": 2,
+            "vars": {"points": 20},
+            "note": "Line 2: 'points' is reassigned to 20. The old value 10 is replaced in memory."
+          },
+          {
+            "line": 3,
+            "vars": {"points": 25},
+            "note": "Line 3: Evaluates right-hand side (20 + 5 = 25) and stores 25 into 'points'."
+          }
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "heading": "Using variables in print()",
+      "text": "You can print a variable directly, or combine it with text using commas or **f-strings** (covered in depth in Phase 8).",
+      "code": "city = \"Paris\"\npop = 2161000\nprint(\"City:\", city)\nprint(f\"{city} has a population of {pop}.\")",
+      "output": "City: Paris\nParis has a population of 2161000."
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "question": "Which variable name is valid in Python?",
+      "options": ["2score", "my-score", "my_score", "my score"],
+      "answer": 2,
+      "hint": "Only letters, digits and underscores are allowed. Cannot start with a digit.",
+      "explain": "my_score uses only letters and an underscore, so it is valid. The others have illegal characters or start with a digit."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "question": "What is stored in x after these two lines?\nx = 5\nx = x + 3",
+      "options": ["5", "3", "8", "x + 3"],
+      "answer": 2,
+      "hint": "The second line reads the old value of x, adds 3, and stores the result back.",
+      "explain": "x starts at 5. x + 3 = 8. That 8 is then stored back in x."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "question": "What is the output?",
+      "code": "animal = \"cat\"\nanimal = \"dog\"\nprint(animal)",
+      "answer": "dog",
+      "hint": "The second assignment overwrites the first.",
+      "explain": "animal is reassigned to \"dog\", so print(animal) outputs dog."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "question": "What is the output?",
+      "code": "x = 10\ny = 3\nprint(x + y)",
+      "answer": "13",
+      "hint": "x + y adds the two numbers.",
+      "explain": "10 + 3 = 13."
+    },
+    {
+      "id": 5,
+      "type": "fill",
+      "question": "Create a variable called score and store the value 100 in it.",
+      "template": "_____ = 100",
+      "answer": "score",
+      "hint": "The variable name goes on the left of =.",
+      "explain": "score = 100 creates a variable named score with the value 100."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "question": "Update points by adding 10 to its current value.",
+      "template": "points = points ___ 10",
+      "answer": "+",
+      "hint": "Use the addition operator.",
+      "explain": "points = points + 10 reads the current value, adds 10, and stores the result."
+    },
+    {
+      "id": 7,
+      "type": "code",
+      "question": "Create a variable called greeting with the value \"Hello, Python!\" and print it.",
+      "starter": "# create and print the variable\n",
+      "tests": [{"input": "", "expected": "Hello, Python!"}],
+      "hint": "greeting = \"Hello, Python!\" then print(greeting).",
+      "explain": "greeting = \"Hello, Python!\" stores the string. print(greeting) outputs it."
+    },
+    {
+      "id": 8,
+      "type": "code",
+      "question": "Store your name in a variable called name and your age in a variable called age. Print: My name is Alice and I am 17 years old. (use your own values — the test checks the format, not the exact name/age).",
+      "starter": "name = \"\"\nage = 0\n# print using the variables\n",
+      "tests": [{"input": "", "expected": "My name is Alice and I am 17 years old."}],
+      "hint": "Use print(f\"My name is {name} and I am {age} years old.\")",
+      "explain": "An f-string embeds the variable values directly in the text."
+    }
+  ],
+  "pass_score": 70
+}
+

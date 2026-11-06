@@ -1,0 +1,300 @@
+{
+  "id": 12,
+  "title": "While Loops",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Not all processes have a known number of steps in advance. A network service must wait for incoming connections indefinitely, a game runs until the player loses all lives, and a password prompt must repeat until the user enters valid credentials. `while` loops allow programs to execute as long as a condition remains true.",
+      "code": "battery = 100\nwhile battery > 20:\n    battery -= 30  # draining energy\nprint(\"Battery low warning:\", battery, \"%\")",
+      "output": "Battery low warning: 10 %"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **while loop** repeatedly executes its block as long as its condition evaluates to `True`. Before each iteration, Python tests the condition. When the condition becomes `False`, the loop finishes and execution continues below.\n\nTwo critical loop control statements alter execution flow:\n- `break`: Exits the loop immediately.\n- `continue`: Skips the remainder of the current iteration and jumps to the next condition check.",
+      "code": "count = 1\nwhile count <= 3:\n    print(\"Step\", count)\n    count += 1\nprint(\"Done!\")",
+      "output": "Step 1\nStep 2\nStep 3\nDone!"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Condition Evaluation**: At the top of every cycle, Python evaluates the boolean condition.\n2. **Block Execution**: If `True`, the indented body runs. If `False`, Python skips the block entirely.\n3. **Loop Update**: Inside the block, you must alter variables that affect the condition (like incrementing `count += 1`). Otherwise, the condition never becomes `False`, causing an **infinite loop**.\n4. **Loop `else` Clause**: Python supports an optional `else` block on loops. It executes **only if the loop finishes naturally without encountering a `break`**.",
+      "code": "n = 1\nwhile n < 4:\n    print(n, end=\" \")\n    n += 1\nelse:\n    print(\"(Finished normally)\")",
+      "output": "1 2 3 (Finished normally)",
+      "trace": {
+        "title": "While Loop & Sentinel Tracer",
+        "code": "n = 1\nsum_val = 0\nwhile n <= 3:\n    sum_val += n\n    n += 1",
+        "steps": [
+          {
+            "line": 1,
+            "vars": {"n": 1},
+            "note": "Line 1: Counter 'n' set to 1."
+          },
+          {
+            "line": 2,
+            "vars": {"n": 1, "sum_val": 0},
+            "note": "Line 2: 'sum_val' set to 0."
+          },
+          {
+            "line": 3,
+            "vars": {"n": 1, "sum_val": 0},
+            "note": "Line 3: Condition 'n <= 3' (1 <= 3) is True. Enters loop."
+          },
+          {
+            "line": 4,
+            "vars": {"n": 1, "sum_val": 1},
+            "note": "Line 4: sum_val += 1 -> sum_val is now 1."
+          },
+          {
+            "line": 5,
+            "vars": {"n": 2, "sum_val": 1},
+            "note": "Line 5: n += 1 -> n is now 2."
+          },
+          {
+            "line": 3,
+            "vars": {"n": 2, "sum_val": 1},
+            "note": "Line 3: Condition 'n <= 3' (2 <= 3) is True."
+          },
+          {
+            "line": 4,
+            "vars": {"n": 2, "sum_val": 3},
+            "note": "Line 4: sum_val += 2 -> sum_val is now 3."
+          },
+          {
+            "line": 5,
+            "vars": {"n": 3, "sum_val": 3},
+            "note": "Line 5: n += 1 -> n is now 3."
+          },
+          {
+            "line": 3,
+            "vars": {"n": 3, "sum_val": 3},
+            "note": "Line 3: Condition 'n <= 3' (3 <= 3) is True."
+          },
+          {
+            "line": 4,
+            "vars": {"n": 3, "sum_val": 6},
+            "note": "Line 4: sum_val += 3 -> sum_val is now 6."
+          },
+          {
+            "line": 5,
+            "vars": {"n": 4, "sum_val": 6},
+            "note": "Line 5: n += 1 -> n is now 4."
+          },
+          {
+            "line": 3,
+            "vars": {"n": 4, "sum_val": 6},
+            "note": "Line 3: Condition 'n <= 3' (4 <= 3) is False! Loop terminates."
+          }
+        ]
+      }
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore key while-loop patterns:\n\n* **Sentinel Value**: Looping until a specific marker (like `target == 'quit'`) is met.\n* **Early Exit with `break`**: `if item == target: break` stops searching once found.\n* **Skipping with `continue`**: Skip even numbers: `if n % 2 == 0: continue`.\n* **Input Validation Loop Simulation**: Keep looping until input matches required criteria.\n* **`for` vs `while`**: Use `for` when you know the collection or count in advance; use `while` when repeating until a state change.",
+      "code": "num = 0\nwhile True:\n    num += 1\n    if num == 3:\n        continue  # skip 3\n    if num > 4:\n        break     # stop at 5\n    print(num, end=\" \")\nprint()",
+      "output": "1 2 4 "
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Infinite Loops**:\n```python\ni = 1\nwhile i <= 5:\n    print(i)  # Forgot i += 1! Loop runs forever and freezes!\n```\n*Fix*: Always ensure the loop condition variables are updated on every iteration.\n\n2. **Off-by-One in While Condition**:\nUsing `while count < 5` runs for `0, 1, 2, 3, 4` (5 times). Using `while count <= 5` runs 6 times.\n\n3. **`continue` placed before counter increment**:\n```python\nwhile i < 10:\n    if i == 5:\n        continue  # Skips i += 1, trapping loop at i = 5 forever!\n    i += 1\n```\n*Fix*: Always update counters before `continue` statements.\n\n4. **Misunderstanding `else` on loops**:\nThe `else` block is skipped if the loop terminates via `break`.",
+      "code": "# Demonstration of break skipping loop-else\nx = 1\nwhile x < 5:\n    if x == 3:\n        print(\"Found 3, breaking!\")\n        break\n    x += 1\nelse:\n    print(\"This won't print because break occurred\")",
+      "output": "Found 3, breaking!"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Prefer `for` when iterating over collections**: Don't use `while i < len(items):`; use `for item in items:`.\n2. **Add a safety counter in `while True` loops**: When waiting on external events, add a max iteration limit to prevent hanging.\n3. **Keep exit conditions obvious**: A clear `while condition:` is often easier to read than multiple buried `break` statements.",
+      "code": "# Safe while loop with max attempt ceiling\nattempts = 0\nmax_attempts = 3\nsuccess = False\nwhile not success and attempts < max_attempts:\n    attempts += 1\n    if attempts == 2:\n        success = True\nprint(\"Succeeded on attempt:\", attempts)",
+      "output": "Succeeded on attempt: 2"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Condition-driven**: `while condition:` runs as long as condition evaluates to `True`.\n\u2022 **Counter updates**: Always modify state inside the loop to avoid infinite loops.\n\u2022 **`break`**: Instantly terminates the loop and bypasses the `else` clause.\n\u2022 **`continue`**: Jumps immediately to the next cycle's condition test.\n\u2022 **`for` vs `while`**: `for` is for known sequences; `while` is for state-dependent repetition.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this basic while loop print?",
+      "code": "n = 1\nwhile n <= 3:\n    print(n, end=\" \")\n    n += 1",
+      "answer": "1 2 3",
+      "hint": "n starts at 1, increments each time, and stops when n becomes 4.",
+      "explanation": "The loop runs for n = 1, 2, and 3, printing '1 2 3 '."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Which statement immediately exits a while loop before its condition becomes False?",
+      "options": [
+        "break",
+        "continue",
+        "pass",
+        "exit()"
+      ],
+      "answer": 0,
+      "hint": "Five-letter keyword that stops loop execution immediately.",
+      "explanation": "`break` immediately terminates the innermost enclosing loop."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword that skips the rest of the current iteration and jumps to the next test.",
+      "template": "while x < 10:\n    x += 1\n    if x == 5:\n        ________  # Skip printing 5\n    print(x)",
+      "answer": "continue",
+      "hint": "Starts with 'cont'.",
+      "explanation": "`continue` skips the rest of the current cycle and begins the next iteration."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "x = 5\nwhile x > 0:\n    x -= 2\nprint(x)",
+      "answer": "-1",
+      "hint": "Trace x: 5 -> 3 -> 1 -> -1. Does the loop stop when x is -1?",
+      "explanation": "5 -> 3 -> 1 -> -1. When x is -1, -1 > 0 is False, loop terminates and prints -1."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this break loop output?",
+      "code": "i = 1\nwhile True:\n    if i == 3:\n        break\n    i += 1\nprint(i)",
+      "answer": "3",
+      "hint": "When i reaches 3, break executes and execution moves to print(i).",
+      "explanation": "i starts at 1, increments to 2, then to 3. At 3, if i == 3 triggers break, printing 3."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What causes an infinite loop in this snippet?\n```python\ncount = 1\nwhile count < 10:\n    print(count)\n```",
+      "options": [
+        "count is never incremented, so count < 10 is always True",
+        "count must start at 0",
+        "while loops cannot check integers",
+        "print() restarts the loop"
+      ],
+      "answer": 0,
+      "hint": "Does the value of count ever change inside the loop body?",
+      "explanation": "Because `count` is never modified inside the body, `count < 10` is perpetually True, creating an infinite loop."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this code print?",
+      "code": "val = 0\nwhile val < 3:\n    val += 1\nelse:\n    val += 10\nprint(val)",
+      "answer": "13",
+      "hint": "Because no break occurred, does the loop's else block run?",
+      "explanation": "The loop finishes naturally (val reaches 3). The else block runs, adding 10 to make val 13."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "n = 0\nwhile n < 4:\n    n += 1\n    if n == 2:\n        continue\n    print(n, end=\"\")",
+      "answer": "134",
+      "hint": "n = 2 is skipped by continue.",
+      "explanation": "n = 1 is printed. n = 2 triggers continue (skipped). n = 3 and 4 are printed. Output: '134'."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "When should you prefer a `while` loop over a `for` loop?",
+      "options": [
+        "When you don't know ahead of time how many iterations will be needed",
+        "Whenever looping over a list of items",
+        "When counting from 0 to 10",
+        "while loops are always preferred in Python"
+      ],
+      "answer": 0,
+      "hint": "Consider indefinite vs definite iteration.",
+      "explanation": "`while` loops are suited for indefinite iteration \u2014 repeating until a certain state or event occurs."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which sequence correctly arranges a countdown simulation that starts at 3 and prints 'Blastoff!' at 0?",
+      "options": [
+        "1: count = 3 \\n 2: while count > 0: \\n 3:     print(count) \\n 4:     count -= 1 \\n 5: print('Blastoff!')",
+        "1: while count > 0: \\n 2:     count = 3 \\n 3:     print(count) \\n 4: print('Blastoff!')",
+        "1: count = 3 \\n 2: while count > 0: \\n 3:     count -= 1 \\n 4: print('Blastoff!') \\n 5: print(count)",
+        "1: print('Blastoff!') \\n 2: count = 3 \\n 3: while count > 0: count -= 1"
+      ],
+      "answer": 0,
+      "hint": "Initialize count = 3 first, decrement inside while, then print Blastoff after the loop.",
+      "explanation": "Initialize count, loop while count > 0 printing and decrementing, then print 'Blastoff!' after the loop completes."
+    },
+    {
+      "id": 11,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What is the final printed value of `sum_val`?",
+      "code": "sum_val = 0\ni = 1\nwhile i <= 4:\n    if i == 3:\n        i += 1\n        continue\n    sum_val += i\n    i += 1\nprint(sum_val)",
+      "answer": "7",
+      "hint": "i iterates through 1, 2, 3 (skipped), 4. What is 1 + 2 + 4?",
+      "explanation": "When i is 3, it increments to 4 and continues without adding to sum_val. Values added are 1, 2, and 4. 1 + 2 + 4 = 7."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "find_bug",
+      "question": "Fix the bug: The loop is supposed to double `val` starting at 1 until it is at least 16, but currently runs indefinitely because `val` is never updated.",
+      "starter": "val = 1\nwhile val < 16:\n    # Double val on each iteration\n    val *= 2\nprint(val)\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "16"
+        }
+      ],
+      "hints": [
+        "Inside the while loop, multiply val by 2.",
+        "val *= 2",
+        "val = 1\nwhile val < 16:\n    val *= 2\nprint(val)"
+      ],
+      "explanation": "Doubling val on each cycle (1 -> 2 -> 4 -> 8 -> 16) terminates the loop when val >= 16."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Number Guessing Simulation\nSimulate a guessing program against a secret number `secret = 7`:\nGiven a list of simulated user guesses `guesses = [2, 5, 7, 9]`:\n1. Use a while loop with an index counter `idx` starting at 0.\n2. In each iteration, inspect `guess = guesses[idx]` and increment `attempts`.\n3. If `guess == secret`, print `f'Found secret {secret} in {attempts} attempts!'` and `break`.\n4. Advance `idx += 1` to check the next guess.\nExpected output:\nFound secret 7 in 3 attempts!",
+      "starter": "secret = 7\nguesses = [2, 5, 7, 9]\nidx = 0\nattempts = 0\n# Write while loop to search guesses for secret\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Found secret 7 in 3 attempts!"
+        }
+      ],
+      "hints": [
+        "Use 'while idx < len(guesses):'",
+        "attempts += 1; if guesses[idx] == secret: print(...); break; idx += 1",
+        "while idx < len(guesses):\n    attempts += 1\n    if guesses[idx] == secret:\n        print(f\"Found secret {secret} in {attempts} attempts!\")\n        break\n    idx += 1"
+      ],
+      "explanation": "This mini-task brings together while-loop indexing, early exit with break, state tracking with an attempt counter, and f-string output."
+    }
+  ]
+}

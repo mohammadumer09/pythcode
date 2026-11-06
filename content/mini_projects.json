@@ -1,0 +1,251 @@
+[
+  {
+    "id": 1,
+    "after_phase": 5,
+    "title": "Mini-Project 1: Tip & Split Bill Calculator",
+    "level": "beginner",
+    "badge_key": "project_1",
+    "badge_name": "Tip Calculator Pro",
+    "badge_icon": "🪙",
+    "xp_reward": 100,
+    "overview": "Build a real-world restaurant bill splitter that takes the total bill, a tip percentage (e.g. 15%, 18%, 20%), and the number of people sharing the table, then outputs the exact amount each person must pay.",
+    "concepts": ["input()", "float()", "int()", "Arithmetic operators (+, *, /)", "f-string formatting (:.2f)"],
+    "steps": [
+      {
+        "step": 1,
+        "title": "Gather User Inputs",
+        "desc": "Collect total bill amount (`float`), tip percentage (`float` or `int`), and number of people splitting (`int`)."
+      },
+      {
+        "step": 2,
+        "title": "Calculate Tip and Total",
+        "desc": "Calculate tip amount (`bill * (tip_pct / 100)`) and add to the original bill to get the grand total."
+      },
+      {
+        "step": 3,
+        "title": "Split and Format",
+        "desc": "Divide the grand total by the number of diners. Format each person's share to 2 decimal places using `f\"{share:.2f}\"`."
+      }
+    ],
+    "checklist": [
+      "Converts bill amount from string to float",
+      "Calculates tip percentage correctly",
+      "Divides grand total evenly among people",
+      "Formats final answer to 2 decimal places"
+    ],
+    "starter_code": "# Tip & Split Bill Calculator\ndef calculate_split(bill: float, tip_percent: float, people: int) -> float:\n    # 1. Calculate tip amount\n    tip_amount = bill * (tip_percent / 100.0)\n    # 2. Grand total\n    total = bill + tip_amount\n    # 3. Share per person\n    share = total / people\n    return round(share, 2)\n\n# Test your function\nbill = 100.0\ntip = 15.0\npeople = 4\nshare = calculate_split(bill, tip, people)\nprint(f\"Each person pays: ${share:.2f}\")\n",
+    "tests": [
+      {
+        "name": "Standard 15% Tip for 4 People",
+        "code": "assert calculate_split(100.0, 15.0, 4) == 28.75, 'Expected 28.75 for $100 bill, 15% tip, 4 people'"
+      },
+      {
+        "name": "Zero Tip for 2 People",
+        "code": "assert calculate_split(50.0, 0.0, 2) == 25.0, 'Expected 25.0 for $50 bill, 0% tip, 2 people'"
+      },
+      {
+        "name": "20% Tip for 5 People",
+        "code": "assert calculate_split(125.0, 20.0, 5) == 30.0, 'Expected 30.0 for $125 bill, 20% tip, 5 people'"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "after_phase": 10,
+    "title": "Mini-Project 2: Number Guessing Game",
+    "level": "beginner",
+    "badge_key": "project_2",
+    "badge_name": "Guess Master",
+    "badge_icon": "🎯",
+    "xp_reward": 100,
+    "overview": "Create a classic number guessing game engine! Test guesses against a target number and return directional clues ('Too High', 'Too Low', or 'Correct!') along with attempt counting.",
+    "concepts": ["Conditionals (if, elif, else)", "Comparison operators (<, >, ==)", "Ternary expressions", "Tracking attempts"],
+    "steps": [
+      {
+        "step": 1,
+        "title": "Define Feedback Rules",
+        "desc": "Compare the guess to the secret target number. If equal, return 'Correct!'. If guess is higher, return 'Too High'. If lower, return 'Too Low'."
+      },
+      {
+        "step": 2,
+        "title": "Score Attempts",
+        "desc": "Calculate a score or rating based on the number of attempts: 1-3 tries = 'Amazing', 4-6 tries = 'Good', 7+ tries = 'Keep practicing'."
+      }
+    ],
+    "checklist": [
+      "Returns 'Too High' when guess exceeds secret",
+      "Returns 'Too Low' when guess is less than secret",
+      "Returns 'Correct!' when guess matches secret exactly",
+      "Rates player performance based on total attempts"
+    ],
+    "starter_code": "# Number Guessing Game Engine\ndef check_guess(guess: int, secret: int) -> str:\n    if guess < secret:\n        return \"Too Low\"\n    elif guess > secret:\n        return \"Too High\"\n    else:\n        return \"Correct!\"\n\ndef get_rating(attempts: int) -> str:\n    if attempts <= 3:\n        return \"Amazing\"\n    elif attempts <= 6:\n        return \"Good\"\n    else:\n        return \"Keep practicing\"\n\n# Test simulation\nsecret = 42\nprint(check_guess(30, secret))  # Should print Too Low\nprint(check_guess(50, secret))  # Should print Too High\nprint(check_guess(42, secret))  # Should print Correct!\n",
+    "tests": [
+      {
+        "name": "Check Lower Guess",
+        "code": "assert check_guess(20, 50) == 'Too Low', 'Expected Too Low'"
+      },
+      {
+        "name": "Check Higher Guess",
+        "code": "assert check_guess(80, 50) == 'Too High', 'Expected Too High'"
+      },
+      {
+        "name": "Check Exact Guess",
+        "code": "assert check_guess(50, 50) == 'Correct!', 'Expected Correct!'"
+      },
+      {
+        "name": "Rating for 2 Attempts",
+        "code": "assert get_rating(2) == 'Amazing', 'Expected Amazing rating for 2 attempts'"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "after_phase": 15,
+    "title": "Mini-Project 3: CLI Contact Book",
+    "level": "core",
+    "badge_key": "project_3",
+    "badge_name": "Contact Pro",
+    "badge_icon": "📒",
+    "xp_reward": 100,
+    "overview": "Build an in-memory contact management system using dictionaries and lists. Support adding new contacts, searching by name (case-insensitive), updating phone numbers, and deleting entries.",
+    "concepts": ["Dictionaries (keys, values, .get())", "Lists of dictionaries", "Case-insensitive lookups", "Key validation"],
+    "steps": [
+      {
+        "step": 1,
+        "title": "Add and Update",
+        "desc": "Store contacts keyed by normalized lowercase name or inside a contact list with name, phone, and email attributes."
+      },
+      {
+        "step": 2,
+        "title": "Search and Retrieve",
+        "desc": "Implement `find_contact(book, name)` returning the contact dict or None if not found."
+      },
+      {
+        "step": 3,
+        "title": "Delete Contact",
+        "desc": "Implement `delete_contact(book, name)` returning True if removed, False otherwise."
+      }
+    ],
+    "checklist": [
+      "Stores contact name, phone, and email in dictionary",
+      "Searches contacts case-insensitively ('alice' finds 'Alice')",
+      "Safely updates existing contacts",
+      "Returns None when contact does not exist instead of raising KeyError"
+    ],
+    "starter_code": "# CLI Contact Book Manager\ndef add_contact(book: dict, name: str, phone: str, email: str) -> dict:\n    key = name.strip().lower()\n    book[key] = {\"name\": name.strip(), \"phone\": phone.strip(), \"email\": email.strip()}\n    return book\n\ndef find_contact(book: dict, name: str) -> dict | None:\n    return book.get(name.strip().lower())\n\ndef delete_contact(book: dict, name: str) -> bool:\n    key = name.strip().lower()\n    if key in book:\n        del book[key]\n        return True\n    return False\n\n# Test operations\nbook = {}\nadd_contact(book, \"Alice Smith\", \"555-0101\", \"alice@example.com\")\nprint(\"Found:\", find_contact(book, \"alice smith\"))\n",
+    "tests": [
+      {
+        "name": "Add and Find Contact",
+        "code": "b = {}; add_contact(b, 'Bob Dylan', '555-1234', 'bob@music.com'); c = find_contact(b, 'BOB DYLAN'); assert c is not None and c['phone'] == '555-1234', 'Contact not found case-insensitively'"
+      },
+      {
+        "name": "Find Nonexistent Contact",
+        "code": "b = {}; assert find_contact(b, 'Ghost') is None, 'Should return None for unknown contact'"
+      },
+      {
+        "name": "Delete Contact",
+        "code": "b = {}; add_contact(b, 'Eve', '555-9999', 'eve@sec.com'); assert delete_contact(b, 'eve') is True and delete_contact(b, 'eve') is False, 'Delete logic failed'"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "after_phase": 20,
+    "title": "Mini-Project 4: File-Based Quiz System",
+    "level": "intermediate",
+    "badge_key": "project_4",
+    "badge_name": "Quiz Architect",
+    "badge_icon": "📜",
+    "xp_reward": 100,
+    "overview": "Implement an automated quiz parser and scoring engine. Read questions, validate answers against error-handling edge cases, compute accuracy percentages, and format a results summary report.",
+    "concepts": ["try / except (ValueError, KeyError)", "Data parsing", "Calculating percentages", "Exception handling for user inputs"],
+    "steps": [
+      {
+        "step": 1,
+        "title": "Parse Question bank",
+        "desc": "Iterate through quiz questions containing text, options, and integer answer indices."
+      },
+      {
+        "step": 2,
+        "title": "Safely Parse Learner Response",
+        "desc": "Write `parse_user_choice(raw_input, min_val, max_val)` that catches ValueError and bounds errors."
+      },
+      {
+        "step": 3,
+        "title": "Grade and Score",
+        "desc": "Calculate total correct, final percentage, and pass status (>= 75%)."
+      }
+    ],
+    "checklist": [
+      "Safely parses user choice string to 1-based integer with try/except",
+      "Handles non-numeric string gracefully without crashing",
+      "Validates answers against key",
+      "Returns structured report with score and pass/fail boolean"
+    ],
+    "starter_code": "# File-based Quiz System & Validator\ndef parse_user_choice(raw_input: str, num_options: int) -> int | None:\n    try:\n        choice = int(raw_input.strip())\n        if 1 <= choice <= num_options:\n            return choice\n        return None\n    except (ValueError, TypeError):\n        return None\n\ndef grade_quiz(answers: list[int], key: list[int]) -> dict:\n    if not key:\n        return {\"score\": 0, \"pct\": 0.0, \"passed\": False}\n    correct = sum(1 for a, k in zip(answers, key) if a == k)\n    pct = round((correct / len(key)) * 100, 1)\n    return {\"correct\": correct, \"total\": len(key), \"pct\": pct, \"passed\": pct >= 70.0}\n\n# Test simulation\nprint(parse_user_choice(\"3\", 4))     # 3\nprint(parse_user_choice(\"invalid\", 4)) # None\nprint(grade_quiz([1, 2, 3], [1, 2, 4])) # 66.7%, passed=False\n",
+    "tests": [
+      {
+        "name": "Parse Valid Choice",
+        "code": "assert parse_user_choice('2', 4) == 2, 'Valid input 2 should parse as 2'"
+      },
+      {
+        "name": "Handle Non-numeric String",
+        "code": "assert parse_user_choice('abc', 4) is None, 'Non-numeric input must return None'"
+      },
+      {
+        "name": "Handle Out of Range Choice",
+        "code": "assert parse_user_choice('5', 4) is None, 'Out-of-range option must return None'"
+      },
+      {
+        "name": "Grade Perfect Score",
+        "code": "res = grade_quiz([1, 2, 3], [1, 2, 3]); assert res['passed'] is True and res['pct'] == 100.0, 'Expected 100% pass'"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "after_phase": 25,
+    "title": "Mini-Project 5: Password Generator & Security Analyzer",
+    "level": "intermediate",
+    "badge_key": "project_5",
+    "badge_name": "Vault Keeper",
+    "badge_icon": "🔐",
+    "xp_reward": 100,
+    "overview": "Create a password generator and strength evaluator. Build passwords with configurable length, numbers, and symbols, and evaluate strength score (1-5) based on length and character diversity using Python built-ins like any() and string constants.",
+    "concepts": ["random.choice()", "string module (ascii_letters, digits, punctuation)", "any() with generator expressions", "Scoring criteria"],
+    "steps": [
+      {
+        "step": 1,
+        "title": "Analyze Password Strength",
+        "desc": "Check for: length >= 8, uppercase letters, lowercase letters, digits, and special characters. Assign 1 point per criterion."
+      },
+      {
+        "step": 2,
+        "title": "Generate Secure Password",
+        "desc": "Combine character pools and select random characters using `random.choice()` ensuring all required categories are present."
+      }
+    ],
+    "checklist": [
+      "Uses string or character checks for uppercase, lowercase, digits, symbols",
+      "Uses any() to evaluate presence of each character category",
+      "Calculates strength score between 0 and 5",
+      "Generates random passwords meeting target length"
+    ],
+    "starter_code": "import string\nimport random\n\ndef check_strength(password: str) -> int:\n    if not password:\n        return 0\n    score = 0\n    if len(password) >= 8:\n        score += 1\n    if any(c.isupper() for c in password):\n        score += 1\n    if any(c.islower() for c in password):\n        score += 1\n    if any(c.isdigit() for c in password):\n        score += 1\n    if any(c in string.punctuation for c in password):\n        score += 1\n    return score\n\ndef generate_password(length: int = 12) -> str:\n    chars = string.ascii_letters + string.digits + \"!@#$%^&*\"\n    return \"\".join(random.choice(chars) for _ in range(length))\n\n# Test simulation\npwd = generate_password(14)\nprint(\"Generated:\", pwd)\nprint(\"Strength (1-5):\", check_strength(pwd))\n",
+    "tests": [
+      {
+        "name": "Weak Password Test",
+        "code": "assert check_strength('abc') == 1, 'Short lowercase password should score 1'"
+      },
+      {
+        "name": "Strong Password Test",
+        "code": "assert check_strength('Secret123!') == 5, 'Length 8+ with upper, lower, digit, and punctuation should score 5'"
+      },
+      {
+        "name": "Generate Target Length",
+        "code": "p = generate_password(16); assert len(p) == 16, 'Generated password should have length 16'"
+      }
+    ]
+  }
+]
+

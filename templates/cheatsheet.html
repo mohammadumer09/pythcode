@@ -1,0 +1,462 @@
+{% extends "base.html" %}
+{% block title %}Python Cheat Sheet — pythcode{% endblock %}
+{% block meta_desc %}Quick reference Python cheat sheet covering Beginner, Core, and Intermediate syntax. Printable.{% endblock %}
+
+{% block head_extra %}
+<style>
+  .cheatsheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .cheatsheet-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--surface);
+    padding: 0.35rem;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+  }
+  .cs-tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    font-size: 0.86rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cs-tab-btn.active {
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 700;
+  }
+  .cheatsheet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.25rem;
+  }
+  .cs-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .cs-card:hover {
+    border-color: rgba(198, 255, 26, 0.3);
+  }
+  .cs-card-title {
+    color: var(--accent);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .cs-code {
+    background: #0d100d;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    font-family: var(--font-code, 'JetBrains Mono', monospace);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 0.4rem 0;
+    overflow-x: auto;
+  }
+  .cs-desc {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .cs-level-header {
+    grid-column: 1 / -1;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ── Print Stylesheet ── */
+  @media print {
+    body {
+      background: #ffffff !important;
+      color: #000000 !important;
+      font-size: 10pt;
+    }
+    .navbar, footer, .cheatsheet-tabs, #printBtn, #themeToggle, .btn {
+      display: none !important;
+    }
+    .container {
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .cheatsheet-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.6rem !important;
+    }
+    .cs-card {
+      background: #ffffff !important;
+      border: 1px solid #ccc !important;
+      color: #000000 !important;
+      padding: 0.6rem !important;
+      page-break-inside: avoid;
+    }
+    .cs-card-title {
+      color: #000000 !important;
+      font-weight: bold !important;
+    }
+    .cs-code {
+      background: #f4f4f4 !important;
+      border: 1px solid #ddd !important;
+      color: #000000 !important;
+      font-size: 8.5pt !important;
+      padding: 0.3rem 0.5rem !important;
+    }
+    .cs-desc {
+      color: #333333 !important;
+      font-size: 8.5pt !important;
+    }
+    .cs-level-header {
+      color: #000000 !important;
+      border-bottom: 2px solid #000 !important;
+      margin-top: 1rem !important;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width:1200px;padding-top:1.5rem;padding-bottom:3rem">
+
+  <div class="cheatsheet-header">
+    <div>
+      <a href="{{ url_for('phase_map') }}" class="text-muted" style="font-size:0.82rem">← Phase Map</a>
+      <h1 style="font-size:clamp(1.8rem, 3vw, 2.4rem);margin-top:0.25rem">
+        Python <span class="accent-word">Cheat Sheet</span>
+      </h1>
+      <p class="text-muted mt-1" style="font-size:0.9rem">
+        Key syntax, methods, and common patterns organized by learning level.
+      </p>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+      <div class="cheatsheet-tabs" role="tablist" aria-label="Level filters">
+        <button class="cs-tab-btn active" onclick="filterLevel('all', this)">All Levels</button>
+        <button class="cs-tab-btn" onclick="filterLevel('beginner', this)">🟢 Beginner</button>
+        <button class="cs-tab-btn" onclick="filterLevel('core', this)">🔵 Core</button>
+        <button class="cs-tab-btn" onclick="filterLevel('intermediate', this)">🟠 Intermediate</button>
+      </div>
+
+      <button class="btn btn-secondary btn-sm" id="printBtn" onclick="window.print()">
+        🖨️ Print Cheat Sheet
+      </button>
+    </div>
+  </div>
+
+  <div class="cheatsheet-grid" id="csGrid">
+
+    <!-- ═══════════════ BEGINNER LEVEL ═══════════════ -->
+    <div class="cs-level-header" data-level="beginner">
+      🟢 Beginner Level (Phases 1–10)
+    </div>
+
+    <!-- 1. Variables & Types -->
+    <div class="cs-card" data-level="beginner">
+      <div class="cs-card-title">📦 Variables &amp; Types</div>
+      <p class="cs-desc">Python variables are created upon assignment with <code>=</code>.</p>
+      <pre class="cs-code">name = "Alice"     # str (string)
+age = 25           # int (integer)
+price = 19.99      # float (decimal)
+is_active = True   # bool (boolean)
+x, y = 10, 20      # multiple assignment</pre>
+      <p class="cs-desc">Check type with <code>type(x)</code>.</p>
+    </div>
+
+    <!-- 2. Type Conversion & input() -->
+    <div class="cs-card" data-level="beginner">
+      <div class="cs-card-title">🔄 Conversion &amp; input()</div>
+      <p class="cs-desc"><code>input()</code> always returns a string; convert explicitly.</p>
+      <pre class="cs-code">text = input("Enter age: ")
+age = int(text)         # string to int
+cost = float("12.50")   # string to float
+s = str(100)            # number to string</pre>
+    </div>
+
+    <!-- 3. Arithmetic & Operators -->
+    <div class="cs-card" data-level="beginner">
+      <div class="cs-card-title">🔢 Arithmetic &amp; Modulo</div>
+      <p class="cs-desc">Standard math follows PEMDAS rules.</p>
+      <pre class="cs-code">a + b   # addition
+a - b   # subtraction
+a * b   # multiplication
+a / b   # float division (returns float)
+a // b  # floor division (rounds down)
+a % b   # modulo (remainder: 10 % 3 = 1)
+a ** b  # power (2 ** 3 = 8)</pre>
+    </div>
+
+    <!-- 4. String Slicing & Methods -->
+    <div class="cs-card" data-level="beginner">
+      <div class="cs-card-title">🧵 Strings &amp; Slicing</div>
+      <p class="cs-desc">Slice with <code>[start:stop:step]</code> (stop is excluded).</p>
+      <pre class="cs-code">s = "Python"
+s[0]       # 'P'
+s[-1]      # 'n' (negative index)
+s[0:3]     # 'Pyt'
+s[::-1]    # 'nohtyP' (reverse string)
+len(s)     # 6 (character count)
+"th" in s  # True</pre>
+    </div>
+
+    <!-- 5. String Methods & f-strings -->
+    <div class="cs-card" data-level="beginner">
+      <div class="cs-card-title">🎨 String Methods &amp; f-strings</div>
+      <p class="cs-desc">Strings are immutable; methods return brand new strings.</p>
+      <pre class="cs-code">s.lower() / s.upper() / s.title()
+s.strip()               # remove surrounding whitespace
+s.replace("old", "new") # replace substring
+s.split(",")            # returns list of substrings
+"-".join(["a", "b"])    # 'a-b'
+f"Cost: ${price:.2f}"   # 2 decimal places</pre>
+    </div>
+
+    <!-- 6. Conditionals -->
+    <div class="cs-card" data-level="beginner">
+      <div class="cs-card-title">🌿 If, Elif, Else</div>
+      <p class="cs-desc">Evaluate branches using 4-space indentation.</p>
+      <pre class="cs-code">if score >= 90:
+    grade = "A"
+elif score >= 75:
+    grade = "B"
+else:
+    grade = "C"
+
+# One-line ternary expression:
+status = "Pass" if score >= 70 else "Retry"</pre>
+    </div>
+
+    <!-- ═══════════════ CORE LEVEL ═══════════════ -->
+    <div class="cs-level-header" data-level="core">
+      🔵 Core Level (Phases 11–18)
+    </div>
+
+    <!-- 7. For Loops & range() -->
+    <div class="cs-card" data-level="core">
+      <div class="cs-card-title">🔁 For Loops &amp; range()</div>
+      <p class="cs-desc">Loop over sequences and numerical ranges.</p>
+      <pre class="cs-code">for i in range(5):          # 0, 1, 2, 3, 4
+    print(i)
+for n in range(1, 10, 2):   # 1, 3, 5, 7, 9
+    print(n)
+for idx, val in enumerate(items, start=1):
+    print(f"{idx}: {val}")</pre>
+    </div>
+
+    <!-- 8. While Loops -->
+    <div class="cs-card" data-level="core">
+      <div class="cs-card-title">⏳ While Loops &amp; Control</div>
+      <p class="cs-desc">Run while condition holds True. Prevent infinite loops!</p>
+      <pre class="cs-code">count = 0
+while count < 3:
+    count += 1
+    if count == 2:
+        continue  # skip to next iteration
+    if count == 5:
+        break     # exit loop completely</pre>
+    </div>
+
+    <!-- 9. Lists -->
+    <div class="cs-card" data-level="core">
+      <div class="cs-card-title">📋 Lists (Mutable Sequences)</div>
+      <p class="cs-desc">Ordered, indexed, mutable collections.</p>
+      <pre class="cs-code">nums = [1, 2, 3]
+nums.append(4)      # add to end
+nums.insert(0, 99)  # insert at index
+nums.pop()          # remove and return last
+nums.remove(2)      # remove first occurrence of 2
+sorted(nums)        # returns new sorted list
+copy = nums.copy()  # shallow copy</pre>
+    </div>
+
+    <!-- 10. Tuples & Sets -->
+    <div class="cs-card" data-level="core">
+      <div class="cs-card-title">🔒 Tuples &amp; Sets</div>
+      <p class="cs-desc">Tuples are immutable; Sets contain unique elements.</p>
+      <pre class="cs-code">point = (10, 20)      # Tuple: immutable
+x, y = point          # unpacking
+
+colors = {"red", "blue", "red"} # Set: {'red', 'blue'}
+colors.add("green")
+a | b   # union
+a & b   # intersection
+a - b   # difference</pre>
+    </div>
+
+    <!-- 11. Dictionaries -->
+    <div class="cs-card" data-level="core">
+      <div class="cs-card-title">📖 Dictionaries (Key-Value)</div>
+      <p class="cs-desc">Fast hash-map lookup by key.</p>
+      <pre class="cs-code">user = {"name": "Bob", "xp": 120}
+user["name"]            # 'Bob' (KeyError if missing)
+user.get("role", "guest") # safe lookup with fallback
+user["level"] = 2       # add/update key
+for k, v in user.items():
+    print(k, "->", v)</pre>
+    </div>
+
+    <!-- 12. Functions & Scope -->
+    <div class="cs-card" data-level="core">
+      <div class="cs-card-title">⚙️ Functions &amp; Arguments</div>
+      <p class="cs-desc">Define reusable blocks with default arguments and returns.</p>
+      <pre class="cs-code">def greet(name, role="student"):
+    """Greeting docstring."""
+    return f"Hello {name}, role: {role}"
+
+def total(*args, **kwargs):
+    # args: tuple of positional values
+    # kwargs: dict of keyword values
+    return sum(args)</pre>
+    </div>
+
+    <!-- ═══════════════ INTERMEDIATE LEVEL ═══════════════ -->
+    <div class="cs-level-header" data-level="intermediate">
+      🟠 Intermediate Level (Phases 19–30)
+    </div>
+
+    <!-- 13. Comprehensions -->
+    <div class="cs-card" data-level="intermediate">
+      <div class="cs-card-title">⚡ Comprehensions</div>
+      <p class="cs-desc">Compact syntax to create lists, dicts, and sets.</p>
+      <pre class="cs-code"># List: [expr for item in iterable if condition]
+evens = [x for x in range(10) if x % 2 == 0]
+# Dict: {k: v for ...}
+sq = {x: x**2 for x in range(5)}
+# Set: {expr for ...}
+unique_len = {len(w) for w in ["cat", "bird", "hat"]}</pre>
+    </div>
+
+    <!-- 14. Error Handling -->
+    <div class="cs-card" data-level="intermediate">
+      <div class="cs-card-title">🛡️ Error Handling (try / except)</div>
+      <p class="cs-desc">Catch specific exceptions gracefully.</p>
+      <pre class="cs-code">try:
+    val = int(input_str)
+    res = 100 / val
+except ValueError:
+    print("Not a valid number")
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+else:
+    print("Success:", res)  # runs if no error
+finally:
+    print("Done cleanup")   # always runs</pre>
+    </div>
+
+    <!-- 15. File I/O -->
+    <div class="cs-card" data-level="intermediate">
+      <div class="cs-card-title">📁 File I/O &amp; with statement</div>
+      <p class="cs-desc">Always use <code>with open()</code> to ensure auto-close.</p>
+      <pre class="cs-code"># Reading
+with open("data.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+
+# Writing / Appending
+with open("log.txt", "a", encoding="utf-8") as f:
+    f.write("New entry\n")
+
+# JSON
+import json
+data = json.loads('{"k": 1}')
+json_str = json.dumps(data, indent=2)</pre>
+    </div>
+
+    <!-- 16. Classes & OOP -->
+    <div class="cs-card" data-level="intermediate">
+      <div class="cs-card-title">🏛️ Classes, OOP &amp; Inheritance</div>
+      <p class="cs-desc">Object-oriented programming with constructors &amp; methods.</p>
+      <pre class="cs-code">class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        return f"{self.name} makes a sound"
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} barks!"</pre>
+    </div>
+
+    <!-- 17. Useful Built-ins -->
+    <div class="cs-card" data-level="intermediate">
+      <div class="cs-card-title">🧰 Built-in Functions &amp; Lambdas</div>
+      <p class="cs-desc">High-efficiency Python built-ins.</p>
+      <pre class="cs-code">any([False, True, False])  # True
+all([True, True, False])   # False
+zip([1, 2], ['a', 'b'])    # (1,'a'), (2,'b')
+sorted(words, key=len)     # sort by length
+max(students, key=lambda s: s["score"])
+square = lambda x: x ** 2</pre>
+    </div>
+
+    <!-- 18. Decorators & Generators -->
+    <div class="cs-card" data-level="intermediate">
+      <div class="cs-card-title">💡 Generators &amp; Clean Python</div>
+      <p class="cs-desc">Memory-efficient generators and clean code tips.</p>
+      <pre class="cs-code"># Generator with yield
+def count_up(n):
+    for i in range(1, n + 1):
+        yield i
+
+# PEP 8 & Type Hints
+def calculate_area(width: float, height: float) -> float:
+    """Return rectangle area."""
+    return width * height</pre>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function filterLevel(level, btn) {
+    document.querySelectorAll('.cs-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.cs-card, .cs-level-header');
+    cards.forEach(el => {
+      if (level === 'all' || el.dataset.level === level) {
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+
+    if (typeof anime !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      anime({
+        targets: '.cs-card:not([style*="display: none"])',
+        opacity: [0, 1],
+        translateY: [10, 0],
+        delay: anime.stagger(25),
+        duration: 350,
+        easing: 'easeOutQuad'
+      });
+    }
+  }
+</script>
+{% endblock %}
+

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}About — pythcode{% endblock %}
+
+{% block content %}
+<section class="section" aria-labelledby="aboutHeading">
+  <div class="container" style="max-width:720px">
+    <div class="section-heading">
+      <h1 id="aboutHeading">About <span class="accent-word">pythcode</span></h1>
+      <p class="text-muted">A free, phase-based Python learning platform.</p>
+    </div>
+
+    <div class="card mt-3">
+      <h3>What is pythcode?</h3>
+      <p class="text-muted mt-1">
+        pythcode teaches Python from zero to intermediate, one phase at a time.
+        Each phase has a short lesson, runnable examples, and 6–10 challenges.
+        Pass the phase test to unlock the next one.
+      </p>
+    </div>
+
+    <div class="card mt-2">
+      <h3>Who is it for?</h3>
+      <p class="text-muted mt-1">
+        Complete beginners who want simple English and small steps.
+        Students who want to learn programming at their own pace.
+      </p>
+    </div>
+
+    <div class="card mt-2">
+      <h3>Built with</h3>
+      <p class="text-muted mt-1">
+        Python 3 &amp; Flask · SQLite · anime.js &amp; motion.dev ·
+        JetBrains Mono · Inter · Syne
+      </p>
+    </div>
+
+    <div class="text-center mt-3">
+      <a href="{{ url_for('phase_map') }}" class="btn btn-primary">Start learning →</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

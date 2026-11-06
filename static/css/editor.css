@@ -1,0 +1,138 @@
+/* ============================================================
+   editor.css — CodeMirror dark theme + playground layout
+   ============================================================ */
+
+/* ── Override CodeMirror defaults for our dark theme ─────── */
+.CodeMirror {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.9rem !important;
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  height: auto !important;
+  min-height: 160px;
+  border-radius: 0 0 12px 12px;
+  padding: 0.5rem 0;
+  line-height: 1.6 !important;
+}
+
+/* CodeMirror scroll and layout */
+
+.CodeMirror-scroll { min-height: 160px; }
+
+.CodeMirror-gutters {
+  background: var(--surface-2) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+.CodeMirror-linenumber { color: var(--text-muted) !important; }
+
+.CodeMirror-cursor { border-left: 2px solid var(--accent) !important; }
+
+.CodeMirror-selected { background: rgba(198, 255, 26, 0.12) !important; }
+
+/* Python token colours */
+.cm-keyword   { color: var(--accent) !important; }
+.cm-def       { color: #7dd3fc !important; }
+.cm-string    { color: #86efac !important; }
+.cm-number    { color: #fda4af !important; }
+.cm-comment   { color: var(--text-muted) !important; font-style: italic; }
+.cm-operator  { color: var(--text) !important; }
+.cm-builtin   { color: #c4b5fd !important; }
+.cm-variable  { color: var(--text) !important; }
+
+/* Focus ring */
+.CodeMirror.focused,
+.CodeMirror-focused {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: -2px;
+}
+
+/* ── Playground layout ──────────────────────────────────────── */
+.playground-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.editor-panel,
+.output-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.panel-header .panel-title {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent);
+  font-size: 0.82rem;
+}
+
+.panel-actions { display: flex; gap: 0.5rem; }
+
+.output-body {
+  padding: 1rem 1.25rem;
+  min-height: 200px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.output-body.empty { color: var(--text-muted); }
+.output-body.success { color: var(--success); }
+.output-body.error-out { color: var(--error); }
+
+/* ── Engine badge ───────────────────────────────────────────── */
+.engine-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.engine-badge.loading  { background: rgba(155,155,155,0.1); color: var(--text-muted); }
+.engine-badge.pyodide  { background: rgba(198,255,26,0.12); color: var(--accent); }
+.engine-badge.server   { background: rgba(255,180,50,0.12); color: #FFB432; }
+.engine-badge.error    { background: rgba(255,92,92,0.1);   color: var(--error); }
+
+/* ── Run button running state ───────────────────────────────── */
+.btn-run.running {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* ── Lesson code challenge with CM ─────────────────────────── */
+.challenge-editor-wrap {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+.challenge-editor-wrap:focus-within { border-color: var(--accent); }
+.challenge-editor-wrap .CodeMirror  { min-height: 90px; border-radius: 0; }
+.challenge-editor-wrap .CodeMirror-scroll { min-height: 90px; }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .playground-layout { grid-template-columns: 1fr; }
+}
+

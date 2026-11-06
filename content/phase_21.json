@@ -1,0 +1,239 @@
+{
+  "id": 21,
+  "title": "Files & I/O",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Variables live in RAM. When your program finishes or the computer reboots, all in-memory data vanishes. To save state permanently \u2014 saving a user's game progress, processing customer CSV spreadsheets, or reading JSON configuration files \u2014 you need file input and output (I/O).",
+      "code": "# Writing and reading with the 'with' statement\nwith open(\"demo.txt\", \"w\") as f:\n    f.write(\"Python persistent data\")\nwith open(\"demo.txt\", \"r\") as f:\n    content = f.read()\nprint(\"Read from file:\", content)",
+      "output": "Read from file: Python persistent data"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "You open files using `open(filename, mode)`:\n- `'r'`: Read (default). Fails with `FileNotFoundError` if file doesn't exist.\n- `'w'`: Write. Creates file or **overwrites existing contents**!\n- `'a'`: Append. Writes new data at the end without overwriting.\n\nAlways use the **`with` statement** (`with open(...) as f:`). The `with` statement creates a context manager that **automatically closes the file** even if an error occurs, preventing data corruption and memory leaks.",
+      "code": "with open(\"log.txt\", \"w\") as f:\n    f.write(\"Entry 1\\n\")\nwith open(\"log.txt\", \"a\") as f:\n    f.write(\"Entry 2\\n\")\nwith open(\"log.txt\", \"r\") as f:\n    print(f.read().strip())",
+      "output": "Entry 1\nEntry 2"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **File Handles & Streams**: `open()` requests an OS file descriptor. Python maintains a cursor position in the file stream. Calling `f.read()` reads from the current cursor to the end.\n2. **Reading Lines**:\n   - `f.read()` returns the entire file as a single `str`.\n   - `f.readline()` reads one line up to `\\n`.\n   - `f.readlines()` reads all lines into a `list` of strings.\n   - Best approach: `for line in f:` streams line by line without loading the whole file into RAM!\n3. **Structured Formats**:\n   - **JSON**: `import json; json.dump(data, f)` writes, `json.load(f)` reads.\n   - **CSV**: `import csv; reader = csv.reader(f)`.",
+      "code": "import json\ndata = {\"username\": \"alex\", \"level\": 5}\nwith open(\"user.json\", \"w\") as f:\n    json.dump(data, f)\nwith open(\"user.json\", \"r\") as f:\n    loaded = json.load(f)\nprint(\"Loaded user:\", loaded[\"username\"])",
+      "output": "Loaded user: alex"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore structured file operations:\n\n* **Streaming Large Files**: Loop directly over the file object `for line in f: print(line.strip())`.\n* **CSV Reading**: `import csv; reader = csv.DictReader(f)` allows reading spreadsheet rows as dictionaries.\n* **JSON string conversion**: `json.dumps(obj)` converts to string; `json.loads(str)` parses from string.\n* **Handling Missing Files**: Wrap in `try...except FileNotFoundError:` to initialize default files.",
+      "code": "import json\n# Safe file loading with fallback\ndef load_settings(path):\n    try:\n        with open(path) as f:\n            return json.load(f)\n    except FileNotFoundError:\n        return {\"theme\": \"dark\"}  # Default\n\nprint(\"Settings:\", load_settings(\"nonexistent.json\"))",
+      "output": "Settings: {'theme': 'dark'}"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Using mode `'w'` when you meant `'a'`**:\nOpening with `'w'` wipes the file clean immediately!\n\n2. **Forgetting to strip newlines**:\nReading lines with `.readlines()` preserves trailing `\\n`. Use `line.strip()` when printing or comparing.\n\n3. **Opening files without `with`**:\nWriting `f = open(...)` and forgetting `f.close()` keeps file locks open and risks unwritten buffer data.\n\n4. **Confusing `json.dump()` vs `json.dumps()`**:\n- `json.dump(data, file)` writes to a **file**.\n- `json.dumps(data)` returns a **string** (\"dump string\").",
+      "code": "import json\n# json.dumps vs json.dump\ninfo = {\"status\": \"ok\"}\njson_str = json.dumps(info)\nprint(\"JSON String:\", json_str, type(json_str))",
+      "output": "JSON String: {\"status\": \"ok\"} <class 'str'>"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Always use `with open(...) as f:`**: Never manually manage `open()` and `close()`.\n2. **Specify encoding explicitly**: Write `open(filename, 'r', encoding='utf-8')` for cross-platform UTF-8 consistency.\n3. **Use JSON for structured program data**: Avoid parsing custom text formats when `json` handles nesting, numbers, and lists automatically.",
+      "code": "with open(\"demo_utf8.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Antigravity \ud83d\ude80\")\nwith open(\"demo_utf8.txt\", \"r\", encoding=\"utf-8\") as f:\n    print(f.read())",
+      "output": "Antigravity \ud83d\ude80"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Modes**: `'r'` (read), `'w'` (write/overwrite), `'a'` (append).\n\u2022 **Context Manager**: Always use `with open(...) as f:` to guarantee file closure.\n\u2022 **Reading**: `for line in f:` streams line-by-line efficiently.\n\u2022 **JSON**: `json.dump()` / `json.load()` for files; `dumps()` / `loads()` for strings.\n\u2022 **Safe Loading**: Always catch `FileNotFoundError` when reading optional files.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Which file open mode overwrites an existing file if it already exists?",
+      "options": [
+        "'w'",
+        "'r'",
+        "'a'",
+        "'x'"
+      ],
+      "answer": 0,
+      "hint": "Think about 'write' mode versus 'append' mode.",
+      "explanation": "'w' mode creates a new file or completely truncates (overwrites) the file if it exists."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Why is the `with` statement recommended for opening files?",
+      "options": [
+        "It automatically closes the file even if exceptions occur",
+        "It makes the file read faster",
+        "It encrypts file contents",
+        "It allows editing read-only files"
+      ],
+      "answer": 0,
+      "hint": "Context managers clean up resources automatically.",
+      "explanation": "The `with` statement guarantees that the file handle is properly closed when execution exits the block."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the open mode to append data to the end of a file without overwriting.",
+      "template": "with open(\"log.txt\", \"_\") as f:\n    f.write(\"new line\\n\")",
+      "answer": "a",
+      "hint": "One character: 'a' for append.",
+      "explanation": "Mode 'a' stands for append, writing to the end of the file."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this JSON deserialization code print?",
+      "code": "import json\ns = '{\"name\": \"Alice\", \"age\": 30}'\nd = json.loads(s)\nprint(d[\"name\"])",
+      "answer": "Alice",
+      "hint": "json.loads parses a JSON string into a Python dictionary.",
+      "explanation": "json.loads(s) creates a dictionary, and d['name'] accesses 'Alice'."
+    },
+    {
+      "id": 5,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you call `open('missing.txt', 'r')` on a file that does not exist?",
+      "options": [
+        "FileNotFoundError",
+        "KeyError",
+        "ValueError",
+        "IOError"
+      ],
+      "answer": 0,
+      "hint": "Specific exception raised when the target path is not found.",
+      "explanation": "Attempting to read a non-existent file raises `FileNotFoundError`."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the module name to work with JSON files.",
+      "template": "import ____\ndata = json.loads('{\"x\": 1}')",
+      "answer": "json",
+      "hint": "Four-letter standard library module.",
+      "explanation": "The `json` module is Python's standard library tool for JSON serialization."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What is the difference between `json.dump()` and `json.dumps()`?",
+      "code": "import json\nd = {\"x\": 10}\nres = json.dumps(d)\nprint(type(res).__name__)",
+      "answer": "str",
+      "hint": "dumps ends in 's', meaning 'dump string'.",
+      "explanation": "json.dumps() returns a Python `str` representation of the data."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the bug when iterating through lines like this?\n```python\nwith open('items.txt') as f:\n    lines = f.readlines()\nfor l in lines:\n    print(l)\n```",
+      "options": [
+        "Each line retains a trailing '\\n', resulting in double-spaced output when print() adds another newline",
+        "readlines() deletes the file",
+        "f is closed before lines can be read",
+        "print cannot print strings"
+      ],
+      "answer": 0,
+      "hint": "Notice that lines read from files include trailing newline characters.",
+      "explanation": "Lines from `.readlines()` include trailing `\\n`. Combined with `print()`, it outputs blank lines between items. Use `l.strip()`."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What does this in-memory file write and read print?",
+      "code": "with open(\"test_num.txt\", \"w\") as f:\n    f.write(\"42\")\nwith open(\"test_num.txt\", \"r\") as f:\n    val = int(f.read().strip())\nprint(val * 2)",
+      "answer": "84",
+      "hint": "42 * 2 = 84.",
+      "explanation": "The file holds '42', which is read, converted to 42, and multiplied by 2 = 84."
+    },
+    {
+      "id": 10,
+      "type": "fill",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Fill in the encoding parameter keyword for opening files in UTF-8.",
+      "template": "with open(\"data.txt\", \"r\", ________=\"utf-8\") as f:\n    content = f.read()",
+      "answer": "encoding",
+      "hint": "Parameter that sets the character encoding format.",
+      "explanation": "The `encoding` parameter sets the text encoding format (e.g., 'utf-8')."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line sequence correctly reads lines from a file and counts non-empty lines?",
+      "options": [
+        "1: count = 0 \\n 2: with open('data.txt') as f: \\n 3:     for line in f: \\n 4:         if line.strip(): count += 1",
+        "1: with open('data.txt') as f: \\n 2:     count = line \\n 3: count += 1",
+        "1: count = f.read() \\n 2: with open('data.txt') as f: pass",
+        "1: for line in f: count += 1 \\n 2: with open('data.txt') as f:"
+      ],
+      "answer": 0,
+      "hint": "Initialize count first, open with 'with', loop over f, check strip().",
+      "explanation": "Initialize count, open file with context manager, iterate line-by-line, and increment if line.strip() is non-empty."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Write code that writes `'apple\\nbanana\\ncherry'` to `'fruits.txt'`, then reads it back line-by-line and prints the total number of lines.\nExpected output:\n3",
+      "starter": "# Write fruits to 'fruits.txt', read back and print line count\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "3"
+        }
+      ],
+      "hints": [
+        "with open('fruits.txt', 'w') as f: f.write('apple\\nbanana\\ncherry')",
+        "with open('fruits.txt', 'r') as f: print(len(f.readlines()))",
+        "with open('fruits.txt', 'w') as f:\n    f.write('apple\\nbanana\\ncherry')\nwith open('fruits.txt', 'r') as f:\n    print(len(f.readlines()))"
+      ],
+      "explanation": "Writing 3 lines and reading with len(f.readlines()) returns 3."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: JSON Score Saver and Loader\n1. Save a dict `score_data = {'player': 'Hero', 'high_score': 9500}` to a file named `'save.json'` using `json.dump()`.\n2. Read the file back with `json.load()`.\n3. Print formatted: `Player: {data['player']} | Score: {data['high_score']}`\nExpected output:\nPlayer: Hero | Score: 9500",
+      "starter": "import json\nscore_data = {'player': 'Hero', 'high_score': 9500}\n# Save to 'save.json', load it back, and print formatted result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Player: Hero | Score: 9500"
+        }
+      ],
+      "hints": [
+        "with open('save.json', 'w') as f: json.dump(score_data, f)",
+        "with open('save.json', 'r') as f: loaded = json.load(f)",
+        "with open('save.json', 'w') as f:\n    json.dump(score_data, f)\nwith open('save.json', 'r') as f:\n    loaded = json.load(f)\nprint(f\"Player: {loaded['player']} | Score: {loaded['high_score']}\")"
+      ],
+      "explanation": "This mini-task brings together json.dump(), json.load(), with statement context managers, and f-string output."
+    }
+  ]
+}

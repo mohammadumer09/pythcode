@@ -1,0 +1,234 @@
+{
+  "id": 14,
+  "title": "Tuples & Sets",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Lists are great when data changes, but programs also need data structures with strict guarantees. Tuples protect constant values (like GPS coordinates or database connection pairs) from accidental modification. Sets instantly eliminate duplicate entries (like finding unique website visitors from millions of log events) and perform lightning-fast membership lookups.",
+      "code": "gps_coords = (37.7749, -122.4194)  # Immutable tuple\nvisitor_ips = {\"10.0.0.1\", \"10.0.0.2\", \"10.0.0.1\"}  # Set deduplicates\nprint(\"Coordinates:\", gps_coords)\nprint(\"Unique visitors:\", len(visitor_ips))",
+      "output": "Coordinates: (37.7749, -122.4194)\nUnique visitors: 2"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "* **Tuples** `()`: Ordered, **immutable** collections. Once created, items cannot be added, removed, or changed. They support indexing, slicing, and **tuple unpacking** (`x, y = point`).\n* **Sets** `{}`: Unordered collections of **unique** items. Duplicates are discarded automatically. Sets provide fast mathematical operations: union (`|`), intersection (`&`), and difference (`-`).",
+      "code": "# Tuple unpacking\npoint = (4, 9)\nx, y = point\nprint(f\"x={x}, y={y}\")\n\n# Set uniqueness\nnums = {1, 2, 2, 3, 3, 3}\nprint(\"Unique set:\", nums)",
+      "output": "x=4, y=9\nUnique set: {1, 2, 3}"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Tuple Memory Optimization**: Because tuples are immutable, Python allocates a compact, fixed memory block. Creating and iterating over tuples is slightly faster and uses less memory than lists.\n2. **Set Hash Tables**: Sets store elements in internal hash tables. When you test `item in my_set`, Python computes the hash of `item` and jumps directly to that memory slot \u2014 taking O(1) instantaneous time regardless of whether the set has 10 or 1,000,000 items (compared to lists which search sequentially).\n3. **Set Requirements**: Elements placed inside a set must be **hashable** (immutable). You can put integers, strings, and tuples in a set, but NOT lists or dicts.",
+      "code": "# Fast set membership\nauthorized_ids = {101, 102, 103}\nprint(\"Is 102 authorized?\", 102 in authorized_ids)\n# Set operations\na = {1, 2, 3}\nb = {2, 3, 4}\nprint(\"Intersection (common):\", a & b)",
+      "output": "Is 102 authorized? True\nIntersection (common): {2, 3}"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore conversions and set operations:\n\n* **Removing duplicates from a list**: `unique_list = list(set(raw_list))`.\n* **Set Operations**:\n  - Union `a | b`: All items from both sets.\n  - Intersection `a & b`: Items present in both.\n  - Difference `a - b`: Items in `a` but not in `b`.\n* **Set Methods**: `s.add(val)` to insert, `s.remove(val)` (errors if missing), `s.discard(val)` (safe, no error if missing).\n* **Single-element tuple**: `t = (42,)` \u2014 requires a trailing comma, otherwise `(42)` is treated as parenthesized integer.",
+      "code": "frontend_devs = {\"Alice\", \"Bob\", \"Charlie\"}\nbackend_devs = {\"Charlie\", \"David\"}\nfullstack = frontend_devs & backend_devs\nprint(\"Fullstack:\", fullstack)\nfrontend_only = frontend_devs - backend_devs\nprint(\"Frontend only:\", frontend_only)",
+      "output": "Fullstack: {'Charlie'}\nFrontend only: {'Alice', 'Bob'}"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Trying to mutate a tuple**:\n```python\ncoords = (10, 20)\ncoords[0] = 15  # TypeError: 'tuple' object does not support item assignment\n```\n*Fix*: Tuples are read-only; construct a new tuple or use a list.\n\n2. **Creating an empty set with `{}`**:\n`x = {}` creates an empty **dictionary**, NOT a set!\n*Fix*: Use `x = set()` to create an empty set.\n\n3. **Forgetting the comma in single-item tuple**:\n`x = ('apple')` is a `str`, NOT a tuple.\n*Fix*: Write `x = ('apple',)`.\n\n4. **Placing a list inside a set**:\n`s = {[1, 2]}` raises `TypeError: unhashable type: 'list'`.",
+      "code": "empty_set = set()\nprint(\"Type:\", type(empty_set))\nsingle_tuple = (42,)\nprint(\"Single tuple type:\", type(single_tuple))",
+      "output": "Type: <class 'set'>\nSingle tuple type: <class 'tuple'>"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use tuples for heterogeneous fixed records**: Such as `(user_id, email, is_active)`.\n2. **Use sets for membership checks**: If you frequently check `if x in collection:`, convert the collection to a `set` for instant lookups.\n3. **Use `.discard()` for safe set deletions**: Avoid unexpected `KeyError` exceptions when removing items from a set.",
+      "code": "allowed_users = {\"admin\", \"moderator\", \"editor\"}\nallowed_users.discard(\"guest\")  # Safe, won't crash if 'guest' is absent\nprint(\"Users:\", allowed_users)",
+      "output": "Users: {'admin', 'editor', 'moderator'}"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Tuples `()`**: Ordered, immutable; use for fixed coordinates, records, unpacking.\n\u2022 **Sets `{}`**: Unordered, unique elements; use for deduplication and O(1) lookups.\n\u2022 **Single-element tuple**: Requires comma: `(x,)`.\n\u2022 **Empty set**: Must be `set()`, since `{}` creates a dictionary.\n\u2022 **Set math**: Union `|`, intersection `&`, difference `-`.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the primary difference between a list and a tuple in Python?",
+      "options": [
+        "Tuples are immutable (cannot be changed), while lists are mutable",
+        "Lists can only hold integers, while tuples hold strings",
+        "Tuples cannot be indexed",
+        "Lists use parentheses (), tuples use square brackets []"
+      ],
+      "answer": 0,
+      "hint": "Think about what happens when you try to change an item.",
+      "explanation": "Tuples are immutable; once defined, their elements cannot be modified, added, or deleted."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this set print?",
+      "code": "s = {1, 2, 2, 3, 3, 3}\nprint(len(s))",
+      "answer": "3",
+      "hint": "Sets automatically filter out duplicate values.",
+      "explanation": "Duplicate elements 2 and 3 are removed, leaving {1, 2, 3}. Length is 3."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the syntax to create an empty set.",
+      "template": "empty = ____()",
+      "answer": "set",
+      "hint": "Using {} creates an empty dict; you must call this constructor.",
+      "explanation": "`set()` creates a new empty set. `{}` creates an empty dictionary."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this tuple unpacking code print?",
+      "code": "coords = (10, 20)\nx, y = coords\nprint(x + y)",
+      "answer": "30",
+      "hint": "x receives 10 and y receives 20.",
+      "explanation": "Tuple unpacking assigns x = 10 and y = 20. 10 + 20 = 30."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this set intersection print?",
+      "code": "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(len(a & b))",
+      "answer": "2",
+      "hint": "The & operator finds common elements. Which elements are in both?",
+      "explanation": "The common elements are {2, 3}, which has a length of 2."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What exception is raised by this tuple operation?\n```python\npoint = (5, 10)\npoint[0] = 7\n```",
+      "options": [
+        "TypeError",
+        "ValueError",
+        "IndexError",
+        "AttributeError"
+      ],
+      "answer": 0,
+      "hint": "Tuples do not support item assignment.",
+      "explanation": "Attempting to reassign an index of a tuple raises `TypeError: 'tuple' object does not support item assignment`."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What is the output of this set difference?",
+      "code": "all_perms = {\"read\", \"write\", \"delete\"}\nguest_perms = {\"read\"}\nprint(len(all_perms - guest_perms))",
+      "answer": "2",
+      "hint": "all_perms - guest_perms removes 'read' from all_perms.",
+      "explanation": "Subtracting 'read' leaves {'write', 'delete'}, with a length of 2."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the type of variable `item` in this code?\n```python\nitem = (42)\n```",
+      "options": [
+        "int",
+        "tuple",
+        "set",
+        "list"
+      ],
+      "answer": 0,
+      "hint": "Without a trailing comma, parentheses are just mathematical grouping.",
+      "explanation": "`item = (42)` evaluates to integer 42. A single-item tuple requires a trailing comma: `(42,)`."
+    },
+    {
+      "id": 9,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the operator for set union (all unique elements from both sets).",
+      "template": "a = {1, 2}\nb = {2, 3}\nall_items = a ___ b  # {1, 2, 3}",
+      "answer": "|",
+      "hint": "The pipe character used for union.",
+      "explanation": "The `|` operator computes the union of two sets."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which sequence correctly removes duplicates from a list while preserving a list type at the end?",
+      "options": [
+        "nums = [1, 2, 2, 3] \\n unique_nums = list(set(nums))",
+        "nums = [1, 2, 2, 3] \\n unique_nums = tuple(nums)",
+        "nums = [1, 2, 2, 3] \\n unique_nums = nums.dedupe()",
+        "nums = [1, 2, 2, 3] \\n unique_nums = set(nums).tolist()"
+      ],
+      "answer": 0,
+      "hint": "Convert to set to deduplicate, then convert back to list.",
+      "explanation": "`list(set(nums))` converts the list to a set (dropping duplicates) and back into a list."
+    },
+    {
+      "id": 11,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this safe set discard print?",
+      "code": "s = {\"a\", \"b\"}\ns.discard(\"z\")\nprint(len(s))",
+      "answer": "2",
+      "hint": ".discard() ignores missing elements without raising an error.",
+      "explanation": "`.discard()` does nothing when the item is missing, leaving the set with 2 items."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Given `log_tags = ['python', 'ai', 'python', 'cloud', 'ai']`, convert it to a sorted list of unique tags, and print the resulting list.\nExpected output:\n['ai', 'cloud', 'python']",
+      "starter": "log_tags = ['python', 'ai', 'python', 'cloud', 'ai']\n# Remove duplicates and sort the unique tags, then print\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "['ai', 'cloud', 'python']"
+        }
+      ],
+      "hints": [
+        "Convert log_tags to a set using set(log_tags)",
+        "Sort it with sorted(set(log_tags))",
+        "print(sorted(set(log_tags)))"
+      ],
+      "explanation": "set(log_tags) drops duplicates and sorted(...) returns a sorted list of unique strings."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Permission Analyzer\nGiven user permissions `user_perms = ('read', 'write')` and required permissions `required = {'read', 'write', 'admin'}`:\n1. Convert `user_perms` to a set.\n2. Find the missing permissions (`required - user_set`).\n3. Print: `Missing permissions: {sorted(missing)}`\nExpected output:\nMissing permissions: ['admin']",
+      "starter": "user_perms = ('read', 'write')\nrequired = {'read', 'write', 'admin'}\n# Convert to set, find difference, sort and print\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Missing permissions: ['admin']"
+        }
+      ],
+      "hints": [
+        "user_set = set(user_perms)",
+        "missing = required - user_set",
+        "print(f\"Missing permissions: {sorted(missing)}\")"
+      ],
+      "explanation": "This mini-task combines tuple-to-set conversion, set difference (-), and sorting to analyze access gaps."
+    }
+  ]
+}

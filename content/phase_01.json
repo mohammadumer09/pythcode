@@ -1,0 +1,112 @@
+{
+  "id": 1,
+  "title": "What is Python?",
+  "level": "beginner",
+  "estimated_minutes": 10,
+  "lesson": [
+    {
+      "step": 1,
+      "heading": "What is Python?",
+      "text": "Python is a programming language. A programming language lets you give instructions to a computer. Python is popular because its instructions look almost like plain English.\n\nPeople use Python to build websites, analyse data, create AI, automate boring tasks, and much more.",
+      "code": null,
+      "output": null
+    },
+    {
+      "step": 2,
+      "heading": "How does code run?",
+      "text": "You write code in a file. Python reads that file line by line from top to bottom and carries out each instruction. The result appears in the **output** (also called the console or terminal).",
+      "code": "# This is your first Python program\nprint(\"Hello, World!\")",
+      "output": "Hello, World!"
+    },
+    {
+      "step": 3,
+      "heading": "The print function",
+      "text": "`print()` is a built-in Python function. A **function** is a named action. When you write `print(\"something\")`, Python displays that something on the screen.\n\nNotice the round brackets `()` and the quotes `\"\"` around the text. Both are required.",
+      "code": "print(\"I am learning Python!\")\nprint(\"One line at a time.\")",
+      "output": "I am learning Python!\nOne line at a time."
+    },
+    {
+      "step": 4,
+      "heading": "Comments",
+      "text": "A **comment** starts with `#`. Python ignores everything after `#` on that line. Use comments to explain your code to yourself and others.",
+      "code": "# This line is a comment. Python skips it.\nprint(\"This line runs.\")  # comment at the end too",
+      "output": "This line runs."
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "question": "What does Python use to display text on the screen?",
+      "options": ["show()", "print()", "display()", "write()"],
+      "answer": 1,
+      "hint": "Think about the function you used in step 2.",
+      "explain": "print() is Python's built-in function for displaying output."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "question": "What character starts a comment in Python?",
+      "options": ["//", "/*", "#", "--"],
+      "answer": 2,
+      "hint": "Look at step 4.",
+      "explain": "In Python, # marks the start of a comment. Everything after it on that line is ignored."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "question": "What will this code print?",
+      "code": "print(\"Python rocks!\")",
+      "answer": "Python rocks!",
+      "hint": "print() outputs exactly what is inside the quotes.",
+      "explain": "print(\"Python rocks!\") outputs the text between the quotes: Python rocks!"
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "question": "What will this code output?",
+      "code": "# just a comment\nprint(\"Line 1\")\nprint(\"Line 2\")",
+      "answer": "Line 1\nLine 2",
+      "hint": "Comments are skipped. Each print() outputs one line.",
+      "explain": "The comment is ignored. The two print() calls output Line 1 and Line 2 on separate lines."
+    },
+    {
+      "id": 5,
+      "type": "fill",
+      "question": "Complete the code to print the word Hello.",
+      "template": "_____(\"Hello\")",
+      "answer": "print",
+      "hint": "The function name is 5 letters long.",
+      "explain": "print(\"Hello\") is the correct call. print is the function name."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "question": "Fill in the blank to make a comment.",
+      "template": "___ This is a comment",
+      "answer": "#",
+      "hint": "One character starts a Python comment.",
+      "explain": "# at the start of a line tells Python to skip that line entirely."
+    },
+    {
+      "id": 7,
+      "type": "code",
+      "question": "Write a program that prints: I love Python",
+      "starter": "# Write your code below\n",
+      "tests": [{"input": "", "expected": "I love Python"}],
+      "hint": "Use print() with the exact text in quotes.",
+      "explain": "print(\"I love Python\") outputs exactly: I love Python"
+    },
+    {
+      "id": 8,
+      "type": "code",
+      "question": "Print two lines: first \"Hello\" then \"World\" (each on its own line).",
+      "starter": "# Write two print() calls\n",
+      "tests": [{"input": "", "expected": "Hello\nWorld"}],
+      "hint": "You need two separate print() calls.",
+      "explain": "print(\"Hello\") followed by print(\"World\") outputs the two lines."
+    }
+  ],
+  "pass_score": 70
+}
+

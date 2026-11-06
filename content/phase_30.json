@@ -1,0 +1,229 @@
+{
+  "id": 30,
+  "title": "Final Projects & Graduation",
+  "level": "intermediate",
+  "estimated_minutes": 30,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Congratulations! You have journeyed all the way from printing your first \"Hello, World!\" to mastering algorithms, data structures, OOP, file persistence, and professional Python design. Now it is time to build three complete, practical capstone projects from scratch: a Smart Calculator, a Persistent To-Do List CLI, and an Interactive Quiz Engine.",
+      "code": "print(\"\ud83c\udf89 Welcome to the pythcode Capstone Finale! \ud83c\udf89\")\nprojects = [\"Smart Calculator\", \"To-Do Manager\", \"Quiz Engine\"]\nfor i, proj in enumerate(projects, start=1):\n    print(f\"Project {i}: {proj}\")",
+      "output": "\ud83c\udf89 Welcome to the pythcode Capstone Finale! \ud83c\udf89\nProject 1: Smart Calculator\nProject 2: To-Do Manager\nProject 3: Quiz Engine"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "The capstone combines everything you have learned into modular, tested software:\n1. **Project 1: Smart Calculator**: Implements arithmetic operations (`+`, `-`, `*`, `/`, `**`), input validation, and division-by-zero protection.\n2. **Project 2: To-Do List CLI**: Manages a list of task dictionaries with operations to Add, List, Complete, Delete, and save to JSON.\n3. **Project 3: Interactive Quiz Engine**: Loads questions from a data structure, prompts for answers, scores results, and displays a final graduation percentage.",
+      "code": "# Project 1 preview: Simple modular math dispatcher\ndef calculate(op, a, b):\n    ops = {'+': lambda x,y: x+y, '-': lambda x,y: x-y, '*': lambda x,y: x*y}\n    if op == '/' and b == 0: return \"Error: Division by zero\"\n    if op == '/': return a / b\n    return ops.get(op, lambda x,y: \"Invalid\")(a, b)\n\nprint(\"10 / 2 =\", calculate('/', 10, 2))",
+      "output": "10 / 2 = 5.0"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Architecture & Separation of Concerns**: Divide your projects into clean layers:\n   - **Data Model**: Storage structures (dictionaries, lists, classes).\n   - **Business Logic**: Pure calculation and data manipulation functions.\n   - **User Interface (UI)**: Input prompts, menus, and formatted outputs.\n2. **Defensive Validation**: Validate inputs at the boundary using `try...except` and guard clauses.\n3. **Persistence Lifecycle**: Always load data at startup (`json.load`) and save immediately after state changes (`json.dump`).",
+      "code": "# Project 2 preview: To-Do task management\ntasks = []\ndef add_task(title):\n    tasks.append({\"id\": len(tasks)+1, \"title\": title, \"done\": False})\nadd_task(\"Master Python\")\nprint(\"Tasks:\", tasks)",
+      "output": "Tasks: [{'id': 1, 'title': 'Master Python', 'done': False}]"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Guided checklists for your projects:\n\n* **Calculator Checklist**:\n  - [x] Supports `+`, `-`, `*`, `/`\n  - [x] Protects against zero division\n  - [x] Handles floating-point decimals cleanly\n* **To-Do List Checklist**:\n  - [x] Add tasks with unique IDs\n  - [x] Mark tasks as complete (`task['done'] = True`)\n  - [x] Filter active vs completed tasks\n* **Quiz Engine Checklist**:\n  - [x] Stores question pool as list of dicts\n  - [x] Calculates score and passing percentage",
+      "code": "# Project 3 preview: Quiz scoring engine\ndef grade_quiz(answers, key):\n    correct = sum(1 for a, k in zip(answers, key) if a.lower() == k.lower())\n    pct = (correct / len(key)) * 100\n    return correct, pct\n\nscore, pct = grade_quiz([\"A\", \"B\"], [\"A\", \"B\"])\nprint(f\"Score: {score}/2 ({pct:.0f}%)\")",
+      "output": "Score: 2/2 (100%)"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Putting all project code in one 200-line `while True` loop**:\nBreak logic into dedicated functions: `add_task()`, `delete_task()`, `display_tasks()`.\n\n2. **Crashing on unexpected user inputs**:\nAlways wrap `int(input())` in `try...except ValueError`.\n\n3. **Hardcoding paths**:\nUse relative paths or `os.path.join()` for data files.\n\n4. **Forgetting to save state after mutations**:\nIf a task is marked completed, call your save routine immediately.",
+      "code": "# Safe user command parsing\ndef parse_command(cmd_str):\n    parts = cmd_str.strip().split(maxsplit=1)\n    action = parts[0].lower() if parts else \"\"\n    arg = parts[1] if len(parts) > 1 else \"\"\n    return action, arg\n\nprint(\"Parsed:\", parse_command(\"add Buy groceries\"))",
+      "output": "Parsed: ('add', 'Buy groceries')"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Write automated test cases for your functions**: Test happy paths and edge cases.\n2. **Keep the user interface clean and responsive**: Use clear menus and feedback.\n3. **Celebrate your graduation!**: You now possess a solid foundational mastery of Python.",
+      "code": "print(\"\ud83c\udf93 You are now officially ready to build real Python applications!\")",
+      "output": "\ud83c\udf93 You are now officially ready to build real Python applications!"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Capstone Skills**: Combines types, logic, loops, functions, OOP, files, and debugging.\n\u2022 **Modularity**: Keep data, logic, and user interface decoupled.\n\u2022 **Error Tolerance**: Validate all user input and catch exceptions gracefully.\n\u2022 **Persistence**: Save structured state using JSON.\n\u2022 **Certificate**: Complete the final challenges to earn your Python Mastery Certificate!",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this calculator dispatch function print?",
+      "code": "def calc(op, a, b):\n    if op == \"+\": return a + b\n    if op == \"*\": return a * b\nprint(calc(\"*\", 4, 5))",
+      "answer": "20",
+      "hint": "calc('*', 4, 5) runs 4 * 5.",
+      "explanation": "4 * 5 = 20."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this to-do task counter print?",
+      "code": "tasks = [{\"done\": True}, {\"done\": False}, {\"done\": True}]\ncompleted = sum(1 for t in tasks if t[\"done\"])\nprint(completed)",
+      "answer": "2",
+      "hint": "Two tasks have done == True.",
+      "explanation": "Two tasks are marked done, returning 2."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the JSON method to load saved tasks from file object f.",
+      "template": "import json\nwith open(\"tasks.json\") as f:\n    tasks = json.____(f)",
+      "answer": "load",
+      "hint": "Four-letter function: load from file.",
+      "explanation": "`json.load(f)` reads JSON from an open file handle."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this quiz percentage calculation print?",
+      "code": "score = 3\ntotal = 4\npct = (score / total) * 100\nprint(f\"{pct:.0f}%\")",
+      "answer": "75%",
+      "hint": "3 / 4 = 0.75. 0.75 * 100 = 75.",
+      "explanation": "3 / 4 is 0.75, which is 75%."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this safe division handler return for zero divisor?",
+      "code": "def divide(a, b):\n    if b == 0: return \"Error: Division by zero\"\n    return a / b\nprint(divide(10, 0))",
+      "answer": "Error: Division by zero",
+      "hint": "b == 0 triggers the error message string.",
+      "explanation": "The guard clause catches b == 0 and returns 'Error: Division by zero'."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "Why is `tasks[:] = [t for t in tasks if t['id'] != 2]` preferred over `tasks = [t for t in tasks if t['id'] != 2]` when mutating global state?",
+      "options": [
+        "Slice assignment (tasks[:]) updates the existing list in-place so all references see the change",
+        "Slice assignment runs 100x faster",
+        "Reassignment is not allowed in Python",
+        "tasks[:] converts tasks into a set"
+      ],
+      "answer": 0,
+      "hint": "Slice assignment modifies the contents of the existing memory object.",
+      "explanation": "`tasks[:] = ...` updates the existing list object in place, keeping external references synchronized."
+    },
+    {
+      "id": 7,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the string method to split a command line into at most two parts: action and argument.",
+      "template": "action, arg = line._____(maxsplit=1)",
+      "answer": "split",
+      "hint": "Five-letter string splitting method.",
+      "explanation": "`.split(maxsplit=1)` divides a string into at most two tokens."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this task completion updater output?",
+      "code": "task = {\"id\": 1, \"title\": \"Study\", \"done\": False}\ntask[\"done\"] = True\nprint(task[\"done\"])",
+      "answer": "True",
+      "hint": "The 'done' key is updated to True.",
+      "explanation": "task['done'] was updated to True."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you try to open a missing JSON file without try...except?",
+      "options": [
+        "FileNotFoundError",
+        "KeyError",
+        "ValueError",
+        "TypeError"
+      ],
+      "answer": 0,
+      "hint": "Opening non-existent files raises this error.",
+      "explanation": "open('missing.json') raises `FileNotFoundError`."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What does this quiz grader print?",
+      "code": "user_ans = [\"a\", \"b\", \"c\"]\nkey = [\"A\", \"B\", \"D\"]\ncorrect = sum(1 for u, k in zip(user_ans, key) if u.upper() == k.upper())\nprint(correct)",
+      "answer": "2",
+      "hint": "a==A matches, b==B matches, c!=D fails.",
+      "explanation": "Two out of three answers match (a and b), so correct is 2."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly implements a safe task-loading lifecycle?",
+      "options": [
+        "1: def load(): try: with open('t.json') as f: return json.load(f) \\n 2: except FileNotFoundError: return [] \\n 3: tasks = load()",
+        "1: tasks = load() \\n 2: def load(): pass",
+        "1: with open('t.json') as f: return json.load(f) \\n 2: def load(): pass",
+        "1: tasks = [] \\n 2: tasks = json.load('t.json')"
+      ],
+      "answer": 0,
+      "hint": "Define load() with FileNotFoundError fallback, then call it.",
+      "explanation": "Define the safe loader function with FileNotFoundError handling, then execute it at initialization."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Implement `smart_calc(a, b, op)`:\n- If `op == '+'`: return `a + b`\n- If `op == '-'`: return `a - b`\n- If `op == '*'`: return `a * b`\n- If `op == '/'`: return `a / b` if `b != 0` else `'ZeroDivisionError'`\n- Otherwise return `'Invalid'`\nTest with `smart_calc(20, 4, '/')` and print the result.\nExpected output:\n5.0",
+      "starter": "# Define smart_calc and test with (20, 4, '/')\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "5.0"
+        }
+      ],
+      "hints": [
+        "def smart_calc(a, b, op):",
+        "Check op against '+', '-', '*', '/'",
+        "def smart_calc(a, b, op):\n    if op == '+': return a + b\n    if op == '-': return a - b\n    if op == '*': return a * b\n    if op == '/': return a / b if b != 0 else 'ZeroDivisionError'\n    return 'Invalid'\nprint(smart_calc(20, 4, '/'))"
+      ],
+      "explanation": "20 / 4 = 5.0."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Graduation Quiz Scorer\nDefine `score_final_exam(student_name, answers, answer_key)`:\n1. Count matching answers case-insensitively.\n2. Calculate score percentage: `pct = round((correct / len(answer_key)) * 100, 1)`.\n3. Return `f'Graduate: {student_name} | Score: {correct}/{len(answer_key)} ({pct}%) | Status: Passed'`\nTest with `score_final_exam('Dev Alex', ['a', 'b', 'c', 'd'], ['A', 'B', 'C', 'D'])` and print result.\nExpected output:\nGraduate: Dev Alex | Score: 4/4 (100.0%) | Status: Passed",
+      "starter": "# Define score_final_exam and print result for Dev Alex with 4/4 correct\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Graduate: Dev Alex | Score: 4/4 (100.0%) | Status: Passed"
+        }
+      ],
+      "hints": [
+        "correct = sum(1 for a, k in zip(answers, answer_key) if a.upper() == k.upper())",
+        "pct = round((correct / len(answer_key)) * 100, 1)",
+        "def score_final_exam(student_name, answers, answer_key):\n    correct = sum(1 for a, k in zip(answers, answer_key) if a.upper() == k.upper())\n    pct = round((correct / len(answer_key)) * 100, 1)\n    return f\"Graduate: {student_name} | Score: {correct}/{len(answer_key)} ({pct}%) | Status: Passed\"\nprint(score_final_exam('Dev Alex', ['a', 'b', 'c', 'd'], ['A', 'B', 'C', 'D']))"
+      ],
+      "explanation": "This capstone mini-task brings together functions, zip pairing, case normalization, score calculation, and celebration formatting for graduation."
+    }
+  ]
+}

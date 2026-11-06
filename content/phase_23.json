@@ -1,0 +1,239 @@
+{
+  "id": 23,
+  "title": "Classes & Objects",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "When building real software \u2014 like a banking system, a video game, or a customer portal \u2014 code isn't just loose numbers and functions. A bank account has data (balance, account holder) and actions (deposit, withdraw, transfer). **Object-Oriented Programming (OOP)** lets you bundle related data and behaviors together into custom types called **classes**.",
+      "code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n    def deposit(self, amount):\n        self.balance += amount\n\nacct = BankAccount(\"Alex\", 100)\nacct.deposit(50)\nprint(f\"{acct.owner}'s balance: ${acct.balance}\")",
+      "output": "Alex's balance: $150"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **class** is a blueprint, and an **object** (or instance) is an individual building created from that blueprint:\n- `def __init__(self, ...)` is the **constructor** method called automatically when creating a new instance.\n- `self` refers to the **specific instance** being created or acted upon. Any variable prefixed with `self.` becomes an **instance attribute** stored on that object.\n- Methods are functions defined inside the class whose first parameter is always `self`.",
+      "code": "class Student:\n    def __init__(self, name, grade):\n        self.name = name\n        self.grade = grade\n    def get_summary(self):\n        return f\"{self.name} is in grade {self.grade}\"\n\ns = Student(\"Maya\", 10)\nprint(s.get_summary())",
+      "output": "Maya is in grade 10"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Object Instantiation**: Writing `acct = BankAccount('Alex')` causes Python to allocate a new object in memory, then invoke `BankAccount.__init__(acct, 'Alex')`. Inside `__init__`, `self` is bound to that fresh object.\n2. **Instance vs Class Attributes**:\n   - **Instance attributes** (`self.name`): Unique to each individual object.\n   - **Class attributes** (defined directly in the class body): Shared across **all** instances of the class.\n3. **Special Dunder Methods**: Methods surrounded by double underscores (`__`) hook into Python's built-in operators:\n   - `__str__(self)`: Returns the string displayed by `print(obj)` or `str(obj)`.\n   - `__repr__(self)`: Returns an unambiguous developer representation for debugging.",
+      "code": "class Book:\n    library_name = \"City Central\"  # Class attribute (shared)\n    def __init__(self, title):\n        self.title = title        # Instance attribute (unique)\n    def __str__(self):\n        return f\"Book: '{self.title}'\"\n\nb = Book(\"Clean Code\")\nprint(b)                       # Calls __str__\nprint(\"Library:\", b.library_name)",
+      "output": "Book: 'Clean Code'\nLibrary: City Central"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore full class implementations:\n\n* **BankAccount with validation**: Protecting balance from overdrawing.\n* **Class Attribute Tracking**: Counting how many instances were created.\n* **`__repr__` vs `__str__`**: `__str__` is user-friendly; `__repr__` looks like code (`Book(title='...')`).",
+      "code": "class Counter:\n    total_counters = 0\n    def __init__(self):\n        self.count = 0\n        Counter.total_counters += 1\n    def increment(self):\n        self.count += 1\n\nc1 = Counter()\nc2 = Counter()\nc1.increment()\nprint(\"c1 count:\", c1.count)\nprint(\"Total counters created:\", Counter.total_counters)",
+      "output": "c1 count: 1\nTotal counters created: 2"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Forgetting `self` as the first method parameter**:\n```python\nclass Dog:\n    def bark():  # Missing self!\n        print('Woof')\nd = Dog()\nd.bark()  # TypeError: Dog.bark() takes 0 positional arguments but 1 was given\n```\n*Fix*: Every instance method must accept `self` as its first parameter: `def bark(self):`.\n\n2. **Forgetting `self.` when accessing attributes**:\nWriting `name = 'Alice'` inside `__init__` creates a temporary local variable that vanishes immediately! You must write `self.name = 'Alice'`.\n\n3. **Accidentally sharing mutable class attributes**:\nDefining `items = []` at the class level shares the exact same list among all instances!",
+      "code": "# Showing proper self usage\nclass Cat:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return f\"{self.name} says meow\"\n\nc = Cat(\"Luna\")\nprint(c.speak())",
+      "output": "Luna says meow"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use PascalCase for class names**: Write `BankAccount` or `StudentProfile`, not `bank_account`.\n2. **Always define `__str__`**: Makes debugging and logging dramatically clearer than seeing `<__main__.Book object at 0x00...>`.\n3. **Initialize all instance attributes inside `__init__`**: Avoid defining new attributes on the fly outside the class.",
+      "code": "class Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __str__(self):\n        return f\"Point({self.x}, {self.y})\"\n\nprint(Point(3, 4))",
+      "output": "Point(3, 4)"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Class vs Object**: Class is the blueprint; object is an active instance.\n\u2022 **`__init__`**: The constructor that initializes instance attributes.\n\u2022 **`self`**: The first parameter representing the current instance.\n\u2022 **Instance vs Class attributes**: `self.x` is per-instance; class-level attributes are shared.\n\u2022 **Dunder `__str__`**: Defines human-readable representation for `print()`.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What is the primary role of the `__init__` method in a Python class?",
+      "options": [
+        "To initialize the attributes of a new object when instantiated",
+        "To delete an object from memory",
+        "To convert the class to a string",
+        "To prevent the class from being modified"
+      ],
+      "answer": 0,
+      "hint": "It is called automatically when you create a new instance of the class.",
+      "explanation": "`__init__` is the constructor method in Python. It sets up initial attribute values when an object is created."
+    },
+    {
+      "id": 2,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword that refers to the specific instance inside a class method.",
+      "template": "class User:\n    def __init__(____, name):\n        self.name = name",
+      "answer": "self",
+      "hint": "Four-letter pronoun representing the instance.",
+      "explanation": "`self` represents the instance of the class being operated on."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this class instance print?",
+      "code": "class Car:\n    def __init__(self, model):\n        self.model = model\n\nmy_car = Car(\"Corolla\")\nprint(my_car.model)",
+      "answer": "Corolla",
+      "hint": "my_car.model accesses the model attribute set during instantiation.",
+      "explanation": "Car(\"Corolla\") assigns 'Corolla' to self.model, so my_car.model prints 'Corolla'."
+    },
+    {
+      "id": 4,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Which naming convention is recommended by PEP 8 for class names?",
+      "options": [
+        "PascalCase (e.g. BankAccount)",
+        "snake_case (e.g. bank_account)",
+        "camelCase (e.g. bankAccount)",
+        "UPPER_CASE (e.g. BANKACCOUNT)"
+      ],
+      "answer": 0,
+      "hint": "Capitalize each word without underscores.",
+      "explanation": "PEP 8 specifies PascalCase (CapWords) for class names."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this class attribute lookup print?",
+      "code": "class Item:\n    category = \"Hardware\"\n    def __init__(self, name):\n        self.name = name\n\ni1 = Item(\"Hammer\")\ni2 = Item(\"Wrench\")\nprint(i1.category == i2.category)",
+      "answer": "True",
+      "hint": "category is a class attribute shared by all instances.",
+      "explanation": "Both instances share the same class attribute category = 'Hardware', so i1.category == i2.category is True."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if an instance method is defined without `self`?\n```python\nclass Dog:\n    def bark():\n        print('Woof')\nd = Dog()\nd.bark()\n```",
+      "options": [
+        "TypeError",
+        "NameError",
+        "AttributeError",
+        "SyntaxError"
+      ],
+      "answer": 0,
+      "hint": "Python passes the instance automatically as the first argument, causing an argument count mismatch.",
+      "explanation": "`d.bark()` automatically passes `d` as an argument. Since `bark()` was defined with 0 arguments, Python raises `TypeError: Dog.bark() takes 0 positional arguments but 1 was given`."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will calling `print()` on this object output?",
+      "code": "class Product:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n    def __str__(self):\n        return f\"{self.name}: ${self.price}\"\n\nprint(Product(\"Book\", 15))",
+      "answer": "Book: $15",
+      "hint": "print() automatically invokes the __str__ dunder method.",
+      "explanation": "The `__str__` method controls string formatting when print() is called on the object."
+    },
+    {
+      "id": 8,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the special dunder method name that returns a user-friendly string for print().",
+      "template": "class User:\n    def _______(self):\n        return self.name",
+      "answer": "__str__",
+      "hint": "Begins and ends with double underscores, containing 'str'.",
+      "explanation": "`__str__` defines the human-readable string representation of an object."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the bug in this constructor?\n```python\nclass Player:\n    def __init__(self, name):\n        player_name = name\n```",
+      "options": [
+        "player_name is a local variable that is discarded when __init__ ends, rather than being attached to self",
+        "name must be an integer",
+        "Player cannot take arguments",
+        "__init__ must return self"
+      ],
+      "answer": 0,
+      "hint": "To keep an attribute on an object, you must assign it to self.",
+      "explanation": "Without `self.name = name`, `player_name` is merely a temporary local variable inside `__init__` and is lost as soon as `__init__` finishes."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this method execution print?",
+      "code": "class BankAccount:\n    def __init__(self, balance):\n        self.balance = balance\n    def withdraw(self, amount):\n        if amount <= self.balance:\n            self.balance -= amount\n            return True\n        return False\n\nacct = BankAccount(100)\nacct.withdraw(40)\nprint(acct.balance)",
+      "answer": "60",
+      "hint": "100 - 40 = 60.",
+      "explanation": "The withdrawal succeeds, deducting 40 from 100 to leave 60."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly defines a class and instantiates it with a method call?",
+      "options": [
+        "1: class User: def __init__(self, n): self.n = n \\n 2: u = User('Ada') \\n 3: print(u.n)",
+        "1: u = User('Ada') \\n 2: class User: def __init__(self, n): self.n = n \\n 3: print(u.n)",
+        "1: print(u.n) \\n 2: u = User('Ada') \\n 3: class User: pass",
+        "1: class User: pass \\n 2: print(User.n) \\n 3: u = User('Ada')"
+      ],
+      "answer": 0,
+      "hint": "The class definition must be executed before creating instances.",
+      "explanation": "The class must be defined first before it can be instantiated and its attributes accessed."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Create a `Rectangle` class with `__init__(self, width, height)` and an `area(self)` method that returns `width * height`. Create `r = Rectangle(4, 5)` and print `r.area()`.\nExpected output:\n20",
+      "starter": "# Define Rectangle class, instantiate with (4, 5), and print its area\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "20"
+        }
+      ],
+      "hints": [
+        "class Rectangle:\n    def __init__(self, width, height): self.width = width; self.height = height\n    def area(self): return self.width * self.height",
+        "r = Rectangle(4, 5); print(r.area())",
+        "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n    def area(self):\n        return self.width * self.height\nr = Rectangle(4, 5)\nprint(r.area())"
+      ],
+      "explanation": "Instantiating Rectangle(4, 5) and calling area() returns 4 * 5 = 20."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Student Grade Tracker\nCreate a class `Student`:\n1. `__init__(self, name)`: initializes `self.name = name` and `self.scores = []`.\n2. `add_score(self, score)`: appends score to `self.scores`.\n3. `average(self)`: returns `sum(self.scores) / len(self.scores)` (or 0 if empty).\nCreate student `s = Student('Alex')`, add scores `90` and `80`, and print: `{s.name}: {s.average():.1f}`\nExpected output:\nAlex: 85.0",
+      "starter": "# Define Student class and demonstrate with Alex (scores 90 and 80)\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Alex: 85.0"
+        }
+      ],
+      "hints": [
+        "class Student: def __init__(self, name): self.name = name; self.scores = []",
+        "def add_score(self, s): self.scores.append(s)",
+        "class Student:\n    def __init__(self, name):\n        self.name = name\n        self.scores = []\n    def add_score(self, s):\n        self.scores.append(s)\n    def average(self):\n        return sum(self.scores) / len(self.scores) if self.scores else 0\ns = Student('Alex')\ns.add_score(90)\ns.add_score(80)\nprint(f\"{s.name}: {s.average():.1f}\")"
+      ],
+      "explanation": "This mini-task brings together OOP class design, instance list state, method creation, and formatted calculation."
+    }
+  ]
+}

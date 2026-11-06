@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Phase Map — pythcode{% endblock %}
+{% block meta_desc %}All 30 Python learning phases. Track your progress and unlock the next phase.{% endblock %}
+
+{% block content %}
+
+<section class="section" aria-labelledby="mapHeading">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="section-heading" style="text-align:left;margin-bottom:1.5rem">
+      <h1 id="mapHeading" style="font-size:clamp(1.8rem,3vw,2.5rem)">
+        Phase <span class="accent-word">Map</span>
+      </h1>
+      <p class="text-muted">Complete each phase to unlock the next one. Score 70%+ to pass.</p>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="map-progress-bar-wrap" aria-label="Overall progress">
+      <div class="map-progress-label">
+        <span>Overall progress</span>
+        <span id="progressText">Loading…</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="30">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Search box -->
+    <div class="phase-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="phaseSearchInput" class="phase-search-input" placeholder="Search lessons by title, keyword, or concept (e.g. loops, lists, slicing, files)..." aria-label="Search lessons" />
+      <button id="clearSearchBtn" class="clear-search-btn" style="display:none" aria-label="Clear search">✕</button>
+    </div>
+    <div id="searchStats" class="text-muted" style="display:none;font-size:0.85rem;margin-bottom:1rem"></div>
+
+    <!-- Loading -->
+    <div id="mapLoading" style="text-align:center;padding:3rem">
+      <div class="spinner" style="width:32px;height:32px;margin:auto"></div>
+    </div>
+
+    <!-- ── Beginner ─────────────────────────────────────────── -->
+    <div id="beginnerSection" style="display:none">
+      <p class="map-level-label">🟢 Beginner — Phases 1–10</p>
+      <div class="map-grid" id="beginnerGrid"></div>
+    </div>
+
+    <!-- ── Core ────────────────────────────────────────────── -->
+    <div id="coreSection" style="display:none">
+      <p class="map-level-label">🔵 Core — Phases 11–18</p>
+      <div class="map-grid" id="coreGrid"></div>
+    </div>
+
+    <!-- ── Intermediate ────────────────────────────────────── -->
+    <div id="intermediateSection" style="display:none">
+      <p class="map-level-label">🟠 Intermediate — Phases 19–30</p>
+      <div class="map-grid" id="intermediateGrid"></div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/phase_map.js') }}"></script>
+{% endblock %}

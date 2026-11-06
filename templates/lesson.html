@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Phase {{ phase_id }} — pythcode{% endblock %}
+{% block meta_desc %}Learn Python phase {{ phase_id }} — lesson, examples and challenges.{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lesson.css') }}" />
+<!-- CodeMirror 5.65.16 -->
+<link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/edit/closebrackets.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/editor.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width:1180px">
+
+  <!-- ── Loading state ─────────────────────────────────────── -->
+  <div id="lessonLoading" style="text-align:center;padding:5rem 1rem">
+    <div class="spinner" style="width:36px;height:36px;margin:0 auto 1rem"></div>
+    <p class="text-muted">Loading phase {{ phase_id }}…</p>
+  </div>
+
+  <!-- ── Error state ───────────────────────────────────────── -->
+  <div id="lessonError" style="display:none;text-align:center;padding:5rem 1rem">
+    <p style="font-size:2rem">😕</p>
+    <p class="text-muted mt-2" id="lessonErrorMsg">Could not load this phase.</p>
+    <a href="{{ url_for('phase_map') }}" class="btn btn-secondary mt-3">← Back to Phase Map</a>
+  </div>
+
+  <!-- ── Lesson shell (populated by JS) ───────────────────── -->
+  <div id="lessonShell" style="display:none">
+
+    <!-- Phase header -->
+    <div class="phase-header">
+      <div>
+        <a href="{{ url_for('phase_map') }}" class="text-muted" style="font-size:0.82rem">← Phase Map</a>
+        <h1 class="phase-header-title mt-1" id="phaseTitle">Phase {{ phase_id }}</h1>
+      </div>
+      <div class="phase-meta">
+        <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()" aria-label="Bookmark this phase">
+          <span id="bmIcon">🔖</span> <span id="bmText">Bookmark</span>
+        </button>
+        <span class="level-badge" id="phaseLevelBadge">beginner</span>
+        <span id="phaseMinutes">~10 min</span>
+        <span>|</span>
+        <span id="phaseProgress">Step 1 of ?</span>
+      </div>
+    </div>
+
+    <!-- Main layout -->
+    <div class="lesson-layout">
+
+      <!-- Sidebar: step nav -->
+      <aside class="lesson-sidebar">
+        <ul class="lesson-nav" id="stepNav" aria-label="Lesson steps"></ul>
+        <div class="card" style="padding:1rem;font-size:0.82rem" id="lessonTip">
+          <strong style="color:var(--accent)">Tip:</strong>
+          <span class="text-muted"> Read each step, then try the challenges below.</span>
+        </div>
+      </aside>
+
+      <!-- Right: lesson steps + challenges -->
+      <div class="lesson-main">
+
+        <!-- Lesson steps -->
+        <div id="lessonSteps"></div>
+
+        <!-- Challenges section -->
+        <div class="challenges-section" id="challengesSection">
+          <div class="challenges-header">
+            <h2>Challenges <span class="text-muted" id="challengeCount" style="font-size:0.85rem;font-weight:400"></span></h2>
+            <p class="text-muted mt-1" style="font-size:0.85rem">Answer all questions, then click Submit to see your score.</p>
+          </div>
+
+          <div id="challengesList"></div>
+
+          <!-- Submit bar -->
+          <div class="submit-bar" id="submitBar">
+            <button class="btn btn-primary" id="submitBtn" onclick="submitAll()">
+              Submit answers →
+            </button>
+            <span class="text-muted" style="font-size:0.82rem">Pass score: 70%</span>
+          </div>
+
+          <!-- Results panel (shown after grading) -->
+          <div class="card results-panel" id="resultsPanel">
+            <div class="results-score" id="resultsScore">0%</div>
+            <div class="results-label">Score</div>
+            <div class="results-stars" id="resultsStars"></div>
+            <div class="results-message" id="resultsMessage"></div>
+            <div id="resultsDetails"></div>
+            <div class="results-actions" id="resultsActions"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Pass phase_id from Flask into JS
+  const PHASE_ID = {{ phase_id }};
+</script>
+<script src="{{ url_for('static', filename='js/code-runner.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lesson.js') }}"></script>
+{% endblock %}
+

@@ -1,0 +1,229 @@
+{
+  "id": 17,
+  "title": "Functions in Depth",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "As programs grow in complexity, simple functions aren't enough. You need functions that accept any number of inputs (like Python's `print()`), functions you can pass as arguments into sorting algorithms, and functions that call themselves (recursion) to explore trees, filesystems, or nested structures. Mastering advanced function mechanics unlocks true professional Python programming.",
+      "code": "def log_event(event_type, *details, **metadata):\n    print(f\"[{event_type.upper()}] Details: {details} | Metadata: {metadata}\")\n\nlog_event(\"login\", \"IP: 192.168.1.1\", \"User: alex\", status=\"success\")",
+      "output": "[LOGIN] Details: ('IP: 192.168.1.1', 'User: alex') | Metadata: {'status': 'success'}"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "* **Scope**: Variables created inside a function are **local**; they vanish when the function exits. Variables defined at the top level are **global**.\n* **Variable Arguments**:\n  - `*args` collects arbitrary positional arguments into a **tuple**.\n  - `**kwargs` collects arbitrary keyword arguments into a **dictionary**.\n* **First-Class Functions & Lambdas**: Functions are objects in memory. You can store them in variables, pass them into other functions, or write short anonymous functions with `lambda x: x * 2`.\n* **Recursion**: A function that calls itself, requiring a **base case** to stop and prevent infinite call stack overflow.",
+      "code": "# Lambda and sorting\npairs = [(1, \"b\"), (2, \"a\"), (3, \"c\")]\npairs.sort(key=lambda item: item[1])\nprint(\"Sorted by letter:\", pairs)",
+      "output": "Sorted by letter: [(2, 'a'), (1, 'b'), (3, 'c')]"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Scope Resolution (LEGB Rule)**: Python looks for variables in order:\n   - **L**ocal (inside current function)\n   - **E**nclosing (in outer nested function)\n   - **G**lobal (module level)\n   - **B**uilt-in (Python built-ins like `len`, `sum`)\n2. **The Mutable Default Argument Trap**: Default argument expressions are evaluated **once when the function is defined**, NOT every time it is called! If you write `def append_to(item, target=[])`, that same list object in memory is reused across every call!\n   *Fix*: Always use `def append_to(item, target=None): if target is None: target = []`.\n3. **The Call Stack in Recursion**: Each recursive call pushes a new frame onto the system call stack. When the base case is reached, frames resolve and return from newest to oldest.",
+      "code": "# Demonstrating recursion and call stack\ndef countdown(n):\n    if n <= 0:          # Base case\n        return \"Blastoff!\"\n    return f\"{n} \" + countdown(n - 1)  # Recursive step\n\nprint(countdown(3))",
+      "output": "3 2 1 Blastoff!"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore advanced functional patterns:\n\n* **`*args` and `**kwargs` combined**: Forwarding arguments.\n* **Recursive Factorial**: `n! = n * (n - 1)!` with base case `n <= 1`.\n* **Functions as Arguments**: Passing custom transformation functions.\n* **Avoiding `global`**: The `global` keyword allows mutating global state from inside functions, but creates hidden dependencies that make programs buggy and difficult to test. Always prefer passing inputs and returning outputs.",
+      "code": "def factorial(n):\n    if n <= 1:      # Base case\n        return 1\n    return n * factorial(n - 1)  # Recursive call\n\nprint(\"5! =\", factorial(5))\n\ndef apply_twice(func, val):\n    return func(func(val))\n\nprint(\"Applied twice:\", apply_twice(lambda x: x + 10, 5))",
+      "output": "5! = 120\nApplied twice: 25"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **The Mutable Default Argument Trap**:\n```python\ndef add_item(item, lst=[]):  # Dangerous!\n    lst.append(item)\n    return lst\nprint(add_item('a'))  # ['a']\nprint(add_item('b'))  # ['a', 'b'] (Unexpected shared state!)\n```\n*Fix*: Default to `None` and initialize inside: `if lst is None: lst = []`.\n\n2. **Recursion Without Base Case**:\nCalling a recursive function without a reachable base case raises `RecursionError: maximum recursion depth exceeded`.\n\n3. **UnboundLocalError when modifying global**:\nReading a global variable works, but assigning to it inside a function creates a new local variable unless `global` is declared.",
+      "code": "# Safe default argument pattern\ndef safe_add(item, lst=None):\n    if lst is None:\n        lst = []\n    lst.append(item)\n    return lst\n\nprint(safe_add(\"x\"))\nprint(safe_add(\"y\"))",
+      "output": "['x']\n['y']"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use `None` as default for mutable arguments**: Never use `[]`, `{}`, or `set()` as default values.\n2. **Avoid the `global` keyword**: Pass data explicitly via arguments and retrieve results via return values.\n3. **Use lambdas only for short one-liners**: If a lambda exceeds one simple expression, write a standard `def` function.",
+      "code": "# Clean lambda for sorting by dictionary property\nusers = [{\"name\": \"Alice\", \"age\": 30}, {\"name\": \"Bob\", \"age\": 22}]\nusers.sort(key=lambda u: u[\"age\"])\nprint(\"Youngest:\", users[0][\"name\"])",
+      "output": "Youngest: Bob"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Scope (LEGB)**: Local variables take precedence over global variables.\n\u2022 **`*args` and `**kwargs`**: `*args` collects positional tuples; `**kwargs` collects keyword dicts.\n\u2022 **Mutable Defaults**: Never default to `[]` or `{}`; use `None` and initialize inside.\n\u2022 **Lambdas**: `lambda params: expression` for quick inline functions.\n\u2022 **Recursion**: Requires a base case and recursive step; each call adds a stack frame.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this *args function print?",
+      "code": "def add_all(*args):\n    return sum(args)\n\nprint(add_all(1, 2, 3, 4))",
+      "answer": "10",
+      "hint": "*args packages 1, 2, 3, 4 into the tuple (1, 2, 3, 4). What is sum(1, 2, 3, 4)?",
+      "explanation": "*args collects all positional arguments into a tuple (1, 2, 3, 4), whose sum is 10."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this lambda expression print?",
+      "code": "square = lambda x: x ** 2\nprint(square(6))",
+      "answer": "36",
+      "hint": "6 ** 2 = 36.",
+      "explanation": "The lambda takes x=6 and evaluates 6 ** 2 = 36."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the syntax to collect arbitrary keyword arguments into a dictionary.",
+      "template": "def setup(mode, **______):\n    print(options)",
+      "answer": "options",
+      "hint": "Two asterisks ** precede the dictionary parameter name.",
+      "explanation": "`**kwargs` (or `**options`) collects keyword arguments into a dictionary."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this scope code print?",
+      "code": "x = 5\ndef test():\n    x = 10\ntest()\nprint(x)",
+      "answer": "5",
+      "hint": "x = 10 inside test() is a local variable.",
+      "explanation": "Assigning x = 10 creates a local variable inside test(). The outer global x remains 5."
+    },
+    {
+      "id": 5,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is dangerous about this function definition?\n```python\ndef add_user(user, active_users=[]):\n    active_users.append(user)\n    return active_users\n```",
+      "options": [
+        "The default list [] is shared across all function calls, accumulating state",
+        "active_users cannot be appended to",
+        "Default arguments must be strings",
+        "The function raises a SyntaxError"
+      ],
+      "answer": 0,
+      "hint": "Default argument expressions are evaluated only once when the function is defined.",
+      "explanation": "Default arguments are evaluated once at definition time. Reusing a mutable default like `[]` shares the same list object across all calls."
+    },
+    {
+      "id": 6,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this recursive function print?",
+      "code": "def fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\n\nprint(fact(4))",
+      "answer": "24",
+      "hint": "4 * 3 * 2 * 1 = 24.",
+      "explanation": "4 * fact(3) = 4 * 3 * fact(2) = 4 * 3 * 2 * 1 = 24."
+    },
+    {
+      "id": 7,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What exception occurs if a recursive function has no reachable base case?",
+      "options": [
+        "RecursionError",
+        "StackOverflowError",
+        "InfiniteLoopError",
+        "MemoryError"
+      ],
+      "answer": 0,
+      "hint": "In Python, exceeding maximum recursion depth raises this specific error.",
+      "explanation": "Python raises `RecursionError: maximum recursion depth exceeded` when the call stack depth exceeds the limit."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this sorting lambda print?",
+      "code": "words = [\"banana\", \"pie\", \"apple\"]\nwords.sort(key=lambda w: len(w))\nprint(words[0])",
+      "answer": "pie",
+      "hint": "Sorting by len(w) sorts from shortest to longest. Which is shortest?",
+      "explanation": "Lengths are pie (3), apple (5), banana (6). 'pie' is the shortest and becomes index 0."
+    },
+    {
+      "id": 9,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the keyword that tells Python an inside variable refers to module-level scope.",
+      "template": "counter = 0\ndef increment():\n    ______ counter\n    counter += 1",
+      "answer": "global",
+      "hint": "Six-letter scope declaration keyword.",
+      "explanation": "The `global` keyword declares that a variable inside a function refers to the global scope."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this **kwargs inspection print?",
+      "code": "def show_config(**kwargs):\n    return len(kwargs)\n\nprint(show_config(host=\"localhost\", port=8080, debug=True))",
+      "answer": "3",
+      "hint": "Three keyword arguments were passed into **kwargs.",
+      "explanation": "kwargs receives {'host': 'localhost', 'port': 8080, 'debug': True}, which has 3 keys."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly defines a safe function with default argument initialization?",
+      "options": [
+        "1: def append_item(item, lst=None): \\n 2:     if lst is None: \\n 3:         lst = [] \\n 4:     lst.append(item) \\n 5:     return lst",
+        "1: def append_item(item, lst=[]): \\n 2:     lst.append(item) \\n 3:     return lst",
+        "1: lst = [] \\n 2: def append_item(item): \\n 3:     lst.append(item) \\n 4:     return lst",
+        "1: def append_item(item, lst=None): \\n 2:     return lst.append(item)"
+      ],
+      "answer": 0,
+      "hint": "Use lst=None as default, check if lst is None, initialize lst = [], then append and return.",
+      "explanation": "The idiom `lst=None` followed by `if lst is None: lst = []` avoids the shared mutable default argument bug."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Write a recursive function `sum_to(n)` that returns the sum of all numbers from 1 to n.\nBase case: if `n <= 1`, return 1.\nRecursive step: return `n + sum_to(n - 1)`.\nPrint `sum_to(5)`.\nExpected output:\n15",
+      "starter": "# Define recursive function sum_to(n) and print sum_to(5)\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "15"
+        }
+      ],
+      "hints": [
+        "def sum_to(n): if n <= 1: return 1 return n + sum_to(n - 1)",
+        "print(sum_to(5))",
+        "def sum_to(n):\n    if n <= 1:\n        return 1\n    return n + sum_to(n - 1)\nprint(sum_to(5))"
+      ],
+      "explanation": "5 + 4 + 3 + 2 + 1 = 15."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Flexible Order Price Calculator\nDefine `calculate_total(base_price, *discounts, tax_rate=0.08)`:\n1. Start with `current = base_price`.\n2. Subtract each discount in `*discounts` from `current`.\n3. Add tax: `final = current * (1 + tax_rate)`.\n4. Return `round(final, 2)`.\nCall `calculate_total(100, 10, 5, tax_rate=0.10)` and print the result.\nExpected output:\n93.5",
+      "starter": "# Define calculate_total and print result for 100 with discounts 10, 5 and tax_rate 0.10\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "93.5"
+        }
+      ],
+      "hints": [
+        "def calculate_total(base_price, *discounts, tax_rate=0.08):",
+        "current = base_price - sum(discounts); return round(current * (1 + tax_rate), 2)",
+        "def calculate_total(base_price, *discounts, tax_rate=0.08):\n    current = base_price\n    for d in discounts:\n        current -= d\n    return round(current * (1 + tax_rate), 2)\nprint(calculate_total(100, 10, 5, tax_rate=0.10))"
+      ],
+      "explanation": "This mini-task exercises *args for variable discounts, keyword arguments with defaults, loop accumulation, and round()."
+    }
+  ]
+}

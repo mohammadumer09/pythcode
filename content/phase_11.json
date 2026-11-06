@@ -1,0 +1,280 @@
+{
+  "id": 11,
+  "title": "For Loops & range()",
+  "level": "core",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Computers excel at repeating repetitive actions without fatigue or errors. Whether you are calculating the total sales of 10,000 transactions, generating a monthly calendar, or sending personalized welcome notifications to a batch of new users, the `for` loop is your primary tool for iterating over sequences.",
+      "code": "daily_sales = [120, 450, 300, 210]\ntotal = 0\nfor sale in daily_sales:\n    total += sale\nprint(f\"Weekly sales total: ${total}\")",
+      "output": "Weekly sales total: $1080"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **for loop** executes a block of code once for each item in an iterable sequence (such as a list, string, or range of numbers). The loop variable takes on the value of each element in turn from start to finish.\n\nThe `range()` function generates an arithmetic sequence of integers on demand without storing them all in memory. It accepts up to three arguments: `range(start, stop, step)`.",
+      "code": "for i in range(1, 4):\n    print(\"Round\", i)\nfor char in \"AI\":\n    print(\"Letter:\", char)",
+      "output": "Round 1\nRound 2\nRound 3\nLetter: A\nLetter: I"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Iteration Protocol**: When `for item in sequence:` starts, Python requests an iterator from `sequence`. At the start of each cycle, Python fetches the next element and assigns it to `item`.\n2. **The `range()` parameters**:\n   - `range(stop)`: Starts at `0`, counts by `1`, stops at `stop - 1`.\n   - `range(start, stop)`: Starts at `start`, stops at `stop - 1`.\n   - `range(start, stop, step)`: Jumps by `step` (can be negative for counting down).\n3. **Loop Variable Scope**: The loop variable remains accessible in memory after the loop terminates, holding the last visited item.",
+      "code": "for n in range(10, 0, -3):\n    print(n, end=\" \")\nprint()",
+      "output": "10 7 4 1 ",
+      "trace": {
+        "title": "For Loop & Accumulator Tracer",
+        "code": "total = 0\nfor n in range(1, 4):\n    total += n\nfinal = total",
+        "steps": [
+          {
+            "line": 1,
+            "vars": {"total": 0},
+            "note": "Line 1: Accumulator 'total' initialized to 0."
+          },
+          {
+            "line": 2,
+            "vars": {"total": 0, "n": 1},
+            "note": "Line 2: Loop starts. range(1, 4) yields first item 1, bound to 'n'."
+          },
+          {
+            "line": 3,
+            "vars": {"total": 1, "n": 1},
+            "note": "Line 3: total += 1 (0 + 1 = 1)."
+          },
+          {
+            "line": 2,
+            "vars": {"total": 1, "n": 2},
+            "note": "Line 2: Next iteration. range(1, 4) yields 2, bound to 'n'."
+          },
+          {
+            "line": 3,
+            "vars": {"total": 3, "n": 2},
+            "note": "Line 3: total += 2 (1 + 2 = 3)."
+          },
+          {
+            "line": 2,
+            "vars": {"total": 3, "n": 3},
+            "note": "Line 2: Final iteration. range(1, 4) yields 3, bound to 'n'."
+          },
+          {
+            "line": 3,
+            "vars": {"total": 6, "n": 3},
+            "note": "Line 3: total += 3 (3 + 3 = 6)."
+          },
+          {
+            "line": 4,
+            "vars": {"total": 6, "n": 3, "final": 6},
+            "note": "Line 4: Loop exhausted. 'final' assigned 6. Notice loop variable 'n' retains value 3."
+          }
+        ]
+      }
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore common loop techniques:\n\n* **`enumerate()`**: When you need both the index and value, use `for idx, val in enumerate(items):` instead of manual indexing.\n* **The Accumulator Pattern**: Start with a running tracker (e.g. `total = 0` or `count = 0`), and update it inside the loop.\n* **Nested Loops**: A loop inside another loop (e.g., coordinates, grids).\n* **Looping Backwards**: `for i in range(5, 0, -1):` counts down from 5 to 1.",
+      "code": "fruits = [\"apple\", \"banana\", \"pear\"]\nfor i, fruit in enumerate(fruits, start=1):\n    print(f\"{i}. {fruit}\")\n\n# Nested loop grid\nfor row in range(2):\n    for col in range(2):\n        print(f\"({row},{col})\", end=\" \")\nprint()",
+      "output": "1. apple\n2. banana\n3. pear\n(0,0) (0,1) (1,0) (1,1) "
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **The Off-By-One Error**:\n`range(1, 5)` generates `1, 2, 3, 4` \u2014 it stops **before** 5! If you need 1 through 5, write `range(1, 6)`.\n\n2. **Modifying a list while looping over it**:\nDeleting or adding items to a list while looping over it skips elements or corrupts iteration. Loop over a copy instead: `for item in items.copy():`.\n\n3. **Reusing the loop variable name** in nested loops:\n```python\nfor i in range(3):\n    for i in range(3):  # Overwrites outer i!\n```\nAlways use distinct names like `row` and `col` or `i` and `j`.\n\n4. **Forgetting to initialize accumulators**:\nWriting `total += x` without `total = 0` first raises `NameError: name 'total' is not defined`.",
+      "code": "# Correct accumulator initialization\nnumbers = [5, 10, 15]\ntotal = 0\nfor num in numbers:\n    total += num\nprint(\"Sum:\", total)",
+      "output": "Sum: 30"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Loop directly over elements**: Write `for item in items:` rather than `for i in range(len(items)):`.\n2. **Use `enumerate()` for indices**: Whenever you need the counter, use `for idx, item in enumerate(items):`.\n3. **Use built-in functions where possible**: If all you need is a sum, length, or max, prefer `sum(nums)`, `len(nums)`, and `max(nums)` over manual loops.",
+      "code": "words = [\"learn\", \"python\", \"now\"]\nfor idx, word in enumerate(words):\n    print(f\"{idx}: {word}\")",
+      "output": "0: learn\n1: python\n2: now"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Iteration**: `for item in seq:` steps through elements in order.\n\u2022 **`range(start, stop, step)`**: Stop is excluded (off-by-one check).\n\u2022 **`enumerate(seq)`**: Yields `(index, item)` pairs cleanly.\n\u2022 **Accumulator**: Initialize accumulator variable before loop, update inside.\n\u2022 **Nested Loops**: Inner loop finishes completely for every step of outer loop.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this range loop print?",
+      "code": "for i in range(3):\n    print(i, end=\" \")",
+      "answer": "0 1 2",
+      "hint": "range(3) starts at 0 and produces 3 numbers (stops before 3).",
+      "explanation": "range(3) produces 0, 1, and 2. With end=\" \", output is '0 1 2 ' (trimmed to '0 1 2')."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What numbers are generated by `range(2, 6)`?",
+      "options": [
+        "2, 3, 4, 5",
+        "2, 3, 4, 5, 6",
+        "1, 2, 3, 4, 5",
+        "2, 4, 6"
+      ],
+      "answer": 0,
+      "hint": "It starts at 2 and stops before 6.",
+      "explanation": "range(2, 6) starts at 2 and stops at 6 - 1 = 5, producing 2, 3, 4, 5."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this string loop print?",
+      "code": "count = 0\nfor char in \"cat\":\n    count += 1\nprint(count)",
+      "answer": "3",
+      "hint": "'cat' has 3 characters. How many iterations happen?",
+      "explanation": "The loop runs once for each character in 'cat' (3 times), so count becomes 3."
+    },
+    {
+      "id": 4,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword that iterates through the sequence.",
+      "template": "___ x in [1, 2, 3]:\n    print(x)",
+      "answer": "for",
+      "hint": "Three-letter keyword for definite loops.",
+      "explanation": "The `for` keyword introduces a for loop in Python."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this step range loop print?",
+      "code": "total = 0\nfor n in range(1, 10, 3):\n    total += n\nprint(total)",
+      "answer": "12",
+      "hint": "The numbers generated are 1, 4, 7 (10 is excluded). What is 1 + 4 + 7?",
+      "explanation": "range(1, 10, 3) yields 1, 4, 7. Their sum is 1 + 4 + 7 = 12."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the built-in function that yields both the index and the item during iteration.",
+      "template": "items = [\"a\", \"b\"]\nfor i, val in _________(items):\n    print(i, val)",
+      "answer": "enumerate",
+      "hint": "Built-in function starting with 'enum'.",
+      "explanation": "The `enumerate()` function pairs each item with its numerical index."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this countdown loop print?",
+      "code": "for i in range(3, 0, -1):\n    print(i, end=\"\")",
+      "answer": "321",
+      "hint": "Starts at 3, steps down by 1, stops before 0.",
+      "explanation": "range(3, 0, -1) steps backwards from 3 down to 1, printing '321'."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "A developer wants to print numbers 1 through 5 inclusive, but wrote:\n```python\nfor i in range(1, 5):\n    print(i)\n```\nWhy does it stop at 4?",
+      "options": [
+        "The stop argument in range() is non-inclusive (stops before stop)",
+        "range() always stops at 4 by default",
+        "print() terminates range early",
+        "The start value must be 0"
+      ],
+      "answer": 0,
+      "hint": "Remember the off-by-one rule of range(start, stop).",
+      "explanation": "range(1, 5) stops at 5 - 1 = 4. To include 5, use range(1, 6)."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this nested loop output?",
+      "code": "count = 0\nfor i in range(2):\n    for j in range(3):\n        count += 1\nprint(count)",
+      "answer": "6",
+      "hint": "Outer loop runs 2 times; inner loop runs 3 times for each outer pass.",
+      "explanation": "The inner loop executes 2 * 3 = 6 times in total, incrementing count to 6."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which sequence correctly implements the accumulator pattern to calculate the product of numbers `[2, 3, 4]`?",
+      "options": [
+        "1: product = 1 \\n 2: for n in [2, 3, 4]: \\n 3:     product *= n \\n 4: print(product)",
+        "1: for n in [2, 3, 4]: \\n 2:     product = 1 \\n 3:     product *= n \\n 4: print(product)",
+        "1: product = 0 \\n 2: for n in [2, 3, 4]: \\n 3:     product *= n \\n 4: print(product)",
+        "1: product = 1 \\n 2: print(product) \\n 3: for n in [2, 3, 4]: product *= n"
+      ],
+      "answer": 0,
+      "hint": "Initialize product = 1 outside the loop, multiply inside, then print.",
+      "explanation": "Product must be initialized to 1 before the loop. Initializing to 0 would yield 0, and initializing inside the loop would reset it every iteration."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "error",
+      "question": "What error occurs if you run this code?\n```python\nfor n in [10, 20]:\n    total += n\n```",
+      "options": [
+        "NameError",
+        "TypeError",
+        "ValueError",
+        "IndexError"
+      ],
+      "answer": 0,
+      "hint": "Notice that variable 'total' was never defined before the += operation.",
+      "explanation": "Referencing `total` before creating it raises `NameError: name 'total' is not defined`."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Write a loop to sum all even numbers between 1 and 10 (inclusive): 2, 4, 6, 8, 10. Print the sum.\nExpected output:\n30",
+      "starter": "total = 0\n# Use a for loop with range() to sum even numbers 2 to 10 inclusive, then print total\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "30"
+        }
+      ],
+      "hints": [
+        "Use range(2, 11, 2) to step by 2 through 10.",
+        "Inside the loop: total += num",
+        "total = 0\nfor num in range(2, 11, 2):\n    total += num\nprint(total)"
+      ],
+      "explanation": "range(2, 11, 2) generates 2, 4, 6, 8, 10. Their sum is 30."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Word Character Frequency Counter\nGiven `text = 'mississippi'`:\n1. Use a for loop to count how many times the letter `'s'` appears.\n2. Also count how many times the letter `'i'` appears.\n3. Print the results in the format: `s: {s_count} | i: {i_count}`\nExpected output:\ns: 4 | i: 4",
+      "starter": "text = \"mississippi\"\ns_count = 0\ni_count = 0\n# Loop over characters in text and count 's' and 'i', then print formatted result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "s: 4 | i: 4"
+        }
+      ],
+      "hints": [
+        "Loop through text with 'for ch in text:'",
+        "Use 'if ch == 's': s_count += 1' and 'elif ch == 'i': i_count += 1'",
+        "print(f\"s: {s_count} | i: {i_count}\")"
+      ],
+      "explanation": "This mini-task brings together for-loop sequence iteration, accumulator variables, conditional checks, and formatted string output."
+    }
+  ]
+}

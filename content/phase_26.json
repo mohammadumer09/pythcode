@@ -1,0 +1,243 @@
+{
+  "id": 26,
+  "title": "Debugging Like a Pro",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "Every programmer writes bugs. In fact, professional software engineers spend over 50% of their time finding and fixing defects. What separates novice programmers from senior engineers is not writing bug-free code on the first try \u2014 it is having a structured, scientific method for tracking down bugs fast rather than randomly guessing.",
+      "code": "# Strategic f-string debugging\nx = 10\ny = 25\nprint(f\"{x=}, {y=}, {x+y=}\")",
+      "output": "x=10, y=25, x+y=35"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "Bugs fall into three broad categories:\n1. **Syntax Errors**: Invalid Python grammar caught before execution starts.\n2. **Runtime Errors (Exceptions)**: Crashes during execution (`IndexError`, `ZeroDivisionError`).\n3. **Logic Errors**: Code runs without errors, but produces the wrong answer!\n\nThe **4-Step Debugging Method**:\n1. **Reproduce**: Make the bug happen consistently with minimal input.\n2. **Isolate**: Narrow down the exact file and line where reality diverges from expectation.\n3. **Hypothesize**: Form a specific theory of *why* the bug occurs.\n4. **Test & Verify**: Apply the fix and verify that both the bug and all existing tests pass.",
+      "code": "def calculate_discount(price, is_vip):\n    # Common logic bug: VIPs get 20%, others get 10%\n    rate = 0.20 if is_vip else 0.10\n    return price * (1 - rate)\n\nprint(\"VIP price for $100:\", calculate_discount(100, True))",
+      "output": "VIP price for $100: 80.0"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Reading Tracebacks**: Tracebacks print in chronological call order. The **last line** gives the exception type and reason. The second-to-last lines point to the **exact file path and line number** in your code where execution stopped.\n2. **F-string Debug Syntax (`f'{var=}'`)**: Introduced in Python 3.8, adding `=` after an expression in an f-string automatically prints both the variable name and its value (e.g. `f\"{user_id=}\"` prints `user_id=42`).\n3. **Defensive Assertions**: `assert condition, 'explanation'` acts as a self-checking tripwire. If condition is `False`, Python immediately halts with an `AssertionError`.",
+      "code": "def process_batch(items):\n    assert len(items) > 0, \"Batch cannot be empty!\"\n    return f\"Processed {len(items)} items\"\n\nprint(process_batch([1, 2, 3]))",
+      "output": "Processed 3 items"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore practical debugging techniques:\n\n* **Off-by-One Debugging**: Printing loop boundaries before and during iteration.\n* **Type Inspection**: Using `type(x)` to find unexpected `None` or string types.\n* **Tracking State Progression**: Printing variable state before and after critical mutations.\n* **Binary Search Debugging (Bisection)**: In a 100-line function, place a print statement in the middle to determine which half contains the bug.",
+      "code": "def find_average(nums):\n    print(f\"DEBUG: Received {nums=}, type={type(nums)}\")\n    if not nums:\n        return 0\n    return sum(nums) / len(nums)\n\nprint(\"Average:\", find_average([10, 20, 30]))",
+      "output": "DEBUG: Received nums=[10, 20, 30], type=<class 'list'>\nAverage: 20.0"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Changing 5 things at once**:\nChanging multiple variables and functions simultaneously makes it impossible to know which change resolved the problem or introduced new defects. Change one variable at a time.\n\n2. **Ignoring the traceback line numbers**:\nSkipping the traceback and guessing lines wastes hours. Look directly at the line number reported in your source file.\n\n3. **Leaving debug prints in production code**:\nForgetting `print(x)` statements clutters console logs and can leak sensitive information.",
+      "code": "# Clean isolated verification\ndef safe_get(d, key):\n    # Defensive check avoids KeyError\n    return d.get(key, \"N/A\")\n\nprint(safe_get({\"name\": \"Kim\"}, \"role\"))",
+      "output": "N/A"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Use `f\"{var=}\"` for fast print debugging**: It saves typing and avoids ambiguous log outputs.\n2. **Write reproducible test cases**: Before fixing a bug, write a small script that reproduces the defect.\n3. **Use assertions to enforce invariants**: Test function inputs and assumptions with `assert`.",
+      "code": "x = 42\nprint(f\"{x=}\")  # Clean f-string debug syntax",
+      "output": "x=42"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **3 Bug Types**: Syntax (grammar), Runtime (crash/exception), Logic (wrong result).\n\u2022 **Traceback Reading**: Read from bottom to top; find the last line mentioning your file.\n\u2022 **4-Step Process**: Reproduce -> Isolate -> Hypothesize -> Verify.\n\u2022 **`f'{x=}'`**: Automatically prints variable name and value for quick debugging.\n\u2022 **Defensive `assert`**: Catch unexpected state before it propagates.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "When an unhandled exception occurs in Python, where in the traceback is the actual error name and reason displayed?",
+      "options": [
+        "On the very last line",
+        "On the first line",
+        "In the exact middle",
+        "In an external log file only"
+      ],
+      "answer": 0,
+      "hint": "Python prints the call stack top-to-bottom, ending with the exception.",
+      "explanation": "Python tracebacks conclude with the exact exception type and error description on the final line."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What does Python 3.8+ f-string debug syntax `f'{val=}'` output when `val = 10`?",
+      "answer": "val=10",
+      "hint": "The = prints the variable name, an equal sign, and the value.",
+      "explanation": "f'{val=}' outputs 'val=10'."
+    },
+    {
+      "id": 3,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What kind of bug occurs when code runs without crashing but produces the wrong answer?",
+      "options": [
+        "Logic error",
+        "Syntax error",
+        "Runtime error",
+        "Indentation error"
+      ],
+      "answer": 0,
+      "hint": "The syntax is valid and no exception is thrown, but the logic is flawed.",
+      "explanation": "A logic error occurs when program logic is flawed, leading to incorrect calculations or outputs without raising exceptions."
+    },
+    {
+      "id": 4,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword that tests an internal condition and raises AssertionError if False.",
+      "template": "______ score >= 0, \"Score cannot be negative\"",
+      "answer": "assert",
+      "hint": "Six-letter debugging keyword.",
+      "explanation": "The `assert` statement tests an assumption and raises AssertionError if false."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this debug check print?",
+      "code": "a = 5\nb = 3\nprint(f\"{a + b=}\")",
+      "answer": "a + b=8",
+      "hint": "The expression 'a + b' is printed followed by '=' and its result 8.",
+      "explanation": "f'{a + b=}' evaluates the expression and displays 'a + b=8'."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the bug in this averaging function?\n```python\ndef average(nums):\n    total = sum(nums)\n    return total / len(nums)\n```",
+      "options": [
+        "It raises ZeroDivisionError if nums is empty ([])",
+        "sum() cannot sum lists",
+        "len() only works on strings",
+        "total must be a float"
+      ],
+      "answer": 0,
+      "hint": "What is len([])?",
+      "explanation": "If `nums` is empty, `len(nums)` is 0, raising `ZeroDivisionError: division by zero`."
+    },
+    {
+      "id": 7,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What exception does `assert 1 == 2, 'Mismatch'` raise?",
+      "options": [
+        "AssertionError",
+        "ValueError",
+        "TypeError",
+        "RuntimeError"
+      ],
+      "answer": 0,
+      "hint": "The keyword assert raises this specific exception.",
+      "explanation": "A failing assert statement raises `AssertionError`."
+    },
+    {
+      "id": 8,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the first step in the 4-step debugging method: Reproduce, ________, Hypothesize, Verify.",
+      "template": "Step 2 is to ________ the bug to the specific line or component.",
+      "answer": "Isolate",
+      "hint": "Seven letters, meaning to separate or narrow down.",
+      "explanation": "The 4-step method is: Reproduce -> Isolate -> Hypothesize -> Verify."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this defensive function return for an empty list?",
+      "code": "def safe_first(items):\n    if not items:\n        return None\n    return items[0]\n\nprint(safe_first([]))",
+      "answer": "None",
+      "hint": "not items evaluates to True when items is [].",
+      "explanation": "The guard clause intercepts empty lists, returning None instead of raising IndexError."
+    },
+    {
+      "id": 10,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "When debugging by bisection (binary search debugging), what do you do?",
+      "options": [
+        "Place a print statement halfway through the code to test which half contains the defect",
+        "Delete half your code and rewrite it",
+        "Run two debuggers at the same time",
+        "Double the number of variables"
+      ],
+      "answer": 0,
+      "hint": "Dividing the problem space in half on each step.",
+      "explanation": "Bisection debugging checks the state midway through execution, immediately cutting the search area for the bug in half."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "What is the correct sequence of the 4-step debugging methodology?",
+      "options": [
+        "1: Reproduce bug consistently \\n 2: Isolate the failing component \\n 3: Hypothesize the root cause \\n 4: Test & verify the fix",
+        "1: Test & verify fix \\n 2: Reproduce bug \\n 3: Guess cause \\n 4: Isolate",
+        "1: Hypothesize \\n 2: Reproduce \\n 3: Delete code \\n 4: Verify",
+        "1: Isolate \\n 2: Test fix \\n 3: Reproduce \\n 4: Hypothesize"
+      ],
+      "answer": 0,
+      "hint": "You must reproduce first before you can isolate and hypothesize.",
+      "explanation": "The professional debugging order is: Reproduce -> Isolate -> Hypothesize -> Verify."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "find_bug",
+      "question": "Find and fix the bug: The function is supposed to return the last element of `items`, but currently raises `IndexError` on non-empty lists due to an off-by-one error.",
+      "starter": "def get_last(items):\n    # Buggy: items[len(items)]\n    return items[len(items) - 1]\n\nprint(get_last([10, 20, 30]))\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "30"
+        }
+      ],
+      "hints": [
+        "Remember indices go from 0 to len - 1, or use items[-1].",
+        "return items[-1]",
+        "def get_last(items):\n    return items[-1]\nprint(get_last([10, 20, 30]))"
+      ],
+      "explanation": "Using items[-1] or items[len(items) - 1] correctly accesses the final element without IndexError."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Defensive Calculator with Validation\nWrite a function `safe_divide(a, b)`:\n1. If `not isinstance(a, (int, float))` or `not isinstance(b, (int, float))`: return `'Invalid type'`.\n2. If `b == 0`: return `'Cannot divide by zero'`.\n3. Return `round(a / b, 2)`.\nTest with `safe_divide(10, 3)` and print the result.\nExpected output:\n3.33",
+      "starter": "# Define safe_divide(a, b) and test with safe_divide(10, 3)\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "3.33"
+        }
+      ],
+      "hints": [
+        "Check types first with isinstance.",
+        "Check for b == 0 to prevent ZeroDivisionError.",
+        "def safe_divide(a, b):\n    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):\n        return 'Invalid type'\n    if b == 0:\n        return 'Cannot divide by zero'\n    return round(a / b, 2)\nprint(safe_divide(10, 3))"
+      ],
+      "explanation": "This mini-task brings together defensive programming, type validation, zero-division prevention, and clean mathematical rounding."
+    }
+  ]
+}

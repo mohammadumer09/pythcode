@@ -1,0 +1,234 @@
+{
+  "id": 28,
+  "title": "Decorators & Generators",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "How do web frameworks like Flask check if a user is logged in before opening every route? They don't copy-paste auth code into 50 functions \u2014 they use a **decorator** like `@login_required`. And how do big-data programs process a 10 GB file without crashing RAM? They use a **generator** that yields one line at a time. These two advanced tools give Python its elegance and power.",
+      "code": "def announce(func):\n    def wrapper():\n        print(\">> Before function runs\")\n        func()\n        print(\">> After function finishes\")\n    return wrapper\n\n@announce\ndef greet():\n    print(\"Hello world!\")\n\ngreet()",
+      "output": ">> Before function runs\nHello world!\n>> After function finishes"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "* **Decorator**: A function that takes another function as input, wraps it with extra behavior (like logging or timing), and returns the enhanced wrapper function. The `@my_decorator` syntax is shorthand for `greet = my_decorator(greet)`.\n* **Generator**: A function that uses `yield` instead of `return`. When called, it doesn't execute immediately; it returns an iterator that pauses at each `yield` and resumes on demand.",
+      "code": "# Generator function with yield\ndef count_down(start):\n    while start > 0:\n        yield start\n        start -= 1\n\nfor n in count_down(3):\n    print(n, end=\" \")\nprint()",
+      "output": "3 2 1 "
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Decorator Wrapping**: Decorator functions execute at definition time when Python loads the script. When Python sees `@log`, it evaluates `func = log(func)`.\n2. **Closures**: The inner wrapper retains access to variables from the outer decorator function even after the outer function has finished executing.\n3. **Generators & Stack State**: Normal functions delete their stack frame on `return`. A generator function preserves its local variables and instruction pointer in memory at `yield`, waiting for the next call to `next()`.",
+      "code": "def simple_gen():\n    yield \"First\"\n    yield \"Second\"\n\ng = simple_gen()\nprint(next(g))\nprint(next(g))",
+      "output": "First\nSecond"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore decorators and generator expressions:\n\n* **Decorator accepting arguments with `*args, **kwargs`**: Allows wrapping any function regardless of parameter count.\n* **Generator Expressions**: `(x ** 2 for x in range(10))` uses round parentheses and yields values lazily, using virtually zero memory compared to a list comprehension.\n* **Timer Decorator**: Measuring function execution time.",
+      "code": "def trace(func):\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__} with {args}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@trace\ndef add(a, b):\n    return a + b\n\nprint(\"Result:\", add(3, 4))",
+      "output": "Calling add with (3, 4)\nResult: 7"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Forgetting to return the inner wrapper** in a decorator:\n```python\ndef bad_dec(func):\n    def wrapper():\n        func()\n    # Forgot return wrapper! Decorator returns None!\n```\n*Fix*: Always end the decorator with `return wrapper`.\n\n2. **Forgetting to return the function's result inside wrapper**:\nIf `wrapper` runs `func()` but doesn't `return func()`, the decorated function returns `None`.\n\n3. **Confusing list comprehension with generator expression**:\n`[x for x in r]` builds the entire list in memory immediately. `(x for x in r)` computes values on demand.",
+      "code": "# Proper wrapper return pattern\ndef double_result(func):\n    def wrapper(*args, **kwargs):\n        res = func(*args, **kwargs)\n        return res * 2\n    return wrapper\n\n@double_result\ndef get_val():\n    return 21\nprint(\"Doubled:\", get_val())",
+      "output": "Doubled: 42"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Always use `*args, **kwargs` in wrappers**: Ensures your decorator works with functions having any number of parameters.\n2. **Use `functools.wraps`**: Preserves original function name and docstrings in production.\n3. **Use generators for large or infinite datasets**: Never read a 5 GB log file into memory with `f.readlines()`; yield line by line.",
+      "code": "import functools\ndef clean_dec(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper",
+      "output": ""
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **Decorator**: Wraps a function with extra behavior: `@dec` means `f = dec(f)`.\n\u2022 **Wrapper pattern**: Define inner wrapper accepting `*args, **kwargs`, return result, return wrapper.\n\u2022 **`yield`**: Pauses function execution and produces next value without exiting.\n\u2022 **Generators**: Evaluate lazily, saving massive memory on large sequences.\n\u2022 **Gen expression**: `(expr for x in seq)` creates a lazy generator.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What does the `@my_decorator` syntax above a function definition do?",
+      "options": [
+        "Passes the function to my_decorator and rebinds it to the returned wrapper",
+        "Deletes the function from memory",
+        "Runs the function in a background thread",
+        "Makes the function private"
+      ],
+      "answer": 0,
+      "hint": "It is syntactic sugar for func = my_decorator(func).",
+      "explanation": "`@decorator` passes the decorated function into the decorator and replaces it with the returned callable."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this generator function print?",
+      "code": "def gen():\n    yield \"Hello\"\n    yield \"World\"\ng = gen()\nprint(next(g))",
+      "answer": "Hello",
+      "hint": "next() advances the generator to its first yield.",
+      "explanation": "Calling next(g) executes up to the first yield statement ('Hello')."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the keyword that turns a function into a generator.",
+      "template": "def count():\n    _____ 1",
+      "answer": "yield",
+      "hint": "Five-letter keyword.",
+      "explanation": "`yield` pauses the function and emits a value to the caller."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this generator loop print?",
+      "code": "def evens():\n    yield 2\n    yield 4\nprint(list(evens()))",
+      "answer": "[2, 4]",
+      "hint": "list() consumes all yielded values into a list.",
+      "explanation": "list(evens()) iterates through both yields, producing [2, 4]."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this simple decorator print?",
+      "code": "def emphasize(func):\n    def wrapper():\n        return func().upper() + \"!\"\n    return wrapper\n\n@emphasize\ndef greet():\n    return \"welcome\"\n\nprint(greet())",
+      "answer": "WELCOME!",
+      "hint": "'welcome'.upper() + '!'",
+      "explanation": "The wrapper converts 'welcome' to uppercase and adds '!', resulting in 'WELCOME!'."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "What is the bug in this decorator?\n```python\ndef log(func):\n    def wrapper():\n        print('Running')\n        func()\n```",
+      "options": [
+        "log() forgot to return wrapper, so the decorated function becomes None",
+        "func cannot be called inside wrapper",
+        "print cannot be used in decorators",
+        "wrapper cannot have 0 arguments"
+      ],
+      "answer": 0,
+      "hint": "A decorator must return the wrapper function.",
+      "explanation": "Without `return wrapper`, the decorator implicitly returns None, destroying the decorated function."
+    },
+    {
+      "id": 7,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the built-in function to advance an iterator to its next value.",
+      "template": "g = (x for x in [10, 20])\nfirst = ____(g)  # 10",
+      "answer": "next",
+      "hint": "Four-letter built-in function.",
+      "explanation": "`next(iterator)` retrieves the next item from an iterator."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What is the type of `(x * 2 for x in range(5))`?",
+      "code": "g = (x * 2 for x in range(5))\nprint(type(g).__name__)",
+      "answer": "generator",
+      "hint": "Parentheses instead of brackets create this lazy object.",
+      "explanation": "Parenthesized comprehensions create a generator expression."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What exception is raised when calling `next()` on an exhausted generator?",
+      "options": [
+        "StopIteration",
+        "IndexError",
+        "GeneratorExit",
+        "ValueError"
+      ],
+      "answer": 0,
+      "hint": "Signifies that the iteration has finished.",
+      "explanation": "When a generator has no more yields, `next()` raises `StopIteration`."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this decorator with arguments print?",
+      "code": "def add_ten(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs) + 10\n    return wrapper\n\n@add_ten\ndef multiply(a, b):\n    return a * b\n\nprint(multiply(3, 4))",
+      "answer": "22",
+      "hint": "3 * 4 = 12. 12 + 10 = 22.",
+      "explanation": "multiply(3, 4) calculates 12, and the wrapper adds 10 = 22."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly defines and applies a decorator?",
+      "options": [
+        "1: def dec(func): def wrap(): return func() + 1; return wrap \\n 2: @dec \\n 3: def get(): return 5",
+        "1: @dec \\n 2: def dec(func): pass \\n 3: def get(): pass",
+        "1: def get(): return 5 \\n 2: @dec \\n 3: def dec(func): pass",
+        "1: def dec(func): return func \\n 2: def get(): return 5 \\n 3: @dec"
+      ],
+      "answer": 0,
+      "hint": "Decorator definition must appear before applying it with @.",
+      "explanation": "The decorator must be defined first before applying it with @dec above a function."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Write a generator function `multiples(n, count)` that yields `n * 1`, `n * 2`, ..., up to `n * count`.\nPrint `list(multiples(3, 4))`.\nExpected output:\n[3, 6, 9, 12]",
+      "starter": "# Define multiples generator and print list(multiples(3, 4))\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "[3, 6, 9, 12]"
+        }
+      ],
+      "hints": [
+        "def multiples(n, count): for i in range(1, count + 1): yield n * i",
+        "print(list(multiples(3, 4)))",
+        "def multiples(n, count):\n    for i in range(1, count + 1):\n        yield n * i\nprint(list(multiples(3, 4)))"
+      ],
+      "explanation": "Yielding n * i produces 3, 6, 9, 12."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Prefix Decorator\nWrite a decorator `add_prefix(func)`:\n- Defines an inner `wrapper(*args, **kwargs)` that calls `func(*args, **kwargs)` and prepends `'INFO: '` to the returned string.\n- Returns `wrapper`.\nApply `@add_prefix` to `def get_status(): return 'Server online'` and print `get_status()`.\nExpected output:\nINFO: Server online",
+      "starter": "# Define add_prefix decorator, apply to get_status(), and print result\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "INFO: Server online"
+        }
+      ],
+      "hints": [
+        "def add_prefix(func):\n    def wrapper(*args, **kwargs):\n        return f\"INFO: {func(*args, **kwargs)}\"\n    return wrapper",
+        "@add_prefix\ndef get_status(): return 'Server online'",
+        "def add_prefix(func):\n    def wrapper(*args, **kwargs):\n        return f\"INFO: {func(*args, **kwargs)}\"\n    return wrapper\n@add_prefix\ndef get_status():\n    return 'Server online'\nprint(get_status())"
+      ],
+      "explanation": "This mini-task exercises defining a decorator, managing wrappers with *args and **kwargs, applying with @ syntax, and formatting output."
+    }
+  ]
+}

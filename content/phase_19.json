@@ -1,0 +1,229 @@
+{
+  "id": 19,
+  "title": "Comprehensions",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "In data processing, you constantly need to transform collections: extracting prices from order items, lowercasing a list of emails, or filtering out expired accounts. Writing a 4-line for loop with an accumulator every time is tedious and repetitive. Python comprehensions provide a concise, readable, and highly optimized syntax to create new lists, dictionaries, and sets in a single expressive line.",
+      "code": "prices = [10, 25, 40, 5]\ndiscounts = [p * 0.9 for p in prices if p >= 20]\nprint(\"Discounted items:\", discounts)",
+      "output": "Discounted items: [22.5, 36.0]"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "A **comprehension** builds a new collection by looping over an iterable, applying an optional filter condition, and evaluating an expression for each item.\n\n* **List comprehension**: `[expr for item in iterable if condition]`\n* **Set comprehension**: `{expr for item in iterable if condition}` (drops duplicates)\n* **Dict comprehension**: `{key_expr: val_expr for item in iterable if condition}`\n\nComprehensions are not just shorter \u2014 they run faster than manual append loops because Python optimizes the loop at the C bytecode level.",
+      "code": "# List comprehension\nsquares = [x ** 2 for x in range(1, 5)]\n# Dict comprehension\nword_lengths = {w: len(w) for w in [\"python\", \"code\"]}\nprint(\"Squares:\", squares)\nprint(\"Lengths:\", word_lengths)",
+      "output": "Squares: [1, 4, 9, 16]\nLengths: {'python': 6, 'code': 4}"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Iteration & Filtering**: When Python evaluates `[x * 2 for x in nums if x > 0]`: \n   - It iterates through `nums` item by item.\n   - For each item, it evaluates the `if` condition. If `False`, the item is skipped.\n   - If `True`, Python evaluates `x * 2` and places the result directly into the pre-allocated result array.\n2. **Conditional Values (if-else)**: If you want to transform values conditionally (instead of filtering them out), place `if-else` **before** the `for`: `[x if x > 0 else 0 for x in nums]`.\n3. **Local Scope**: In Python 3, comprehensions execute in their own isolated scope \u2014 the loop variable does not leak into the surrounding function or module.",
+      "code": "scores = [85, 40, 92, 58]\n# Ternary inside comprehension\nresults = [\"Pass\" if s >= 60 else \"Fail\" for s in scores]\nprint(\"Results:\", results)",
+      "output": "Results: ['Pass', 'Fail', 'Pass', 'Fail']"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Explore different comprehension patterns:\n\n* **Set Comprehension (Deduplication & Transform)**: `{w.lower() for w in ['Python', 'python', 'AI']}` -> `{'python', 'ai'}`.\n* **Dict Inversion**: Invert keys and values: `{v: k for k, v in original.items()}`.\n* **Simple Flattening**: Flatten a 2D list: `[val for row in matrix for val in row]`.\n* **When NOT to use comprehensions**: If your logic requires multiple nested loops, side-effects (like calling `print()`), or exceeds two lines of logic, use a standard `for` loop for readability.",
+      "code": "tags = [\"python\", \"ai\", \"Python\", \"ml\"]\nunique_clean = {t.lower() for t in tags}\nprint(\"Unique tags:\", sorted(unique_clean))\n\nmatrix = [[1, 2], [3, 4]]\nflattened = [num for row in matrix for num in row]\nprint(\"Flattened:\", flattened)",
+      "output": "Unique tags: ['ai', 'ml', 'python']\nFlattened: [1, 2, 3, 4]"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Mixing up filter `if` vs transform `if-else` placement**:\n```python\n# Filtering: if comes AFTER the for\n[x for x in nums if x > 0]\n# Transforming: if-else comes BEFORE the for\n[x if x > 0 else 0 for x in nums]\n```\nWriting `[x for x in nums if x > 0 else 0]` raises a `SyntaxError`.\n\n2. **Using comprehensions solely for side effects**:\n`[print(x) for x in items]` builds a wasteful list of `[None, None, ...]` in memory. Use a normal `for` loop for printing.\n\n3. **Over-nesting comprehensions**:\nDeeply nested 3-level comprehensions are unreadable. Favor readability over cleverness.",
+      "code": "# Correct if-else transformation vs filtering\nnums = [-2, 5, -1, 8]\npositive_only = [x for x in nums if x > 0]\nclamped = [x if x > 0 else 0 for x in nums]\nprint(\"Filtered:\", positive_only)\nprint(\"Clamped:\", clamped)",
+      "output": "Filtered: [5, 8]\nClamped: [0, 5, 0, 8]"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Keep comprehensions short and readable**: If it doesn't fit comfortably on one line or requires more than one `for`, break it into a standard loop.\n2. **Use dictionary comprehensions for lookup tables**: Fast indexing: `{user['id']: user for user in users}`.\n3. **Remember generator expressions for large data**: If you only need to iterate once through millions of items, use parentheses `(x * 2 for x in nums)` to save memory.",
+      "code": "users = [{\"id\": 1, \"name\": \"Ada\"}, {\"id\": 2, \"name\": \"Bob\"}]\nuser_by_id = {u[\"id\"]: u[\"name\"] for u in users}\nprint(\"User 1:\", user_by_id[1])",
+      "output": "User 1: Ada"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **List syntax**: `[expr for item in iterable if condition]`.\n\u2022 **Dict syntax**: `{k: v for item in iterable}`.\n\u2022 **Set syntax**: `{expr for item in iterable}` creates a deduplicated set.\n\u2022 **Filter vs Transform**: Filter `if` goes at the end; transform `if-else` goes before `for`.\n\u2022 **Readability first**: Use for loops if the comprehension becomes complex.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this list comprehension print?",
+      "code": "evens = [x for x in range(6) if x % 2 == 0]\nprint(evens)",
+      "answer": "[0, 2, 4]",
+      "hint": "range(6) gives 0 through 5. Which are divisible by 2?",
+      "explanation": "0, 2, and 4 satisfy x % 2 == 0, producing [0, 2, 4]."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this uppercase comprehension output?",
+      "code": "words = [\"a\", \"b\", \"c\"]\nprint([w.upper() for w in words])",
+      "answer": "['A', 'B', 'C']",
+      "hint": "w.upper() transforms each character to uppercase.",
+      "explanation": "Every word in the list is converted to uppercase, producing ['A', 'B', 'C']."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Complete the dict comprehension mapping numbers 1 to 3 to their cubes.",
+      "template": "cubes = {x: x ** 3 ___ x in range(1, 4)}",
+      "answer": "for",
+      "hint": "The standard iteration keyword used in comprehensions.",
+      "explanation": "The comprehension syntax requires `for` to iterate over the sequence."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this set comprehension print?",
+      "code": "s = {len(w) for w in [\"cat\", \"dog\", \"bird\"]}\nprint(sorted(s))",
+      "answer": "[3, 4]",
+      "hint": "Lengths are 3, 3, and 4. Sets eliminate duplicate lengths.",
+      "explanation": "Lengths are 3, 3, and 4. The set automatically deduplicates to {3, 4}."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this ternary transform comprehension print?",
+      "code": "nums = [10, -5, 20]\nclamped = [x if x > 0 else 0 for x in nums]\nprint(clamped)",
+      "answer": "[10, 0, 20]",
+      "hint": "-5 is not > 0, so it becomes 0.",
+      "explanation": "10 stays 10, -5 becomes 0, and 20 stays 20, resulting in [10, 0, 20]."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you write `[x for x in nums if x > 0 else 0]`?",
+      "options": [
+        "SyntaxError",
+        "ValueError",
+        "TypeError",
+        "IndentationError"
+      ],
+      "answer": 0,
+      "hint": "An else clause cannot appear at the end of a comprehension filter.",
+      "explanation": "When using `if-else` for value transformation, it must precede the `for`. Putting `else` at the end raises a `SyntaxError`."
+    },
+    {
+      "id": 7,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this dictionary comprehension print?",
+      "code": "names = [\"Ada\", \"Bob\"]\nlengths = {name: len(name) for name in names}\nprint(lengths[\"Ada\"])",
+      "answer": "3",
+      "hint": "len('Ada') is 3.",
+      "explanation": "lengths maps 'Ada' to 3 and 'Bob' to 3. lengths['Ada'] is 3."
+    },
+    {
+      "id": 8,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "Why is `[print(x) for x in range(5)]` considered bad practice?",
+      "options": [
+        "It builds an unnecessary list of [None, None, ...] in memory when all you wanted was side effects",
+        "print() cannot be used in comprehensions",
+        "It raises a TypeError",
+        "range(5) cannot be looped over"
+      ],
+      "answer": 0,
+      "hint": "What does print() return?",
+      "explanation": "print() returns None. A comprehension builds a list in memory storing the return values; for side effects, a normal for loop is cleaner and memory-efficient."
+    },
+    {
+      "id": 9,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this 2D flattening comprehension print?",
+      "code": "grid = [[1, 2], [3, 4]]\nflat = [x for row in grid for x in row]\nprint(flat)",
+      "answer": "[1, 2, 3, 4]",
+      "hint": "The comprehension loops over each row, then each x in that row.",
+      "explanation": "The nested loops run left-to-right: outer `for row in grid`, inner `for x in row`, yielding `[1, 2, 3, 4]`."
+    },
+    {
+      "id": 10,
+      "type": "fill",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Fill in the comprehension to filter words whose length is at least 4 characters.",
+      "template": "words = [\"hi\", \"code\", \"py\", \"data\"]\nlong_words = [w for w in words __ len(w) >= 4]",
+      "answer": "if",
+      "hint": "Two-letter filter keyword placed after the iterable.",
+      "explanation": "The `if` condition at the end filters out items that do not meet the criteria."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which comprehension correctly squares only positive numbers from `data = [-2, 3, -1, 4]`?",
+      "options": [
+        "[x ** 2 for x in data if x > 0]",
+        "[x ** 2 if x > 0 for x in data]",
+        "[x in data for x ** 2 if x > 0]",
+        "[x for x in data if x > 0 ** 2]"
+      ],
+      "answer": 0,
+      "hint": "Expression first, then for loop, then if filter.",
+      "explanation": "`[x ** 2 for x in data if x > 0]` squares only positive elements [3, 4], producing [9, 16]."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Given `scores = [45, 88, 72, 95, 60]`, write a single list comprehension to extract all scores >= 70, then print the resulting list.\nExpected output:\n[88, 72, 95]",
+      "starter": "scores = [45, 88, 72, 95, 60]\n# Extract scores >= 70 with a comprehension and print\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "[88, 72, 95]"
+        }
+      ],
+      "hints": [
+        "Use: [s for s in scores if s >= 70]",
+        "Store in a variable or print directly.",
+        "print([s for s in scores if s >= 70])"
+      ],
+      "explanation": "Filtering with `if s >= 70` selects 88, 72, and 95."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Email Cleaner & Indexer\nGiven `raw_emails = ['  ALICE@TEST.COM ', 'bob@test.com', '  CHRIS@TEST.COM ']`:\n1. Use a list comprehension to clean all emails: strip whitespace and lowercase them.\n2. Use a dict comprehension to map each clean email to its username (the part before `'@'`).\n3. Print the dict.\nExpected output:\n{'alice@test.com': 'alice', 'bob@test.com': 'bob', 'chris@test.com': 'chris'}",
+      "starter": "raw_emails = ['  ALICE@TEST.COM ', 'bob@test.com', '  CHRIS@TEST.COM ']\n# 1. Clean emails with list comprehension\n# 2. Build email->username dict with dict comprehension\n# 3. Print the dict\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "{'alice@test.com': 'alice', 'bob@test.com': 'bob', 'chris@test.com': 'chris'}"
+        }
+      ],
+      "hints": [
+        "clean = [e.strip().lower() for e in raw_emails]",
+        "index = {e: e.split('@')[0] for e in clean}",
+        "clean = [e.strip().lower() for e in raw_emails]\nindex = {e: e.split('@')[0] for e in clean}\nprint(index)"
+      ],
+      "explanation": "This mini-task brings together list comprehensions for string cleaning and dict comprehensions for data indexing."
+    }
+  ]
+}

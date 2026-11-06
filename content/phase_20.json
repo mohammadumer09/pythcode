@@ -1,0 +1,239 @@
+{
+  "id": 20,
+  "title": "Error Handling",
+  "level": "intermediate",
+  "estimated_minutes": 15,
+  "pass_score": 70,
+  "lesson": [
+    {
+      "heading": "1. Why This Matters",
+      "text": "In production, anything that can go wrong will go wrong: a user enters \"abc\" into an age field, a remote server drops a network connection, or a required configuration file is deleted. Without error handling, your program crashes with an ugly traceback and halts. With `try...except`, your code intercepts errors gracefully, logs the issue, and keeps running.",
+      "code": "user_input = \"zero\"\ntry:\n    count = int(user_input)\nexcept ValueError:\n    count = 1  # Fallback safe value\nprint(\"Safe count:\", count)",
+      "output": "Safe count: 1"
+    },
+    {
+      "heading": "2. Core Idea",
+      "text": "Python uses **exceptions** to signal errors. You handle exceptions using the `try...except` block:\n- Code that might fail goes inside `try`.\n- If an exception occurs, Python halts execution in `try` and jumps to the matching `except` block.\n- The optional `else` block runs **only if NO exception occurred**.\n- The optional `finally` block runs **every time**, regardless of whether an exception occurred or was caught.",
+      "code": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return \"Cannot divide by zero\"\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))",
+      "output": "5.0\nCannot divide by zero"
+    },
+    {
+      "heading": "3. How Python Runs It",
+      "text": "1. **Reading a Traceback**: Tracebacks are read **from top to bottom**. The top shows where execution began, and the very last line names the specific exception and error description (e.g. `KeyError: 'role'`).\n2. **Catching Specific Errors**: Always name the exact exception: `except (ValueError, TypeError) as e:`. Never use a bare `except:`, which catches everything including system exits and `KeyboardInterrupt` (Ctrl+C).\n3. **Raising Exceptions**: Use `raise ValueError(\"message\")` to deliberately trigger an exception when invalid data enters your functions.\n4. **Assertions**: `assert condition, \"error message\"` tests internal assumptions during development.",
+      "code": "def set_age(age):\n    if age < 0:\n        raise ValueError(\"Age cannot be negative!\")\n    return f\"Age set to {age}\"\n\ntry:\n    print(set_age(-5))\nexcept ValueError as err:\n    print(\"Validation caught:\", err)",
+      "output": "Validation caught: Age cannot be negative!"
+    },
+    {
+      "heading": "4. More Examples",
+      "text": "Common Python exceptions and patterns:\n\n* `ValueError`: Correct type, invalid value (`int('abc')`).\n* `TypeError`: Operation on wrong type (`'a' + 5`).\n* `IndexError`: Sequence index out of range (`[1][5]`).\n* `KeyError`: Dictionary key not found (`{}[key]`).\n* `ZeroDivisionError`: Division by zero (`5 / 0`).\n* `FileNotFoundError`: Missing file during `open()`.\n* `try...except...else...finally`: The complete lifecycle.",
+      "code": "try:\n    val = int(\"42\")\nexcept ValueError:\n    print(\"Conversion failed\")\nelse:\n    print(\"Success! Value is:\", val)\nfinally:\n    print(\"Cleanup complete\")",
+      "output": "Success! Value is: 42\nCleanup complete"
+    },
+    {
+      "heading": "5. Common Mistakes",
+      "text": "1. **Bare `except:` catch-all**:\n```python\ntry:\n    do_work()\nexcept:  # Dangerous! Catches system exits, typos, and memory errors!\n    pass\n```\n*Fix*: Catch specific exceptions: `except (ValueError, KeyError):`.\n\n2. **Catching exceptions you can't handle**:\nDon't catch errors just to silence them. If you cannot fix or log the issue, let it bubble up.\n\n3. **Assuming `finally` can be skipped by `return`**:\nEven if you `return` inside `try` or `except`, Python will **still execute the `finally` block before exiting**!",
+      "code": "def check_finally():\n    try:\n        return \"Returning from try\"\n    finally:\n        print(\"Finally always runs!\")\n\nmsg = check_finally()\nprint(msg)",
+      "output": "Finally always runs!\nReturning from try"
+    },
+    {
+      "heading": "6. Best Practices",
+      "text": "1. **Keep `try` blocks narrow**: Only wrap the specific lines that might fail, not entire 50-line functions.\n2. **EAFP (Easier to Ask for Forgiveness than Permission)**: In Python, attempting an operation in `try...except` is idiomatic and often faster than pre-checking with 5 `if` statements.\n3. **Provide helpful custom error messages**: When using `raise`, explain clearly what failed and what was expected.",
+      "code": "config = {\"timeout\": \"30\"}\ntry:\n    timeout = int(config[\"timeout\"])\nexcept (KeyError, ValueError):\n    timeout = 10  # Sensible fallback\nprint(\"Timeout:\", timeout)",
+      "output": "Timeout: 30"
+    },
+    {
+      "heading": "7. Quick Summary",
+      "text": "\u2022 **`try...except`**: Intercepts runtime errors without crashing.\n\u2022 **Common Errors**: `ValueError`, `TypeError`, `KeyError`, `IndexError`, `ZeroDivisionError`.\n\u2022 **`else`**: Runs only when `try` succeeds without error.\n\u2022 **`finally`**: Always runs (for closing files, network connections, cleanup).\n\u2022 **`raise`**: Triggers an exception with a custom message.",
+      "code": null,
+      "output": null
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What exception does `int('hello')` raise?",
+      "options": [
+        "ValueError",
+        "TypeError",
+        "SyntaxError",
+        "NameError"
+      ],
+      "answer": 0,
+      "hint": "The type (string) is acceptable to int(), but the content is invalid.",
+      "explanation": "int() accepts strings, but 'hello' cannot be parsed as a base-10 number, raising a ValueError."
+    },
+    {
+      "id": 2,
+      "type": "predict",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "What will this error-handling code print?",
+      "code": "try:\n    res = 10 / 0\nexcept ZeroDivisionError:\n    res = 0\nprint(res)",
+      "answer": "0",
+      "hint": "10 / 0 raises ZeroDivisionError, which is caught and sets res = 0.",
+      "explanation": "The ZeroDivisionError is caught by the except block, setting res to 0."
+    },
+    {
+      "id": 3,
+      "type": "fill",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Fill in the block keyword that runs cleanup code whether an exception occurred or not.",
+      "template": "try:\n    process()\n______:\n    close_connection()",
+      "answer": "finally",
+      "hint": "Seven-letter keyword meaning 'at the end'.",
+      "explanation": "The `finally` block always executes regardless of exceptions."
+    },
+    {
+      "id": 4,
+      "type": "mcq",
+      "difficulty": "easy",
+      "subtype": "regular",
+      "question": "Which block executes ONLY if the code inside `try` succeeds with no exceptions?",
+      "options": [
+        "else",
+        "finally",
+        "except",
+        "catch"
+      ],
+      "answer": 0,
+      "hint": "The else block in a try-statement runs when no exception was raised.",
+      "explanation": "The `else` block runs only if the `try` block ran to completion without raising an exception."
+    },
+    {
+      "id": 5,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What will this code print?",
+      "code": "try:\n    val = int(\"25\")\nexcept ValueError:\n    print(\"Error\")\nelse:\n    print(\"Success\")",
+      "answer": "Success",
+      "hint": "int('25') succeeds without raising an error.",
+      "explanation": "Because no error occurred in try, the `else` block runs, printing 'Success'."
+    },
+    {
+      "id": 6,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "find_bug",
+      "question": "Why is writing `except:` (bare except) without an exception name discouraged?",
+      "options": [
+        "It catches everything, including KeyboardInterrupt (Ctrl+C) and system exits",
+        "It raises a SyntaxError in Python 3",
+        "It only catches ValueErrors",
+        "It makes the program run 10x slower"
+      ],
+      "answer": 0,
+      "hint": "A bare except catches BaseException, swallowing user interrupts and system signals.",
+      "explanation": "A bare `except:` catches BaseException, hiding unintended bugs and making it impossible for the user to interrupt the program with Ctrl+C."
+    },
+    {
+      "id": 7,
+      "type": "fill",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "Fill in the keyword to deliberately trigger an exception in your code.",
+      "template": "if balance < 0:\n    _____ ValueError(\"Insufficient funds\")",
+      "answer": "raise",
+      "hint": "Five-letter keyword to throw an error.",
+      "explanation": "The `raise` keyword triggers an exception."
+    },
+    {
+      "id": 8,
+      "type": "predict",
+      "difficulty": "medium",
+      "subtype": "regular",
+      "question": "What exception name is printed here?",
+      "code": "try:\n    d = {}\n    print(d[\"missing\"])\nexcept KeyError as e:\n    print(\"Caught KeyError\")",
+      "answer": "Caught KeyError",
+      "hint": "Accessing a missing key in a dict raises KeyError.",
+      "explanation": "d['missing'] raises KeyError, which matches the except block."
+    },
+    {
+      "id": 9,
+      "type": "mcq",
+      "difficulty": "medium",
+      "subtype": "error",
+      "question": "What error occurs if you run `'hello'[10]`?",
+      "options": [
+        "IndexError",
+        "KeyError",
+        "ValueError",
+        "TypeError"
+      ],
+      "answer": 0,
+      "hint": "Index 10 is beyond the length of 'hello'.",
+      "explanation": "Accessing an out-of-bounds sequence index raises `IndexError`."
+    },
+    {
+      "id": 10,
+      "type": "predict",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "What will this multi-block sequence print?",
+      "code": "output = []\ntry:\n    output.append(\"A\")\n    x = 1 / 1\nexcept ZeroDivisionError:\n    output.append(\"B\")\nelse:\n    output.append(\"C\")\nfinally:\n    output.append(\"D\")\nprint(\"\".join(output))",
+      "answer": "ACD",
+      "hint": "try runs (A), no exception so else runs (C), then finally runs (D).",
+      "explanation": "A is appended in try. No error occurs, so else appends C. finally appends D. Result: ACD."
+    },
+    {
+      "id": 11,
+      "type": "mcq",
+      "difficulty": "hard",
+      "subtype": "order",
+      "question": "Which line order correctly defines the complete exception handling structure?",
+      "options": [
+        "1: try: \\n 2: except Exception: \\n 3: else: \\n 4: finally:",
+        "1: try: \\n 2: finally: \\n 3: except Exception: \\n 4: else:",
+        "1: except Exception: \\n 2: try: \\n 3: else: \\n 4: finally:",
+        "1: try: \\n 2: else: \\n 3: except Exception: \\n 4: finally:"
+      ],
+      "answer": 0,
+      "hint": "try must come first, followed by except, then else, then finally.",
+      "explanation": "Python requires the blocks in this exact order: try -> except -> else -> finally."
+    },
+    {
+      "id": 12,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "regular",
+      "question": "Define a function `safe_int(text, default=0)`:\n- Try to convert `text` with `int(text)` and return it.\n- If a `ValueError` occurs, return `default`.\nTest `safe_int('abc', -1)` and print the result.\nExpected output:\n-1",
+      "starter": "# Define safe_int function and test with safe_int('abc', -1)\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "-1"
+        }
+      ],
+      "hints": [
+        "def safe_int(text, default=0):",
+        "try: return int(text) except ValueError: return default",
+        "def safe_int(text, default=0):\n    try:\n        return int(text)\n    except ValueError:\n        return default\nprint(safe_int('abc', -1))"
+      ],
+      "explanation": "Wrapping int(text) in try...except ValueError safely falls back to default."
+    },
+    {
+      "id": 13,
+      "type": "code",
+      "difficulty": "hard",
+      "subtype": "mini_task",
+      "question": "Practical Mini Task: Robust User Profile Parser\nDefine `parse_age(data_dict)`:\n1. Inside `try`: retrieve `data_dict['age']` and convert it to `int`.\n2. If `age < 0`: `raise ValueError('Negative age')`.\n3. Catch `KeyError`: return `'Missing age'`.\n4. Catch `ValueError`: return `'Invalid age'`.\n5. If valid: return `f'Valid age: {age}'`.\nTest with `parse_age({'age': '24'})` and print the result.\nExpected output:\nValid age: 24",
+      "starter": "# Define parse_age and test with {'age': '24'}\n",
+      "tests": [
+        {
+          "input": "",
+          "expected": "Valid age: 24"
+        }
+      ],
+      "hints": [
+        "def parse_age(data_dict):",
+        "try: age = int(data_dict['age']); if age < 0: raise ValueError(); return f'Valid age: {age}'",
+        "def parse_age(data_dict):\n    try:\n        age = int(data_dict['age'])\n        if age < 0:\n            raise ValueError()\n        return f'Valid age: {age}'\n    except KeyError:\n        return 'Missing age'\n    except ValueError:\n        return 'Invalid age'\nprint(parse_age({'age': '24'}))"
+      ],
+      "explanation": "This mini-task exercises handling multiple exception types (KeyError, ValueError), custom raise checks, and clean error reporting."
+    }
+  ]
+}

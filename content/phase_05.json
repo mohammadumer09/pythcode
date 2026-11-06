@@ -1,0 +1,112 @@
+{
+  "id": 5,
+  "title": "Type Conversion and input()",
+  "level": "beginner",
+  "estimated_minutes": 12,
+  "lesson": [
+    {
+      "step": 1,
+      "heading": "Why convert types?",
+      "text": "Sometimes a value is the wrong type for what you need. For example, `\"5\"` (a string) cannot be added to `3` (an int) — Python will raise a `TypeError`.\n\n**Type conversion** (also called type casting) lets you change a value from one type to another using built-in functions.",
+      "code": "# This would error:\n# result = \"5\" + 3\n\n# Fix: convert first\nresult = int(\"5\") + 3\nprint(result)",
+      "output": "8"
+    },
+    {
+      "step": 2,
+      "heading": "int() and float()",
+      "text": "`int(value)` converts to a whole number. It works on floats (truncates the decimal) and strings that look like integers.\n\n`float(value)` converts to a decimal number. It works on ints and strings that look like numbers.",
+      "code": "print(int(3.9))      # 3  (truncates, does not round)\nprint(int(\"42\"))     # 42\nprint(float(7))      # 7.0\nprint(float(\"1.5\"))  # 1.5",
+      "output": "3\n42\n7.0\n1.5"
+    },
+    {
+      "step": 3,
+      "heading": "str() and bool()",
+      "text": "`str(value)` turns anything into a string. Useful when you want to join a number with text.\n\n`bool(value)` turns a value into True or False. Most values are **truthy** (become True). Only a few are **falsy** (become False): `0`, `0.0`, `\"\"`, `None`.",
+      "code": "print(str(100))      # \"100\" as a string\nprint(str(3.14))     # \"3.14\"\nprint(bool(0))       # False\nprint(bool(\"hello\")) # True\nprint(bool(\"\"))      # False",
+      "output": "100\n3.14\nFalse\nTrue\nFalse"
+    },
+    {
+      "step": 4,
+      "heading": "input() — reading from the user",
+      "text": "`input(prompt)` shows a message and waits for the user to type something and press Enter.\n\n**Important:** `input()` always returns a **string**, even if the user types a number. You must convert it yourself.\n\nNote: challenges use pre-set inputs — you do not need to handle real keyboard input in this phase.",
+      "code": "# Example (not run here — needs a real terminal):\n# name = input(\"Your name: \")\n# age  = int(input(\"Your age: \"))\n# print(\"Hello\", name, \"you are\", age, \"years old\")\nage = int(\"17\")   # simulating input\nprint(age + 1)",
+      "output": "18"
+    }
+  ],
+  "challenges": [
+    {
+      "id": 1,
+      "type": "mcq",
+      "question": "What type does input() always return?",
+      "options": ["int", "float", "str", "bool"],
+      "answer": 2,
+      "hint": "Even if the user types a number, input() gives you text.",
+      "explain": "input() always returns a str. You must convert it with int(), float(), etc. if you need a number."
+    },
+    {
+      "id": 2,
+      "type": "mcq",
+      "question": "What does int(3.9) return?",
+      "options": ["4", "3", "3.9", "Error"],
+      "answer": 1,
+      "hint": "int() cuts off the decimal — it does not round.",
+      "explain": "int(3.9) truncates (cuts off) the decimal part, giving 3. It does not round up."
+    },
+    {
+      "id": 3,
+      "type": "predict",
+      "question": "What will this code print?",
+      "code": "x = \"10\"\ny = int(x) + 5\nprint(y)",
+      "answer": "15",
+      "hint": "int(\"10\") converts the string to the integer 10, then add 5.",
+      "explain": "int(\"10\") gives 10. 10 + 5 = 15."
+    },
+    {
+      "id": 4,
+      "type": "predict",
+      "question": "What will this code print?",
+      "code": "print(bool(\"\"))\nprint(bool(\"hi\"))\nprint(bool(0))",
+      "answer": "False\nTrue\nFalse",
+      "hint": "Empty string and 0 are falsy. Non-empty strings are truthy.",
+      "explain": "An empty string \"\" and 0 are falsy (become False). Any non-empty string is truthy (becomes True)."
+    },
+    {
+      "id": 5,
+      "type": "fill",
+      "question": "Convert the string \"25\" to an integer.",
+      "template": "age = ___( \"25\" )",
+      "answer": "int",
+      "hint": "The function name matches the target type.",
+      "explain": "int(\"25\") converts the string to the integer 25."
+    },
+    {
+      "id": 6,
+      "type": "fill",
+      "question": "Convert the integer 7 to a string so it can be joined with text.",
+      "template": "num_text = ___(7)",
+      "answer": "str",
+      "hint": "The function name is 3 letters.",
+      "explain": "str(7) converts the integer 7 to the string \"7\"."
+    },
+    {
+      "id": 7,
+      "type": "code",
+      "question": "Convert the string \"42\" to an integer, add 8, and print the result. Expected: 50",
+      "starter": "s = \"42\"\n# convert and add\n",
+      "tests": [{"input": "", "expected": "50"}],
+      "hint": "Use int(s) + 8 and print the result.",
+      "explain": "int(\"42\") + 8 = 50. print(int(s) + 8) outputs 50."
+    },
+    {
+      "id": 8,
+      "type": "code",
+      "question": "Print float(7) and str(3.14) on separate lines.\nExpected:\n7.0\n3.14",
+      "starter": "# two print calls\n",
+      "tests": [{"input": "", "expected": "7.0\n3.14"}],
+      "hint": "print(float(7)) then print(str(3.14)).",
+      "explain": "float(7) gives 7.0 and str(3.14) gives the string \"3.14\"."
+    }
+  ],
+  "pass_score": 70
+}
+
